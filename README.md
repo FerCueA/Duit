@@ -26,6 +26,9 @@ Duit es una aplicación web diseñada para gestionar sesiones de usuario y regis
 - **Diseño:**
   - Se aplican colores y tamaños personalizados a los botones, encabezados y etiquetas.
 
+## Nota sobre los estilos
+Los estilos actuales no son definitivos. Se han implementado como un placeholder para revisar la configuración y funcionalidad del proyecto. Los estilos finales serán definidos en futuras iteraciones.
+
 ## Requisitos
 - **Frontend:**
   - Bootstrap 5.3 para diseño responsivo.
