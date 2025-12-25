@@ -1,7 +1,7 @@
 # Proyecto Duit
 
 ## Descripción
-Duit es una aplicación web diseñada para gestionar sesiones de usuario y registro. Hasta el momento, hemos implementado las siguientes funcionalidades:
+Duit es una aplicación web diseñada para gestionar sesiones de usuario, registro y búsqueda de ofertas. En los últimos días, hemos realizado varias mejoras importantes en el diseño y funcionalidad de la aplicación.
 
 ## Funcionalidades Implementadas
 
@@ -15,35 +15,33 @@ Duit es una aplicación web diseñada para gestionar sesiones de usuario y regis
   - Formulario de registro con campos para nombre completo, correo electrónico y contraseña.
   - Botones alineados y funcionales para enviar los datos.
 
-### 2. Estilos Personalizados
+### 2. Mejoras en el Header
+- **Logo:**
+  - Se añadió un logo en formato SVG directamente en el header.
+  - El tamaño del logo fue ajustado para que sea más visible.
+- **Estilo:**
+  - Se redujo el tamaño del header para hacerlo más compacto.
+  - Se aplicaron gradientes y ajustes visuales para mejorar la apariencia.
+
+### 3. Footer
+- **Ubicación:**
+  - Se ajustó el footer para que se mantenga en la parte inferior de la página.
+- **Contenido:**
+  - Información sobre la empresa, enlaces útiles y datos de contacto.
+
+### 4. Funcionalidad de Búsqueda
+- **Formulario:**
+  - Se añadió un formulario para buscar ofertas.
+- **Resultados Dinámicos:**
+  - Los resultados se cargan dinámicamente en la sección "Selecciona una opción".
+
+### 5. Estilos Personalizados
 - **Archivo:** `styles.css`
 - **Colores:**
-  - Primario: Azul (#007bff).
-  - Secundario: Gris (#6c757d).
-  - Éxito: Verde (#28a745).
-  - Claro: Blanco (#f8f9fa).
-  - Oscuro: Negro (#343a40).
-- **Diseño:**
-  - Se aplican colores y tamaños personalizados a los botones, encabezados y etiquetas.
-
-## Nota sobre los estilos
-Los estilos actuales no son definitivos. Se han implementado como un placeholder para revisar la configuración y funcionalidad del proyecto. Los estilos finales serán definidos en futuras iteraciones.
-
-## Requisitos
-- **Frontend:**
-  - Bootstrap 5.3 para diseño responsivo.
-  - Bootstrap Icons para iconos.
-- **Backend:**
-  - Configuración pendiente para manejar las solicitudes de los formularios.
+  - Se añadieron gradientes y ajustes visuales para mejorar la experiencia del usuario.
 
 ## Próximos Pasos
-- Implementar la lógica del backend para procesar los datos enviados desde los formularios.
-- Mejorar la experiencia de usuario con validaciones en tiempo real.
+- Continuar mejorando el diseño de las páginas.
+- Implementar más funcionalidades dinámicas.
+- Realizar pruebas de usuario para validar la experiencia.
 
-## Cómo Ejecutar
-1. Clonar el repositorio.
-2. Abrir el proyecto en un entorno de desarrollo compatible.
-3. Ejecutar la aplicación desde el archivo principal `DuitApplication.java`.
-
----
-Este README será actualizado conforme avancemos en el desarrollo del proyecto.

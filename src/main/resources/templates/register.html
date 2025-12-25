@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+
+<body>
+    <div class="container d-flex justify-content-center align-items-center vh-100 bg-light">
+        <div class="card w-100 p-4" style="max-width: 600px; border: 1px solid var(--color-oscuro);">
+            <div class="p-4">
+                <h2 class="text-center mb-4 text-success">
+                    <i class="bi bi-person-plus-fill"></i> Registro
+                </h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="nombreCompleto" class="form-label text-secondary">Nombre Completo</label>
+                        <input type="text" class="form-control" id="nombreCompleto" placeholder="Introduce tu nombre completo" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="correoElectronico" class="form-label text-secondary">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="correoElectronico" placeholder="Introduce tu correo electrónico" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="contrasena" class="form-label text-secondary">Contraseña</label>
+                        <input type="password" class="form-control" id="contrasena" placeholder="Introduce tu contraseña" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="tipoPerfil" class="form-label text-secondary">Tipo de Perfil</label>
+                        <select class="form-select" id="tipoPerfil">
+                            <option value="cliente">Cliente</option>
+                            <option value="trabajador">Trabajador</option>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center" style="height: 60px">
+                        <button type="submit" class="btn w-100 text-light bg-success">
+                            <i class="bi bi-person-plus-fill"></i> Registrarse
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center mt-3">
+                        <a href="/" class="btn btn-outline-primary w-100">
+                            <i class="bi bi-house"></i> Volver al Inicio
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

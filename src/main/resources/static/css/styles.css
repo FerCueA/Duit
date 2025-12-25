@@ -9,46 +9,78 @@
   --color-oscuro: #343a40;
 }
 
-.texto-azul {
-  color: var(--color-primario) !important;
-}
-
-.texto-gris {
-  color: var(--color-secundario) !important;
-}
-
-.texto-claro {
-  color: var(--color-claro) !important;
-}
-
-.texto-oscuro {
-  color: var(--color-oscuro) !important;
-}
-.texto-exito {
-  color: var(--color-exito) !important;
-}
-
-.texto-rojo {
-  color: var(--color-peligro) !important;
-}
 
 
-.bg-azul {
-  background-color: var(--color-primario) !important;
+/* Custom colors */
+.text-primary {
+  color: #007bff !important;
+}
+.text-warning {
+  color: #ffc107 !important;
+}
+.text-danger {
+  color: #dc3545 !important;
+}
+.text-success {
+  color: #28a745 !important;
+}
+.text-info {
+  color: #17a2b8 !important;
+}
+.text-secondary {
+  color: #6c757d !important;
 }
 
-.bg-secundario {
-  background-color: var(--color-secundario) !important;
+/* Header and footer text adjustments */
+.bg-info {
+  background-color: #e3f2fd !important;
 }
 
-.bg-rojo {
-  background-color: var(--color-peligro) !important;
+.text-dark {
+  color: #0d47a1 !important;
 }
 
-.bg-oscuro {
-  background-color: var(--color-oscuro) !important;
+.text-light {
+  color: #ffffff !important;
 }
 
-.bg-exito {
-  background-color: var(--color-exito) !important;
-}   
+/* Button styles */
+.btn-primary {
+  background-color: #1565c0 !important;
+  border-color: #1565c0 !important;
+}
+
+.btn-outline-primary {
+  color: #1565c0 !important;
+  border-color: #1565c0 !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: #1565c0 !important;
+  color: #ffffff !important;
+}
+
+/* Basic animations */
+.category-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.category-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Ajustes de tamaño */
+.header-avatar {
+  width: 60px;
+  height: 60px;
+  border: 2px solid var(--color-primario);
+}
+
+.header-text {
+  font-size: 1rem;
+}
