@@ -18,12 +18,12 @@
                 <h2 class="text-center mb-4 text-primary">
                     <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
                 </h2>
-                <form action="/login" method="POST">
+                <form th:action="@{/loginprocess}" method="POST">
                     <div class="mb-3">
-                        <label for="loginEmail" class="form-label text-secondary">
-                            Correo Electrónico <i class="bi bi-envelope"></i>
+                        <label for="loginUsername" class="form-label text-secondary">
+                            Nombre de Usuario <i class="bi bi-person"></i>
                         </label>
-                        <input type="email" class="form-control" id="loginEmail" name="email" placeholder="Introduce tu correo electrónico" required />
+                        <input type="text" class="form-control" id="loginUsername" name="username" placeholder="Introduce tu nombre de usuario" required />
                     </div>
                     <div class="mb-3">
                         <label for="loginPassword" class="form-label text-secondary">

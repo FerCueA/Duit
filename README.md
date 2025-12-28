@@ -40,8 +40,19 @@ Duit es una aplicación web diseñada para gestionar sesiones de usuario, regist
 - **Colores:**
   - Se añadieron gradientes y ajustes visuales para mejorar la experiencia del usuario.
 
+### 6. Base de Datos y Autenticación
+- **Implementación de la base de datos MySQL:**
+  - Se crearon las tablas `usuario` y `rol` según los nuevos modelos.
+  - Se conectó la aplicación a la base de datos para gestión de usuarios y roles.
+- **Login con autenticación de usuarios desde la base de datos:**
+  - El sistema de login ahora valida las credenciales contra los datos almacenados en la base de datos.
+  - Se utiliza Spring Security para la autenticación y gestión de sesiones.
+
+
+
+
 ## Próximos Pasos
 - Continuar mejorando el diseño de las páginas.
 - Implementar más funcionalidades dinámicas.
-- Realizar pruebas de usuario para validar la experiencia.
+
 
