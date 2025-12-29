@@ -1,0 +1,50 @@
+<div th:fragment="navLateral" class="bg-light border-end d-flex flex-column px-2 pt-2 pb-2 shadow-sm" style="min-height: 70vh;">
+    <h5 class="fw-bold mb-2 text-primary">Menú</h5>
+
+    <ul class="nav flex-column w-100">
+
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/home(view='buscarOfertas')}">
+                <i class="bi bi-search"></i> Buscar ofertas
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/home(view='misOfertas')}">
+                <i class="bi bi-briefcase"></i> Mis ofertas
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/home(view='anadirOferta')}">
+                <i class="bi bi-plus-circle"></i> Añadir oferta
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/home(view='consultarHistorial')}">
+                <i class="bi bi-clock-history"></i> Consultar historial
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/home(view='verValoraciones')}">
+                <i class="bi bi-star"></i> Ver valoraciones
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/home(view='editarPerfil')}">
+                <i class="bi bi-pencil"></i> Editar perfil
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/home(view='panelAdministrador')}">
+                <i class="bi bi-gear"></i> Panel administrador
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/home(view='ayuda')}">
+                <i class="bi bi-question-circle"></i> Ayuda
+            </a>
+        </li>
+        <!-- El botón de salir se elimina para volver al estado anterior -->
+
+    </ul>
+
+</div>

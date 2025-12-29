@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Duit | Buscar Ofertas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- HEADER -->
+    <div th:replace="componentes/headerUsuario :: headerUsuario"></div>
+    <div class="container-fluid flex-grow-1">
+        <div class="row" style="min-height: 70vh;">
+            <!-- NAV LATERAL -->
+            <div class="col-md-2 p-0 d-flex flex-column justify-content-center align-items-start">
+                <div th:replace="componentes/navLateral :: navLateral"></div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="col-md-10 p-4">
+                <h2 class="text-center mb-4"><i class="bi bi-search"></i> Buscar Ofertas</h2>
+                <div class="card shadow-lg border-0 mx-auto" style="max-width:700px;">
+                    <div class="card-body p-4">
+                        <form id="form-busqueda-ofertas">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-5">
+                                    <label class="form-label fw-bold"><i class="bi bi-tags"></i> Tipo</label>
+                                    <select name="tipo" class="form-select">
+                                        <option value="">Todos</option>
+                                        <option value="Limpieza">Limpieza</option>
+                                        <option value="Reparaciones">Reparaciones</option>
+                                        <option value="Jardinería">Jardinería</option>
+                                        <option value="Informática">Informática</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold"><i class="bi bi-geo-alt"></i> Código Postal</label>
+                                    <input type="text" name="cp" class="form-control" placeholder="Ej: 35001" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold"><i class="bi bi-search"></i> Palabra clave</label>
+                                    <input type="text" name="keyword" class="form-control" placeholder="Ej: limpieza, fontanero..." />
+                                </div>
+                            </div>
+                            <div class="mt-4 text-end">
+                                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-search"></i> Buscar</button>
+                                <button type="button" class="btn btn-outline-secondary ms-2 px-4" id="mostrar-todo-btn">Mostrar todo</button>
+                            </div>
+                        </form>
+                        <div id="resultados-ofertas" style="display:none;">
+                            <h4 class="mb-4 mt-4"><i class="bi bi-list-ul"></i> Resultados de la búsqueda:</h4>
+                            <div class="row g-4">
+                                <div class="col-md-12">
+                                    <div class="card mb-3 border-0 shadow-sm">
+                                        <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                                            <div>
+                                                <h5 class="card-title mb-1">Limpieza de oficina <span class="badge bg-success ms-2">Activa</span></h5>
+                                                <p class="mb-0">Zona: 35001 | Precio: 30€</p>
+                                                <small class="text-muted">Descripción: Limpieza semanal de oficinas en el centro.</small>
+                                            </div>
+                                            <div class="text-end">
+                                                <span class="badge bg-primary">3 candidatos</span><br>
+                                                <button class="btn btn-outline-info btn-sm mt-2">Ver detalles</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FOOTER -->
+    <div th:replace="componentes/footer :: footer"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -13,32 +13,44 @@
 
 <body>
     <div class="container d-flex justify-content-center align-items-center vh-100 bg-light">
-        <div class="card w-100 p-4" style="max-width: 600px; border: 1px solid var(--color-oscuro);">
+        <div class="card w-100 p-4">
             <div class="p-4">
-                <h2 class="text-center mb-4 text-success">
+                <h2 class="text-center mb-4 text-success" id="titulo-registro">
                     <i class="bi bi-person-plus-fill"></i> Registro
                 </h2>
                 <form>
                     <div class="mb-3">
-                        <label for="nombreCompleto" class="form-label text-secondary">Nombre Completo</label>
-                        <input type="text" class="form-control" id="nombreCompleto" placeholder="Introduce tu nombre completo" />
+                        <label for="nombre" class="form-label text-secondary">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Introduce tu nombre" required />
                     </div>
                     <div class="mb-3">
-                        <label for="correoElectronico" class="form-label text-secondary">Correo Electrónico</label>
-                        <input type="email" class="form-control" id="correoElectronico" placeholder="Introduce tu correo electrónico" />
+                        <label for="apellidos" class="form-label text-secondary">Apellidos</label>
+                        <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Introduce tus apellidos" required />
                     </div>
                     <div class="mb-3">
-                        <label for="contrasena" class="form-label text-secondary">Contraseña</label>
-                        <input type="password" class="form-control" id="contrasena" placeholder="Introduce tu contraseña" />
+                        <label for="username" class="form-label text-secondary">Nombre de usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de usuario" required />
                     </div>
                     <div class="mb-3">
-                        <label for="tipoPerfil" class="form-label text-secondary">Tipo de Perfil</label>
-                        <select class="form-select" id="tipoPerfil">
-                            <option value="cliente">Cliente</option>
-                            <option value="trabajador">Trabajador</option>
+                        <label for="email" class="form-label text-secondary">Correo electrónico</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Introduce tu correo electrónico" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label text-secondary">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Introduce tu contraseña" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="telefono" class="form-label text-secondary">Teléfono</label>
+                        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Introduce tu teléfono" required />
+                    </div>
+                    <div class="mb-3" id="rol-group">
+                        <label for="idRol" class="form-label text-secondary">Rol</label>
+                        <select class="form-select" id="idRol" name="idRol" required>
+                            <option value="1">Cliente</option>
+                            <option value="2">Trabajador</option>
                         </select>
                     </div>
-                    <div class="d-flex justify-content-center align-items-center" style="height: 60px">
+                    <div class="d-flex justify-content-center align-items-center">
                         <button type="submit" class="btn w-100 text-light bg-success">
                             <i class="bi bi-person-plus-fill"></i> Registrarse
                         </button>
@@ -48,6 +60,31 @@
                             <i class="bi bi-house"></i> Volver al Inicio
                         </a>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Selecciona el rol automáticamente según el parámetro idRol en la URL y oculta el selector si está preseleccionado
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const idRol = params.get('idRol');
+            const selectRol = document.getElementById('idRol');
+            const rolGroup = document.getElementById('rol-group');
+            const titulo = document.getElementById('titulo-registro');
+            if (idRol) {
+                selectRol.value = idRol;
+                rolGroup.style.display = 'none';
+                if (idRol === '1') {
+                    titulo.innerHTML = '<i class="bi bi-person-plus-fill"></i> Registrarse como Cliente';
+                } else if (idRol === '2') {
+                    titulo.innerHTML = '<i class="bi bi-person-plus-fill"></i> Registrarse como Trabajador';
+                }
+            } else {
+                titulo.innerHTML = '<i class="bi bi-person-plus-fill"></i> Registro';
+            }
+        });
+    </script>
                 </form>
             </div>
         </div>
