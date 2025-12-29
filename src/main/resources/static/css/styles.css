@@ -1,3 +1,4 @@
+/* Definición de variables de color */
 :root {
   --color-primario: #007bff;
   --color-secundario: #6c757d;
@@ -11,7 +12,7 @@
 
 
 
-/* Custom colors */
+/* Colores de texto */
 .text-primary {
   color: #007bff !important;
 }
@@ -31,7 +32,8 @@
   color: #6c757d !important;
 }
 
-/* Header and footer text adjustments */
+/* Colores de fondo */
+
 .bg-info {
   background-color: #e3f2fd !important;
 }
@@ -60,7 +62,7 @@
   color: #ffffff !important;
 }
 
-/* Basic animations */
+/* Animaciones básicas para las cards del inicio */
 .category-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-align: center;
