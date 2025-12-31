@@ -42,7 +42,7 @@ public class MainController {
             @RequestParam("idRol") int idRol,
             RedirectAttributes redirectAttributes) {
         try {
-            // Validación básica (puedes mejorarla)
+            // Verificar si el username ya existe
             if (usuarioDAO.obtenerUsuarioPorUsername(username) != null) {
                 redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya existe");
                 return "redirect:/register";
