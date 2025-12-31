@@ -52,7 +52,7 @@ public class MainController {
             usuario.setApellidos(apellidos);
             usuario.setUsername(username);
             usuario.setEmail(email);
-            usuario.setPassword(password); // Considera encriptar la contraseña
+            usuario.setPassword(password); 
             usuario.setTelefono(telefono);
             usuario.setIdRol(idRol);
             usuario.setActivo(true);
