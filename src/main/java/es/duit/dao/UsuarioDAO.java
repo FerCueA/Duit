@@ -1,3 +1,4 @@
+
 package es.duit.dao;
 
 import es.duit.connections.MySqlConnection;
@@ -90,6 +91,22 @@ public class UsuarioDAO {
 
         objMySQLConnection.close();
         return objUsuario;
+    }
+
+    // Insertar un nuevo usuario
+    public void insertarUsuario(Usuario usuario) throws SQLException {
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = String.format(
+                    "INSERT INTO usuario (nombre, apellidos, username, email, password, telefono, id_rol, activo, fecha_registro) "
+                            +
+                            "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %d, %b, '%s')",
+                    usuario.getNombre(), usuario.getApellidos(), usuario.getUsername(), usuario.getEmail(),
+                    usuario.getPassword(), usuario.getTelefono(), usuario.getIdRol(), usuario.isActivo(),
+                    usuario.getFechaRegistro().toString());
+            objMySQLConnection.executeInsert(sql);
+        }
+        objMySQLConnection.close();
     }
 
 }

@@ -18,7 +18,10 @@
                 <h2 class="text-center mb-4 text-success" id="titulo-registro">
                     <i class="bi bi-person-plus-fill"></i> Registro
                 </h2>
-                <form>
+                <form method="post" th:action="@{/register}">
+                                    <!-- Mensajes de error o éxito -->
+                                    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                                    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
                     <div class="mb-3">
                         <label for="nombre" class="form-label text-secondary">Nombre</label>
                         <input type="text" class="form-control" id="nombre" name="nombre"
