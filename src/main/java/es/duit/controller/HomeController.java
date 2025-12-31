@@ -61,6 +61,7 @@ public class HomeController {
             }
         }
 
+        
         String username = authentication.getName();
         Usuario usuario = usuarioDAO.obtenerUsuarioPorUsername(username);
 
