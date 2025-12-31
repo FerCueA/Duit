@@ -15,11 +15,21 @@ public class Usuario {
     private int idRol;
     private boolean activo;
     private Timestamp fechaRegistro;
+    private Rol rol;
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
 
     public Usuario() {
     }
 
-    public Usuario(int idUsuario, String nombre, String apellidos, String username, String email, String password, String telefono, int idRol, boolean activo, Timestamp fechaRegistro) {
+    public Usuario(int idUsuario, String nombre, String apellidos, String username, String email, String password,
+            String telefono, int idRol, boolean activo, Timestamp fechaRegistro) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -114,15 +124,22 @@ public class Usuario {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Usuario usuario = (Usuario) o;
-        return idUsuario == usuario.idUsuario && idRol == usuario.idRol && activo == usuario.activo && Objects.equals(nombre, usuario.nombre) && Objects.equals(apellidos, usuario.apellidos) && Objects.equals(username, usuario.username) && Objects.equals(email, usuario.email) && Objects.equals(password, usuario.password) && Objects.equals(telefono, usuario.telefono) && Objects.equals(fechaRegistro, usuario.fechaRegistro);
+        return idUsuario == usuario.idUsuario && idRol == usuario.idRol && activo == usuario.activo
+                && Objects.equals(nombre, usuario.nombre) && Objects.equals(apellidos, usuario.apellidos)
+                && Objects.equals(username, usuario.username) && Objects.equals(email, usuario.email)
+                && Objects.equals(password, usuario.password) && Objects.equals(telefono, usuario.telefono)
+                && Objects.equals(fechaRegistro, usuario.fechaRegistro);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idUsuario, nombre, apellidos, username, email, password, telefono, idRol, activo, fechaRegistro);
+        return Objects.hash(idUsuario, nombre, apellidos, username, email, password, telefono, idRol, activo,
+                fechaRegistro);
     }
 
     @Override

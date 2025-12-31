@@ -21,27 +21,33 @@
                 <form>
                     <div class="mb-3">
                         <label for="nombre" class="form-label text-secondary">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Introduce tu nombre" required />
+                        <input type="text" class="form-control" id="nombre" name="nombre"
+                            placeholder="Introduce tu nombre" required />
                     </div>
                     <div class="mb-3">
                         <label for="apellidos" class="form-label text-secondary">Apellidos</label>
-                        <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Introduce tus apellidos" required />
+                        <input type="text" class="form-control" id="apellidos" name="apellidos"
+                            placeholder="Introduce tus apellidos" required />
                     </div>
                     <div class="mb-3">
                         <label for="username" class="form-label text-secondary">Nombre de usuario</label>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de usuario" required />
+                        <input type="text" class="form-control" id="username" name="username"
+                            placeholder="Nombre de usuario" required />
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label text-secondary">Correo electrónico</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Introduce tu correo electrónico" required />
+                        <input type="email" class="form-control" id="email" name="email"
+                            placeholder="Introduce tu correo electrónico" required />
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label text-secondary">Contraseña</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Introduce tu contraseña" required />
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Introduce tu contraseña" required />
                     </div>
                     <div class="mb-3">
                         <label for="telefono" class="form-label text-secondary">Teléfono</label>
-                        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Introduce tu teléfono" required />
+                        <input type="text" class="form-control" id="telefono" name="telefono"
+                            placeholder="Introduce tu teléfono" required />
                     </div>
                     <div class="mb-3" id="rol-group">
                         <label for="idRol" class="form-label text-secondary">Rol</label>
@@ -66,7 +72,7 @@
     </div>
     <script>
         // Selecciona el rol automáticamente según el parámetro idRol en la URL y oculta el selector si está preseleccionado
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const params = new URLSearchParams(window.location.search);
             const idRol = params.get('idRol');
             const selectRol = document.getElementById('idRol');
@@ -85,9 +91,9 @@
             }
         });
     </script>
-                </form>
-            </div>
-        </div>
+    </form>
+    </div>
+    </div>
     </div>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

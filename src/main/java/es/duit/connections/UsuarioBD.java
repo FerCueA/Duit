@@ -11,7 +11,6 @@ import es.duit.dao.UsuarioDAO;
 import es.duit.models.Rol;
 import es.duit.models.Usuario;
 
-
 // Utilizamos esta clase auxiliar para conectar la BD con el proyecto
 @Service
 public class UsuarioBD implements UserDetailsService {
@@ -26,7 +25,7 @@ public class UsuarioBD implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            // Usamos UsuarioDAO para buscar el usuario en la BD por teléfono
+            // Usamos UsuarioDAO para buscar el usuario en la BD el username
             UsuarioDAO usuarioDAO = new UsuarioDAO();
             Usuario usuario = usuarioDAO.obtenerUsuarioPorUsername(username);
 
@@ -35,10 +34,9 @@ public class UsuarioBD implements UserDetailsService {
                 throw new UsernameNotFoundException("Usuario no encontrado con el teléfono: " + username);
             }
 
-             if (!usuario.isActivo()) {
-            throw new UsernameNotFoundException("Usuario desactivado");
+            if (!usuario.isActivo()) {
+                throw new UsernameNotFoundException("Usuario desactivado");
             }
-
 
             // Obtener SOLO el rol del usuario
             RolDAO rolDAO = new RolDAO();
@@ -50,7 +48,6 @@ public class UsuarioBD implements UserDetailsService {
 
             // Spring Security espera roles SIN "ROLE_"
             String rolNombre = rol.getNombre().toUpperCase();
-
 
             // Convertimos el objeto Usuario al formato que Spring Security espera
             return User.withUsername(usuario.getUsername())

@@ -15,45 +15,45 @@ import es.duit.connections.UsuarioBD;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private UsuarioBD usuarioBD;
+        @Autowired
+        private UsuarioBD usuarioBD;
 
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                // .csrf(csrf -> csrf.disable()) 
-                .userDetailsService(usuarioBD)   
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/", "/index",
-                                "/login", "/loginprocess",
-                                "/register",
-                                "/css/**", "/js/**", "/images/**")
-                        .permitAll()
-                        .requestMatchers("/home").authenticated()
-                        .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/loginprocess")
-                        .defaultSuccessUrl("/home", true)
-                        .permitAll())
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/index")
-                        .permitAll());
+        @Bean
+        SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http
+                                // .csrf(csrf -> csrf.disable())
+                                .userDetailsService(usuarioBD)
+                                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers(
+                                                                "/", "/index",
+                                                                "/login", "/loginprocess",
+                                                                "/register",
+                                                                "/css/**", "/js/**", "/images/**")
+                                                .permitAll()
+                                                .requestMatchers("/home").authenticated()
+                                                .anyRequest().authenticated())
+                                .formLogin(form -> form
+                                                .loginPage("/login")
+                                                .loginProcessingUrl("/loginprocess")
+                                                .defaultSuccessUrl("/home", true)
+                                                .permitAll())
+                                .logout(logout -> logout
+                                                .logoutUrl("/logout")
+                                                .logoutSuccessUrl("/index")
+                                                .permitAll());
 
-        return http.build();
-    }
+                return http.build();
+        }
 
-    // si nos conectamos con usuarios en memoria o con base de datos necesitamos un
-    // encoder si o si
-    // este funcuiona para usuarios en memoria sin encriptar y en una base de datos
-    // tambien sin encriptar
-    @Bean
-    @SuppressWarnings("deprecation")
-    PasswordEncoder passwordEncoder() {
-        PasswordEncoder encoder = NoOpPasswordEncoder.getInstance();
-        return encoder;
-    }
+        // si nos conectamos con usuarios en memoria o con base de datos necesitamos un
+        // encoder si o si
+        // este funcuiona para usuarios en memoria sin encriptar y en una base de datos
+        // tambien sin encriptar
+        @Bean
+        @SuppressWarnings("deprecation")
+        PasswordEncoder passwordEncoder() {
+                PasswordEncoder encoder = NoOpPasswordEncoder.getInstance();
+                return encoder;
+        }
 
 }

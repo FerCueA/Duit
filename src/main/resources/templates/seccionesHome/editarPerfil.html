@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Duit | Editar Perfil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <!-- HEADER -->
+    <div th:replace="componentes/headerUsuario :: headerUsuario"></div>
+    <div class="container-fluid flex-grow-1 d-flex align-items-center justify-content-center" style="min-height:80vh;">
+        <div class="w-100" style="max-width:700px;">
+            <h2 class="text-center mb-4"><i class="bi bi-pencil"></i> Editar Perfil</h2>
+            <div class="card shadow mx-auto">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <img src="/images/avatarPlaceholder.png" alt="Avatar" class="rounded-circle border border-2"
+                            width="90" height="90">
+                        <div class="mt-2">
+                            <button class="btn btn-outline-secondary btn-sm" type="button" disabled><i
+                                    class="bi bi-upload"></i> Cambiar foto</button>
+                        </div>
+                    </div>
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="bi bi-person"></i> Nombre</label>
+                                <input type="text" name="nombre" class="form-control" placeholder="Usuario Ejemplo" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="bi bi-person"></i> Apellidos</label>
+                                <input type="text" name="apellidos" class="form-control" value="Pérez García" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="bi bi-envelope"></i> Correo electrónico</label>
+                                <input type="email" name="email" class="form-control" value="usuario@email.com" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="bi bi-telephone"></i> Teléfono</label>
+                                <input type="tel" name="telefono" class="form-control" value="+34 123 456 789" />
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label"><i class="bi bi-geo"></i> Dirección</label>
+                                <input type="text" name="direccion" class="form-control"
+                                    value="Calle Ejemplo 123, Las Palmas" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="bi bi-building"></i> Ciudad</label>
+                                <input type="text" name="ciudad" class="form-control" value="Las Palmas" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"><i class="bi bi-geo-alt"></i> Código Postal</label>
+                                <input type="text" name="cp" class="form-control" value="35001" />
+                            </div>
+                        </div>
+                        <div class="mt-4 text-end">
+                            <button type="submit" class="btn btn-primary px-4"><i class="bi bi-pencil"></i> Guardar
+                                cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- FOOTER -->
+    <div th:replace="componentes/footer :: footer"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+</div>
