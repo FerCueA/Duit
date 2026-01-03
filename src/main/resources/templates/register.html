@@ -11,9 +11,12 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+    <!-- Sección: Encabezado público -->
     <div th:replace="componentes/headerPublico :: headerPublico"></div>
+    <!-- Sección principal de registro de usuario -->
     <main class="container flex-grow-1 d-flex flex-column justify-content-center align-items-center py-4">
         <div class="mx-auto w-100" style="max-width:800px;">
+            <!-- Card principal de registro -->
             <div class="bg-white p-5 rounded-4 shadow-lg border-0" style="background-color:#e9fbe7;">
                 <div class="text-center mb-4">
                     <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success mb-3"
@@ -23,10 +26,12 @@
                     <h2 class="fw-bold text-success mb-1 display-5">Registro</h2>
                     <p class="text-muted mb-2 fs-5">Crea tu cuenta para acceder a todos los servicios y ofertas.</p>
                 </div>
+                <!-- Formulario de registro -->
                 <form method="post" th:action="@{/register}" novalidate>
                     <!-- Mensajes de error o éxito -->
                     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
                     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+                    <!-- Campos del formulario -->
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="nombre" class="form-label text-secondary">Nombre</label>
@@ -112,6 +117,7 @@
         </div>
     </main>
     <!-- FOOTER -->
+    <!-- Pie de página -->
     <div th:replace="componentes/footer :: footer"></div>
     <!-- Script para selección de rol y validación visual -->
     <script>

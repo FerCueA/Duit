@@ -9,14 +9,17 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <!-- HEADER -->
+    <!-- Sección: Encabezado de usuario -->
     <div th:replace="componentes/headerUsuario :: headerUsuario"></div>
     <div class="container-fluid flex-grow-1 d-flex align-items-center justify-content-center" style="min-height:80vh;">
         <div class="w-100" style="max-width:800px;">
+            <!-- Título principal de la página de búsqueda -->
             <h2 class="text-center mb-4"><i class="bi bi-search"></i> Buscar Ofertas</h2>
+            <!-- Filtro de búsqueda de ofertas -->
             <div class="card shadow-lg border-0 mx-auto" style="max-width:700px;">
                 <div class="card-body p-4">
                     <form id="form-busqueda-ofertas">
+                        <!-- Campos del formulario de búsqueda -->
                         <div class="row g-3 align-items-end">
                             <div class="col-md-5">
                                 <label class="form-label fw-bold"><i class="bi bi-tags"></i> Tipo</label>
@@ -39,6 +42,7 @@
                                     placeholder="Ej: limpieza, fontanero..." />
                             </div>
                         </div>
+                        <!-- Botones de acción de búsqueda -->
                         <div class="mt-4 text-end">
                             <button type="submit" class="btn btn-primary px-4"><i class="bi bi-search"></i>
                                 Buscar</button>
@@ -48,10 +52,12 @@
                     </form>
                 </div>
             </div>
-            <!-- RESULTADOS DE OFERTAS: justo debajo del card del filtro -->
+            <!-- Resultados de ofertas: se muestran debajo del filtro -->
             <div id="resultados-ofertas" class="mx-auto mt-4 p-4 bg-white rounded-3 shadow border"
                 style="display:none; max-width:700px;">
+                <!-- Título de resultados -->
                 <h4 class="mb-4 text-center"><i class="bi bi-list-ul"></i> Resultados de la búsqueda:</h4>
+                <!-- Ejemplo de ofertas mostradas -->
                 <div class="row g-4" id="ofertas-ejemplo">
                     <div class="col-md-12">
                         <div class="card mb-3 border-0 shadow-sm">
@@ -77,13 +83,13 @@
             </div>
         </div>
     </div>
-    <!-- FOOTER -->
+    <!-- Pie de página -->
     <div th:replace="componentes/footer :: footer"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script para mostrar resultados y controlar modales -->
     <script>
-
-        
         document.addEventListener('DOMContentLoaded', function () {
+            // Botón para mostrar todas las ofertas de ejemplo
             const mostrarTodoBtn = document.getElementById('mostrar-todo-btn');
             const resultadosOfertas = document.getElementById('resultados-ofertas');
             mostrarTodoBtn.addEventListener('click', function () {
@@ -92,7 +98,7 @@
             // Ocultar resultados al cargar
             resultadosOfertas.style.display = 'none';
 
-            // Abrir modal al pulsar 'Ver detalles'
+            // Abrir modal de detalles al pulsar 'Ver detalles'
             document.getElementById('ofertas-ejemplo').addEventListener('click', function (e) {
                 if (e.target.closest('.btn-outline-info')) {
                     const modal = new bootstrap.Modal(document.getElementById('modalDetallesOferta'));
@@ -100,7 +106,7 @@
                 }
             });
 
-            // Abrir segundo modal al pulsar 'Reservar'
+            // Abrir segundo modal de contacto al pulsar 'Reservar'
             document.getElementById('modalDetallesOferta').addEventListener('click', function (e) {
                 if (e.target.closest('#btnReservarOferta')) {
                     const modalDetalles = bootstrap.Modal.getInstance(document.getElementById('modalDetallesOferta'));
@@ -114,7 +120,7 @@
         });
     </script>
 
-    <!-- Modal Detalles Oferta -->
+    <!-- Modal: Detalles de la oferta -->
     <div class="modal fade" id="modalDetallesOferta" tabindex="-1" aria-labelledby="modalDetallesOfertaLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -144,7 +150,7 @@
             </div>
         </div>
     </div>
-    <!-- Segundo Modal: Contacto y edición -->
+    <!-- Modal: Contacto y reserva de la oferta -->
     <div class="modal fade" id="modalContactoOferta" tabindex="-1" aria-labelledby="modalContactoOfertaLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">

@@ -11,9 +11,12 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100 bg-light">
+    <!-- Sección: Encabezado público -->
     <div th:replace="componentes/headerPublico :: headerPublico"></div>
+    <!-- Sección principal de inicio de sesión -->
  <main class="container flex-grow-1 d-flex flex-column justify-content-center align-items-center py-4">
         <div class="mx-auto w-100" style="max-width:500px;">
+            <!-- Formulario de inicio de sesión -->
             <form th:action="@{/loginprocess}" method="post" class="bg-white p-5 rounded-4 shadow-lg border-0">
                 <div class="text-center mb-4">
                     <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary mb-3"
@@ -52,6 +55,7 @@
                     Iniciar Sesión
                 </button>
             </form>
+            <!-- Botón para volver al inicio -->
             <a href="/" class="btn btn-outline-primary w-100 rounded-3 mt-4 d-flex align-items-center justify-content-center gap-2 fs-5"
                 tabindex="4" aria-label="Volver al inicio">
                 <i class="bi bi-house"></i>
@@ -59,6 +63,7 @@
             </a>
         </div>
     </main>
+    <!-- Pie de página -->
     <div th:replace="componentes/footer :: footer" class="mt-auto"></div>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
