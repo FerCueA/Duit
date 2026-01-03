@@ -21,63 +21,86 @@
             <!-- Card principal de estadísticas -->
             <div class="card shadow">
                 <div class="card-body">
-                    
                     <!-- Estadísticas visuales con Bootstrap -->
                     <div class="row g-4 justify-content-center">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="card border-info h-100">
-                                <div class="card-body text-center">
-                                    <i class="bi bi-people-fill display-4 text-info mb-2"></i>
-                                    <h5 class="card-title">Usuarios registrados</h5>
-                                    <p class="fs-2 fw-bold mb-0">128</p>
-                                    <span class="text-success"><i class="bi bi-arrow-up"></i> +12 este mes</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card border-success h-100">
-                                <div class="card-body text-center">
-                                    <i class="bi bi-briefcase-fill display-4 text-success mb-2"></i>
-                                    <h5 class="card-title">Ofertas publicadas</h5>
-                                    <p class="fs-2 fw-bold mb-0">54</p>
-                                    <span class="text-danger"><i class="bi bi-arrow-down"></i> -3 este mes</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card border-warning h-100">
-                                <div class="card-body text-center">
-                                    <i class="bi bi-star-fill display-4 text-warning mb-2"></i>
-                                    <h5 class="card-title">Valoraciones recibidas</h5>
-                                    <p class="fs-2 fw-bold mb-0">230</p>
-                                    <span class="text-success"><i class="bi bi-arrow-up"></i> +21 este mes</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="my-4">
-                    <div class="row justify-content-center">
-                        <div class="col-md-8">
-                            <div class="card border-light">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-3"><i class="bi bi-pie-chart-fill text-primary"></i> Distribución de tipos de trabajo</h5>
-                                    <div class="d-flex justify-content-around align-items-center">
-                                        <div class="text-center">
-                                            <i class="bi bi-tools text-info fs-3"></i>
-                                            <div class="fw-bold">Fontanería</div>
-                                            <span class="badge bg-info">30%</span>
-                                        </div>
-                                        <div class="text-center">
-                                            <i class="bi bi-lightbulb-fill text-warning fs-3"></i>
-                                            <div class="fw-bold">Electricidad</div>
-                                            <span class="badge bg-warning text-dark">25%</span>
-                                        </div>
-                                        <div class="text-center">
-                                            <i class="bi bi-broom text-success fs-3"></i>
-                                            <div class="fw-bold">Limpieza</div>
-                                            <span class="badge bg-success">45%</span>
-                                        </div>
-                                    </div>
+                                    <i class="bi bi-people-fill display-4 text-info mb-2 d-block text-center"></i>
+                                    <h5 class="card-title text-center">Usuarios registrados</h5>
+                                    <ul class="list-group list-group-flush mt-3">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-person-badge text-primary"></i> Trabajadores</span>
+                                            <span class="badge bg-info rounded-pill">72</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-person text-success"></i> Clientes</span>
+                                            <span class="badge bg-info rounded-pill">56</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-success h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-briefcase-fill display-4 text-success mb-2 d-block text-center"></i>
+                                    <h5 class="card-title text-center">Ofertas por tipo</h5>
+                                    <ul class="list-group list-group-flush mt-3">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-briefcase text-secondary"></i> Fontanería</span>
+                                            <span class="badge bg-success rounded-pill">18</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-briefcase text-secondary"></i> Electricidad</span>
+                                            <span class="badge bg-success rounded-pill">22</span>
+                                        </li>
+                                      
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-warning h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-bar-chart-fill display-4 text-warning mb-2 d-block text-center"></i>
+                                    <h5 class="card-title text-center">Porcentaje de ofertas por estado</h5>
+                                    <ul class="list-group list-group-flush mt-3">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-hourglass-split text-secondary"></i> En proceso</span>
+                                            <span class="badge bg-warning text-dark rounded-pill">40%</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-check-circle-fill text-success"></i> Completadas</span>
+                                            <span class="badge bg-success rounded-pill">50%</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-x-circle-fill text-danger"></i> Canceladas</span>
+                                            <span class="badge bg-danger rounded-pill">10%</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-primary h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-geo-alt-fill display-4 text-primary mb-2 d-block text-center"></i>
+                                    <h5 class="card-title text-center">Ofertas por código postal</h5>
+                                    <ul class="list-group list-group-flush mt-3">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-geo text-secondary"></i> 28001</span>
+                                            <span class="badge bg-primary rounded-pill">12</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-geo text-secondary"></i> 28002</span>
+                                            <span class="badge bg-primary rounded-pill">8</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-geo text-secondary"></i> 28003</span>
+                                            <span class="badge bg-primary rounded-pill">15</span>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
