@@ -9,22 +9,221 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+    <!-- Sección: Encabezado de usuario -->
     <div th:replace="componentes/headerUsuario :: headerUsuario"></div>
+    <!-- Sección principal de usuarios registrados -->
     <div class="container-fluid flex-grow-1 d-flex align-items-center justify-content-center" style="min-height: 80vh">
         <div class="w-100" style="max-width: 900px">
+            <!-- Título principal de la sección -->
             <h2 class="text-center mb-4">
                 <i class="bi bi-people"></i> Usuarios Registrados
             </h2>
+            <!-- Card principal de usuarios -->
             <div class="card shadow">
                 <div class="card-body">
-                    <!-- Aquí iría la tabla de usuarios -->
-                    <p class="text-center text-muted">(Tabla de usuarios aquí)</p>
+                    <!-- Buscador de usuarios -->
+                    <form class="mb-3">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text bg-primary text-white"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control" placeholder="Buscar usuario, nombre, email...">
+                            <button class="btn btn-primary" type="submit">Buscar</button>
+                        </div>
+                    </form>
+                    <!-- Tabla de usuarios de ejemplo (solo nombre, email, rol, username) -->
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th><i class="bi bi-person-fill text-secondary"></i> Nombre</th>
+                                    <th><i class="bi bi-envelope-fill text-secondary"></i> Email</th>
+                                    <th><i class="bi bi-person-badge-fill text-secondary"></i> Rol</th>
+                                    <th><i class="bi bi-person-lines-fill text-secondary"></i> Usuario</th>
+                                    <th class="text-center"><i class="bi bi-gear-fill text-secondary"></i> Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Juan Pérez</td>
+                                    <td>juan@email.com</td>
+                                    <td>Usuario</td>
+                                    <td>juanp</td>
+                                    <td>
+                                        <div class="d-flex flex-row gap-2">
+                                            <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalUsuarioJuan">
+                                                <i class="bi bi-pencil-square"></i> Editar
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i> Borrar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>María López</td>
+                                    <td>maria@email.com</td>
+                                    <td>Administrador</td>
+                                    <td>marial</td>
+                                    <td>
+                                        <div class="d-flex flex-row gap-2">
+                                            <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalUsuarioMaria">
+                                                <i class="bi bi-pencil-square"></i> Editar
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i> Borrar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Fin tabla ejemplo -->
                 </div>
             </div>
         </div>
     </div>
+    <!-- Pie de página -->
     <div th:replace="componentes/footer :: footer"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Modales de ejemplo para ver/editar usuario -->
+    <div class="modal fade" id="modalUsuarioJuan" tabindex="-1" aria-labelledby="modalUsuarioJuanLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="modalUsuarioJuanLabel"><i class="bi bi-person-circle me-2"></i>Ver / Editar Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">ID Usuario</label>
+                                <input type="text" class="form-control" placeholder="ID Usuario">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" placeholder="Nombre">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Apellidos</label>
+                                <input type="text" class="form-control" placeholder="Apellidos">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Usuario</label>
+                                <input type="text" class="form-control" placeholder="Usuario">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" placeholder="Email">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" placeholder="Contraseña">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" placeholder="Teléfono">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Rol</label>
+                                <select class="form-select">
+                                    <option value="">Selecciona rol</option>
+                                    <option>Usuario</option>
+                                    <option>Administrador</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Activo</label>
+                                <select class="form-select">
+                                    <option value="">Selecciona estado</option>
+                                    <option>Activo</option>
+                                    <option>Inactivo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha de registro</label>
+                                <input type="text" class="form-control" placeholder="Fecha de registro">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalUsuarioMaria" tabindex="-1" aria-labelledby="modalUsuarioMariaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="modalUsuarioMariaLabel"><i class="bi bi-person-circle me-2"></i>Ver / Editar Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">ID Usuario</label>
+                                <input type="text" class="form-control" placeholder="ID Usuario">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" placeholder="Nombre">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Apellidos</label>
+                                <input type="text" class="form-control" placeholder="Apellidos">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Usuario</label>
+                                <input type="text" class="form-control" placeholder="Usuario">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" placeholder="Email">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" placeholder="Contraseña">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" placeholder="Teléfono">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Rol</label>
+                                <select class="form-select">
+                                    <option value="">Selecciona rol</option>
+                                    <option>Usuario</option>
+                                    <option>Administrador</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Activo</label>
+                                <select class="form-select">
+                                    <option value="">Selecciona estado</option>
+                                    <option>Activo</option>
+                                    <option>Inactivo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha de registro</label>
+                                <input type="text" class="form-control" placeholder="Fecha de registro">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin modales ejemplo -->
 </body>
 
 </html>

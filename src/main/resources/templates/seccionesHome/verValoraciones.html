@@ -9,61 +9,87 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <!-- HEADER -->
+    <!-- Sección: Encabezado de usuario -->
     <div th:replace="componentes/headerUsuario :: headerUsuario"></div>
-    <div class="container-fluid flex-grow-1 d-flex align-items-center justify-content-center" style="min-height:80vh;">
+    <div class="container-fluid flex-grow-1 d-flex align-items-center justify-content-center bg-light py-5">
         <div class="w-100" style="max-width:700px;">
-            <h2 class="text-center mb-4"><i class="bi bi-star"></i> Valoraciones</h2>
-            <div class="card shadow mx-auto mb-3">
+            <h2 class="text-center mb-4"><i class="bi bi-star-fill text-warning"></i> Valoraciones</h2>
+            <!-- Título principal de la sección de valoraciones -->
+            <div class="card border-0 shadow-lg mx-auto rounded-4 mb-4">
+            <!-- Card principal para mostrar valoraciones -->
                 <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                    <!-- Valoración media del usuario -->
                         <span class="fw-bold">Valoración media:</span>
-                        <span class="fs-4">4.4 <span class="text-warning">&#9733;</span></span>
+                        <span class="fs-4">
+                            <span class="badge bg-warning text-dark">4.4 <i class="bi bi-star-fill"></i></span>
+                        </span>
                     </div>
                     <hr>
+                    <!-- Separador visual -->
                     <h6 class="mb-3">Últimas 5 valoraciones</h6>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <img src="/images/avatarPlaceholder.png" alt="Usuario" class="rounded-circle me-3"
-                                    width="40" height="40">
-                                <div>
-                                    <span class="fw-bold">Juan Pérez</span> <span class="text-muted small">·
-                                        28/12/2025</span><br>
-                                    <span class="text-warning">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <span
-                                        class="ms-2">Excelente servicio</span>
+                    <!-- Título de últimas valoraciones -->
+                    <div class="row g-3">
+                    <!-- Cards de valoraciones individuales -->
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body d-flex align-items-center">
+                                    <img src="/images/avatarPlaceholder.png" alt="Usuario" class="rounded-circle me-3" width="48" height="48">
+                                    <div class="flex-grow-1">
+                                        <span class="fw-bold">Juan Pérez</span>
+                                        <span class="badge bg-light text-secondary ms-2">28/12/2025</span><br>
+                                        <span class="text-warning">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                        </span>
+                                        <span class="ms-2">Excelente servicio</span>
+                                    </div>
                                 </div>
                             </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <img src="/images/avatarPlaceholder.png" alt="Usuario" class="rounded-circle me-3"
-                                    width="40" height="40">
-                                <div>
-                                    <span class="fw-bold">María López</span> <span class="text-muted small">·
-                                        25/12/2025</span><br>
-                                    <span style="color:gold;">&#9733;&#9733;&#9733;&#9733;</span> <span class="ms-2">Muy
-                                        profesional</span>
+                        </div>
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body d-flex align-items-center">
+                                    <img src="/images/avatarPlaceholder.png" alt="Usuario" class="rounded-circle me-3" width="48" height="48">
+                                    <div class="flex-grow-1">
+                                        <span class="fw-bold">María López</span>
+                                        <span class="badge bg-light text-secondary ms-2">25/12/2025</span><br>
+                                        <span class="text-warning">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                        </span>
+                                        <span class="ms-2">Muy profesional</span>
+                                    </div>
                                 </div>
                             </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <img src="/images/avatarPlaceholder.png" alt="Usuario" class="rounded-circle me-3"
-                                    width="40" height="40">
-                                <div>
-                                    <span class="fw-bold">Carlos Ruiz</span> <span class="text-muted small">·
-                                        22/12/2025</span><br>
-                                    <span style="color:gold;">&#9733;&#9733;&#9733;&#9733;</span> <span
-                                        class="ms-2">Servicio rápido</span>
+                        </div>
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body d-flex align-items-center">
+                                    <img src="/images/avatarPlaceholder.png" alt="Usuario" class="rounded-circle me-3" width="48" height="48">
+                                    <div class="flex-grow-1">
+                                        <span class="fw-bold">Carlos Ruiz</span>
+                                        <span class="badge bg-light text-secondary ms-2">22/12/2025</span><br>
+                                        <span class="text-warning">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                        </span>
+                                        <span class="ms-2">Servicio rápido</span>
+                                    </div>
                                 </div>
                             </div>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <!-- FOOTER -->
     <div th:replace="componentes/footer :: footer"></div>
