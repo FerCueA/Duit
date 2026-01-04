@@ -19,31 +19,32 @@ public class UsuarioDAO {
         objMySQLConnection = new MySqlConnection();
     }
 
+       // Método para mapear un ResultSet a un objeto Usuario
+    private Usuario mapearUsuario(ResultSet rs) throws SQLException {
+        Usuario usuario = new Usuario();
+        usuario.setIdUsuario(rs.getInt("id_usuario"));
+        usuario.setNombre(rs.getString("nombre"));
+        usuario.setApellidos(rs.getString("apellidos"));
+        usuario.setUsername(rs.getString("username"));
+        usuario.setEmail(rs.getString("email"));
+        usuario.setPassword(rs.getString("password"));
+        usuario.setTelefono(rs.getString("telefono"));
+        usuario.setIdRol(rs.getInt("id_rol"));
+        usuario.setActivo(rs.getBoolean("activo"));
+        usuario.setFechaRegistro(rs.getTimestamp("fecha_registro"));
+        return usuario;
+    }
+
     // Obtener todos los usuarios
     public ArrayList<Usuario> obtenerTodosUsuarios() throws SQLException {
-
         ArrayList<Usuario> objListaUsuarios = new ArrayList<>();
         objMySQLConnection.open();
-
         if (!objMySQLConnection.isError()) {
-
             String sql = "SELECT id_usuario, nombre, apellidos, username, email, password, telefono, id_rol, activo, fecha_registro FROM usuario";
             ResultSet objResultSet = objMySQLConnection.executeSelect(sql);
-
             try {
                 while (objResultSet != null && objResultSet.next()) {
-                    Usuario usuario = new Usuario();
-                    usuario.setIdUsuario(objResultSet.getInt("id_usuario"));
-                    usuario.setNombre(objResultSet.getString("nombre"));
-                    usuario.setApellidos(objResultSet.getString("apellidos"));
-                    usuario.setUsername(objResultSet.getString("username"));
-                    usuario.setEmail(objResultSet.getString("email"));
-                    usuario.setPassword(objResultSet.getString("password"));
-                    usuario.setTelefono(objResultSet.getString("telefono"));
-                    usuario.setIdRol(objResultSet.getInt("id_rol"));
-                    usuario.setActivo(objResultSet.getBoolean("activo"));
-                    usuario.setFechaRegistro(objResultSet.getTimestamp("fecha_registro"));
-                    objListaUsuarios.add(usuario);
+                    objListaUsuarios.add(mapearUsuario(objResultSet));
                 }
             } catch (Exception e) {
                 System.err.println("Error inesperado ejecutando la consulta SQL: " + sql);
@@ -51,10 +52,8 @@ public class UsuarioDAO {
                 e.printStackTrace();
             }
         }
-
         objMySQLConnection.close();
         return objListaUsuarios;
-
     }
 
     // Obtener datos de un usuario por su username
@@ -62,25 +61,13 @@ public class UsuarioDAO {
     public Usuario obtenerUsuarioPorUsername(String username) {
         Usuario objUsuario = null;
         objMySQLConnection.open();
-
         if (!objMySQLConnection.isError()) {
             String query = "SELECT id_usuario, nombre, apellidos, username, email, password, telefono, id_rol, activo, fecha_registro FROM usuario WHERE username = '"
                     + username + "'";
             ResultSet resultSet = objMySQLConnection.executeSelect(query);
-
             try {
                 if (resultSet != null && resultSet.next()) {
-                    objUsuario = new Usuario();
-                    objUsuario.setIdUsuario(resultSet.getInt("id_usuario"));
-                    objUsuario.setNombre(resultSet.getString("nombre"));
-                    objUsuario.setApellidos(resultSet.getString("apellidos"));
-                    objUsuario.setUsername(resultSet.getString("username"));
-                    objUsuario.setEmail(resultSet.getString("email"));
-                    objUsuario.setPassword(resultSet.getString("password"));
-                    objUsuario.setTelefono(resultSet.getString("telefono"));
-                    objUsuario.setIdRol(resultSet.getInt("id_rol"));
-                    objUsuario.setActivo(resultSet.getBoolean("activo"));
-                    objUsuario.setFechaRegistro(resultSet.getTimestamp("fecha_registro"));
+                    objUsuario = mapearUsuario(resultSet);
                 }
             } catch (Exception e) {
                 System.err.println("Error inesperado ejecutando la consulta SQL: " + query);
@@ -88,10 +75,11 @@ public class UsuarioDAO {
                 e.printStackTrace();
             }
         }
-
         objMySQLConnection.close();
         return objUsuario;
     }
+
+ 
 
     // Insertar un nuevo usuario
     public void insertarUsuario(Usuario usuario) throws SQLException {
@@ -105,6 +93,31 @@ public class UsuarioDAO {
                     usuario.getPassword(), usuario.getTelefono(), usuario.getIdRol(), usuario.isActivo(),
                     usuario.getFechaRegistro().toString());
             objMySQLConnection.executeInsert(sql);
+        }
+        objMySQLConnection.close();
+    }
+
+    // Eliminar usuario por ID
+    public void eliminarUsuario(int idUsuario) throws SQLException {
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = "DELETE FROM usuario WHERE id_usuario = " + idUsuario;
+            objMySQLConnection.executeUpdateOrDelete(sql);
+        }
+        objMySQLConnection.close();
+    }
+
+    // Actualizar usuario
+    public void actualizarUsuario(Usuario usuario) throws SQLException {
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = String.format(
+                "UPDATE usuario SET nombre = '%s', apellidos = '%s', username = '%s', email = '%s', password = '%s', telefono = '%s', id_rol = %d, activo = %b, fecha_registro = '%s' WHERE id_usuario = %d",
+                usuario.getNombre(), usuario.getApellidos(), usuario.getUsername(), usuario.getEmail(),
+                usuario.getPassword(), usuario.getTelefono(), usuario.getIdRol(), usuario.isActivo(),
+                usuario.getFechaRegistro().toString(), usuario.getIdUsuario()
+            );
+            objMySQLConnection.executeUpdateOrDelete(sql);
         }
         objMySQLConnection.close();
     }
