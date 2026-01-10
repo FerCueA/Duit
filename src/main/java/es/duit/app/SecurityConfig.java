@@ -21,27 +21,28 @@ public class SecurityConfig {
         @Bean
         SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
-                                // .csrf(csrf -> csrf.disable())
-                                .userDetailsService(usuarioBD)
-                                .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers(
-                                                                "/", "/index",
-                                                                "/login", "/loginprocess",
-                                                                "/register",
-                                                                "/css/**", "/js/**", "/images/**")
-                                                .permitAll()
-                                                .requestMatchers("/home").authenticated()
-                                                .anyRequest().authenticated())
-                                .formLogin(form -> form
-                                                .loginPage("/login")
-                                                .loginProcessingUrl("/loginprocess")
-                                                .defaultSuccessUrl("/home", true)
-                                                .permitAll())
-                                .logout(logout -> logout
-                                                .logoutUrl("/logout")
-                                                .logoutSuccessUrl("/index")
-                                                .permitAll());
-
+                        .userDetailsService(usuarioBD)
+                        .authorizeHttpRequests(auth -> auth
+                                .requestMatchers(
+                                        "/", "/index",
+                                        "/login", "/loginprocess",
+                                        "/register",
+                                        "/css/**", "/js/**", "/images/**"
+                                ).permitAll()
+                                .requestMatchers("/home").authenticated()
+                                .anyRequest().authenticated()
+                        )
+                        .formLogin(form -> form
+                                .loginPage("/login")
+                                .loginProcessingUrl("/loginprocess")
+                                .defaultSuccessUrl("/home", true)
+                                .permitAll()
+                        )
+                        .logout(logout -> logout
+                                .logoutUrl("/logout")
+                                .logoutSuccessUrl("/index")
+                                .permitAll()
+                        );
                 return http.build();
         }
 
