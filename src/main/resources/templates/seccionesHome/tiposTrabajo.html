@@ -39,35 +39,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Fontanería</td>
-                                    <td>Reparaciones y mantenimiento de tuberías</td>
+                                <tr th:each="categoria : ${categorias}">
+                                    <td th:text="${categoria.nombre}"></td>
+                                    <td th:text="${categoria.descripcion}"></td>
                                     <td class="text-center">
-                                        <button class="btn btn-outline-primary btn-sm me-1" data-bs-toggle="modal" data-bs-target="#modalEditarTipo1">
-                                            <i class="bi bi-pencil"></i> Editar
-                                        </button>
-                                        <button class="btn btn-outline-danger btn-sm">
-                                            <i class="bi bi-trash"></i> Eliminar
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Electricidad</td>
-                                    <td>Instalaciones y arreglos eléctricos</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-outline-primary btn-sm me-1" data-bs-toggle="modal" data-bs-target="#modalEditarTipo2">
-                                            <i class="bi bi-pencil"></i> Editar
-                                        </button>
-                                        <button class="btn btn-outline-danger btn-sm">
-                                            <i class="bi bi-trash"></i> Eliminar
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Limpieza</td>
-                                    <td>Servicios de limpieza general</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-outline-primary btn-sm me-1" data-bs-toggle="modal" data-bs-target="#modalEditarTipo3">
+                                        <button class="btn btn-outline-primary btn-sm me-1">
                                             <i class="bi bi-pencil"></i> Editar
                                         </button>
                                         <button class="btn btn-outline-danger btn-sm">
@@ -78,114 +54,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- Modal: Añadir nuevo tipo -->
-                    <div class="modal fade" id="modalNuevoTipo" tabindex="-1" aria-labelledby="modalNuevoTipoLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-success text-white">
-                                    <h5 class="modal-title" id="modalNuevoTipoLabel"><i class="bi bi-plus-circle me-2"></i>Añadir tipo de trabajo</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="mb-3">
-                                            <label class="form-label">Nombre</label>
-                                            <input type="text" class="form-control" placeholder="Nombre del tipo de trabajo">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Descripción</label>
-                                            <textarea class="form-control" rows="2" placeholder="Descripción"></textarea>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-success">Guardar</button>
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal: Editar tipo 1 -->
-                    <div class="modal fade" id="modalEditarTipo1" tabindex="-1" aria-labelledby="modalEditarTipo1Label" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-primary text-white">
-                                    <h5 class="modal-title" id="modalEditarTipo1Label"><i class="bi bi-pencil me-2"></i>Editar tipo de trabajo</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="mb-3">
-                                            <label class="form-label">Nombre</label>
-                                            <input type="text" class="form-control" value="Fontanería">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Descripción</label>
-                                            <textarea class="form-control" rows="2">Reparaciones y mantenimiento de tuberías</textarea>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">Guardar cambios</button>
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal: Editar tipo 2 -->
-                    <div class="modal fade" id="modalEditarTipo2" tabindex="-1" aria-labelledby="modalEditarTipo2Label" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-primary text-white">
-                                    <h5 class="modal-title" id="modalEditarTipo2Label"><i class="bi bi-pencil me-2"></i>Editar tipo de trabajo</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="mb-3">
-                                            <label class="form-label">Nombre</label>
-                                            <input type="text" class="form-control" value="Electricidad">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Descripción</label>
-                                            <textarea class="form-control" rows="2">Instalaciones y arreglos eléctricos</textarea>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">Guardar cambios</button>
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal: Editar tipo 3 -->
-                    <div class="modal fade" id="modalEditarTipo3" tabindex="-1" aria-labelledby="modalEditarTipo3Label" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-primary text-white">
-                                    <h5 class="modal-title" id="modalEditarTipo3Label"><i class="bi bi-pencil me-2"></i>Editar tipo de trabajo</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="mb-3">
-                                            <label class="form-label">Nombre</label>
-                                            <input type="text" class="form-control" value="Limpieza">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Descripción</label>
-                                            <textarea class="form-control" rows="2">Servicios de limpieza general</textarea>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">Guardar cambios</button>
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                     
                 </div>
             </div>

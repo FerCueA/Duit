@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class TrabajoDAO {
+import org.springframework.stereotype.Repository;
+@Repository
+class TrabajoDAO {
     private MySqlConnection objMySQLConnection;
 
     public TrabajoDAO() {

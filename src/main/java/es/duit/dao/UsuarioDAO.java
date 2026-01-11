@@ -1,4 +1,5 @@
 
+
 package es.duit.dao;
 
 import es.duit.connections.MySqlConnection;
@@ -120,6 +121,27 @@ public class UsuarioDAO {
             objMySQLConnection.executeUpdateOrDelete(sql);
         }
         objMySQLConnection.close();
+    }
+
+        // Obtener usuario por ID
+    public Usuario obtenerUsuarioPorId(int idUsuario) {
+        Usuario objUsuario = null;
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String query = "SELECT id_usuario, nombre, apellidos, username, email, password, telefono, id_rol, activo, fecha_registro FROM usuario WHERE id_usuario = '" + idUsuario + "'";
+            ResultSet resultSet = objMySQLConnection.executeSelect(query);
+            try {
+                if (resultSet != null && resultSet.next()) {
+                    objUsuario = mapearUsuario(resultSet);
+                }
+            } catch (Exception e) {
+                System.err.println("Error inesperado ejecutando la consulta SQL: " + query);
+                System.err.println("Mensaje de error: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        objMySQLConnection.close();
+        return objUsuario;
     }
 
 }

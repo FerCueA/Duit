@@ -1,22 +1,30 @@
 package es.duit.controller;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
 import es.duit.dao.RolDAO;
 import es.duit.dao.UsuarioDAO;
+import es.duit.dao.CategoriaDAO;
 import es.duit.models.Rol;
 import es.duit.models.Usuario;
+import es.duit.models.Categoria;
+import java.util.ArrayList;
 
 @Controller
 public class HomeController {
-
+    
+   
     @Autowired
     private UsuarioDAO usuarioDAO;
     @Autowired
     private RolDAO rolDAO;
+    @Autowired
+    private CategoriaDAO categoriaDAO;
 
     private void obtenerDatosUsuario(Model model, Authentication authentication) throws Exception {
         if (authentication != null) {
@@ -77,21 +85,28 @@ public class HomeController {
         return "seccionesHome/ayuda";
     }
 
+
     @GetMapping("/verUsuarios")
     public String verUsuarios(Model model, Authentication authentication) throws Exception {
         obtenerDatosUsuario(model, authentication);
+        ArrayList<Usuario> usuarios = usuarioDAO.obtenerTodosUsuarios();
+        model.addAttribute("usuarios", usuarios);
         return "seccionesHome/verUsuarios";
     }
 
     @GetMapping("/verEstadisticas")
     public String verEstadisticas(Model model, Authentication authentication) throws Exception {
         obtenerDatosUsuario(model, authentication);
+       
         return "seccionesHome/verEstadisticas";
     }
+
 
     @GetMapping("/tiposTrabajo")
     public String tiposTrabajo(Model model, Authentication authentication) throws Exception {
         obtenerDatosUsuario(model, authentication);
+        ArrayList<Categoria> categorias = categoriaDAO.obtenerTodasCategorias();
+        model.addAttribute("categorias", categorias);
         return "seccionesHome/tiposTrabajo";
     }
 
@@ -100,4 +115,8 @@ public class HomeController {
         obtenerDatosUsuario(model, authentication);
         return "seccionesHome/errorView";
     }
+
+
+
+
 }

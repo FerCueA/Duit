@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Repository;
+@Repository
 public class SolicitudDAO {
     private MySqlConnection objMySQLConnection;
 
@@ -97,6 +99,11 @@ public class SolicitudDAO {
             objMySQLConnection.executeUpdateOrDelete(sql);
         }
         objMySQLConnection.close();
+    }
+
+    public ArrayList<Solicitud> obtenerTodasSolicitudes() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'obtenerTodasSolicitudes'");
     }
 
    
