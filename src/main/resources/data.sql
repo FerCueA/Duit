@@ -143,6 +143,6 @@ VALUES
   'Sistema',
   'admin',
   'admin@marketplace.com',
-  'HASH_admin',
+  'admin123',
   (SELECT id_rol FROM rol WHERE nombre='ADMIN')
 );
