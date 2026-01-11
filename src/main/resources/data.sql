@@ -1,11 +1,9 @@
 -- =========================================
--- BASE DE DATOS
--- =========================================
-CREATE DATABASE IF NOT EXISTS duit_db
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_general_ci;
+-- CREATE DATABASE IF NOT EXISTS duit_db
+-- CHARACTER SET utf8mb4
+-- COLLATE utf8mb4_general_ci;
 
-USE duit_db;
+-- USE duit_db;
 
 -- =========================================
 -- ROLES
