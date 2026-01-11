@@ -26,4 +26,6 @@
 **Eliminar la clase `ServletInitializer`:**
    - Esta clase solo es necesaria para WAR. Se eliminó el archivo `src/main/java/es/duit/app/ServletInitializer.java`.
 
+**Ejecutar para desplegar**
 
+`./mvnw clean package`
