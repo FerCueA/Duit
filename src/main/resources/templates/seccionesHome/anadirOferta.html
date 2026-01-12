@@ -46,7 +46,7 @@
                             </div>
                         </div>
                         <!-- Formulario para añadir nueva oferta -->
-                        <form id="formOferta" autocomplete="off">
+                        <form id="formOferta" autocomplete="off" method="post" th:action="@{/anadirOferta}">
                             <!-- Campos del formulario -->
                             <div class="row g-3">
                                 <div class="col-12">
@@ -64,11 +64,8 @@
                                     <label class="form-label"><i class="bi bi-tags fs-5 text-primary"></i> Tipo</label>
                                     <select name="tipo" class="form-select" required>
                                         <option value="">Selecciona un tipo</option>
-                                        <option value="Limpieza">Limpieza</option>
-                                        <option value="Reparaciones">Reparaciones</option>
-                                        <option value="Jardinería">Jardinería</option>
-                                        <option value="Informática">Informática</option>
-                                        <option value="Otro">Otro</option>
+                                        <option th:each="categoria : ${categorias}" th:value="${categoria.idCategoria}"
+                                            th:text="${categoria.nombre}"></option>
                                     </select>
                                 </div>
                                 <div class="col-12">
@@ -86,15 +83,7 @@
                                     Publicar</button>
                             </div>
                         </form>
-                        <!-- Script para mostrar el modal de éxito y limpiar el formulario -->
-                        <script>
-                            document.getElementById('formOferta').addEventListener('submit', function (e) {
-                                e.preventDefault();
-                                var modal = new bootstrap.Modal(document.getElementById('modalOfertaPublicada'));
-                                modal.show();
-                                document.getElementById('formOferta').reset();
-                            });
-                        </script>
+                        <!-- El modal de éxito se elimina porque ahora se redirige tras guardar la oferta -->
                     </div>
                 </div>
             </div>
