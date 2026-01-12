@@ -10,7 +10,7 @@ import es.duit.dao.UsuarioDAO;
 import es.duit.models.Usuario;
 import java.sql.Timestamp;
 
-// hola caracola
+
 // Controlador principal para rutas públicas y registro/login
 @Controller
 public class MainController {

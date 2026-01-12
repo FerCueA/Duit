@@ -131,10 +131,6 @@ public class SolicitudDAO {
         objMySQLConnection.close();
     }
 
-    public ArrayList<Solicitud> obtenerTodasSolicitudes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerTodasSolicitudes'");
-    }
-
+    
    
 }
