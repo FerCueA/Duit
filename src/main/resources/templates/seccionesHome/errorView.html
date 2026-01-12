@@ -13,9 +13,12 @@
             <h4 class="fw-bold mb-2 text-danger">¡Ups! Algo salió mal</h4>
             <p class="mb-4 text-secondary">No se pudo encontrar el componente solicitado.<br>Por favor verifica la dirección o vuelve al inicio.</p>
             <!-- Botón para volver al inicio -->
-            <a th:href="@{/home(view='panelPrincipal')}" class="btn btn-outline-danger btn-lg px-4 shadow-sm">
+            <a th:href="@{/home}" class="btn btn-outline-danger btn-lg px-4 shadow-sm">
                 <i class="bi bi-arrow-left-circle me-2"></i> Volver al inicio
             </a>
         </div>
+    </div>
+    <div class="mt-4 text-center">
+        <a th:href="@{/home}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Volver al panel</a>
     </div>
 </div>

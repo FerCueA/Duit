@@ -109,11 +109,10 @@
                     </div>
                 </form>
             </div>
-            <a href="/" class="btn btn-outline-success w-100 rounded-3 mt-4 d-flex align-items-center justify-content-center gap-2 fs-5"
-                aria-label="Volver al inicio">
-                <i class="bi bi-house"></i>
-                Volver al Inicio
-            </a>
+            <div class="text-center mt-3">
+                <a th:href="@{/login}" class="btn btn-link">¿Ya tienes cuenta? Inicia sesión</a>
+                <a th:href="@{/index}" class="btn btn-outline-secondary">Volver al inicio</a>
+            </div>
         </div>
     </main>
     <!-- FOOTER -->

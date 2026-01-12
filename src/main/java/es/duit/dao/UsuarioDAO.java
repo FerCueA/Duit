@@ -1,5 +1,3 @@
-
-
 package es.duit.dao;
 
 import es.duit.connections.MySqlConnection;
@@ -173,6 +171,24 @@ public class UsuarioDAO {
         }
         objMySQLConnection.close();
         return objUsuario;
+    }
+
+    // Buscar usuarios por nombre, apellidos, username o email
+    public ArrayList<Usuario> buscarUsuarios(String filtro) throws SQLException {
+        ArrayList<Usuario> lista = new ArrayList<>();
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = String.format(
+                "SELECT id_usuario, nombre, apellidos, username, email, password, telefono, id_rol, id_direccion, activo, fecha_registro FROM usuario WHERE nombre LIKE '%%%s%%' OR apellidos LIKE '%%%s%%' OR username LIKE '%%%s%%' OR email LIKE '%%%s%%'",
+                filtro, filtro, filtro, filtro
+            );
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            while (rs != null && rs.next()) {
+                lista.add(mapearUsuario(rs));
+            }
+        }
+        objMySQLConnection.close();
+        return lista;
     }
 
 }

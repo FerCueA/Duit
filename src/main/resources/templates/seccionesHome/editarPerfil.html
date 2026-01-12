@@ -32,22 +32,27 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label"><i class="bi bi-person fs-5 text-primary"></i> Nombre</label>
-                                <input type="text" name="nombre" class="form-control" placeholder="Usuario Ejemplo" required />
+                                <input type="text" name="nombre" class="form-control" th:value="${usuario.nombre}" required />
                                 <div class="invalid-feedback">Por favor, introduce tu nombre.</div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label"><i class="bi bi-person fs-5 text-primary"></i> Apellidos</label>
-                                <input type="text" name="apellidos" class="form-control" value="Pérez García" required />
+                                <input type="text" name="apellidos" class="form-control" th:value="${usuario.apellidos}" required />
                                 <div class="invalid-feedback">Por favor, introduce tus apellidos.</div>
                             </div>
                             <div class="col-md-6">
+                                <label class="form-label"><i class="bi bi-person fs-5 text-primary"></i> Nombre de usuario</label>
+                                <input type="text" name="username" class="form-control" th:value="${usuario.username}" required />
+                                <div class="invalid-feedback">Por favor, introduce un nombre de usuario.</div>
+                            </div>
+                            <div class="col-md-6">
                                 <label class="form-label"><i class="bi bi-envelope fs-5 text-primary"></i> Correo electrónico</label>
-                                <input type="email" name="email" class="form-control" value="usuario@email.com" required />
+                                <input type="email" name="email" class="form-control" th:value="${usuario.email}" required />
                                 <div class="invalid-feedback">Introduce un correo válido.</div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label"><i class="bi bi-telephone fs-5 text-primary"></i> Teléfono</label>
-                                <input type="tel" name="telefono" class="form-control" value="+34 123 456 789" required />
+                                <input type="tel" name="telefono" class="form-control" th:value="${usuario.telefono}" required />
                                 <div class="invalid-feedback">Introduce un teléfono válido.</div>
                             </div>
                         </div>
@@ -78,6 +83,10 @@
                     </form>
                 </div>
             </div>
+            <!-- Botón 'Volver al panel' -->
+            <div class="mt-4 text-center">
+                <a th:href="@{/home}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Volver al panel</a>
+            </div>
         </div>
     </div>
     </div>
@@ -87,4 +96,3 @@
 </body>
 
 </html>
-</div>
