@@ -16,17 +16,46 @@ public class ValoracionDAO {
         objMySQLConnection = new MySqlConnection();
     }
 
-     private Valoracion mapearValoracion(ResultSet rs) throws SQLException {
+    private Valoracion mapearValoracion(ResultSet rs) throws SQLException {
         Valoracion valoracion = new Valoracion();
         valoracion.setIdValoracion(rs.getInt("id_valoracion"));
         valoracion.setIdTrabajo(rs.getInt("id_trabajo"));
         valoracion.setIdEmisor(rs.getInt("id_emisor"));
         valoracion.setIdReceptor(rs.getInt("id_receptor"));
-        valoracion.setTipo(rs.getString("tipo"));
+        String tipoStr = rs.getString("tipo");
+        valoracion.setTipo(Valoracion.TipoValoracion.valueOf(tipoStr));
         valoracion.setPuntuacion(rs.getInt("puntuacion"));
         valoracion.setComentario(rs.getString("comentario"));
         valoracion.setFechaValoracion(rs.getTimestamp("fecha_valoracion"));
         return valoracion;
+    }
+
+    public Valoracion obtenerPorId(int id) throws SQLException {
+        objMySQLConnection.open();
+        Valoracion valoracion = null;
+        if (!objMySQLConnection.isError()) {
+            String sql = "SELECT * FROM valoracion WHERE id_valoracion = " + id;
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            if (rs != null && rs.next()) {
+                valoracion = mapearValoracion(rs);
+            }
+        }
+        objMySQLConnection.close();
+        return valoracion;
+    }
+
+    public ArrayList<Valoracion> obtenerTodas() throws SQLException {
+        ArrayList<Valoracion> lista = new ArrayList<>();
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = "SELECT * FROM valoracion";
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            while (rs != null && rs.next()) {
+                lista.add(mapearValoracion(rs));
+            }
+        }
+        objMySQLConnection.close();
+        return lista;
     }
 
     public Valoracion obtenerValoracionPorId(int id) throws SQLException {

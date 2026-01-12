@@ -31,17 +31,48 @@ public class UsuarioDAO {
         usuario.setPassword(rs.getString("password"));
         usuario.setTelefono(rs.getString("telefono"));
         usuario.setIdRol(rs.getInt("id_rol"));
+        int idDireccion = rs.getInt("id_direccion");
+        usuario.setIdDireccion(rs.wasNull() ? null : idDireccion);
         usuario.setActivo(rs.getBoolean("activo"));
         usuario.setFechaRegistro(rs.getTimestamp("fecha_registro"));
         return usuario;
     }
+
+    public Usuario obtenerPorId(int id) throws SQLException {
+        objMySQLConnection.open();
+        Usuario usuario = null;
+        if (!objMySQLConnection.isError()) {
+            String sql = "SELECT * FROM usuario WHERE id_usuario = " + id;
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            if (rs != null && rs.next()) {
+                usuario = mapearUsuario(rs);
+            }
+        }
+        objMySQLConnection.close();
+        return usuario;
+    }
+
+    public ArrayList<Usuario> obtenerTodos() throws SQLException {
+        ArrayList<Usuario> lista = new ArrayList<>();
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = "SELECT * FROM usuario";
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            while (rs != null && rs.next()) {
+                lista.add(mapearUsuario(rs));
+            }
+        }
+        objMySQLConnection.close();
+        return lista;
+    }
+    
 
     // Obtener todos los usuarios
     public ArrayList<Usuario> obtenerTodosUsuarios() throws SQLException {
         ArrayList<Usuario> objListaUsuarios = new ArrayList<>();
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
-            String sql = "SELECT id_usuario, nombre, apellidos, username, email, password, telefono, id_rol, activo, fecha_registro FROM usuario";
+            String sql = "SELECT id_usuario, nombre, apellidos, username, email, password, telefono, id_rol, id_direccion, activo, fecha_registro FROM usuario";
             ResultSet objResultSet = objMySQLConnection.executeSelect(sql);
             try {
                 while (objResultSet != null && objResultSet.next()) {
@@ -63,7 +94,7 @@ public class UsuarioDAO {
         Usuario objUsuario = null;
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
-            String query = "SELECT id_usuario, nombre, apellidos, username, email, password, telefono, id_rol, activo, fecha_registro FROM usuario WHERE username = '"
+                String query = "SELECT id_usuario, nombre, apellidos, username, email, password, telefono, id_rol, id_direccion, activo, fecha_registro FROM usuario WHERE username = '"
                     + username + "'";
             ResultSet resultSet = objMySQLConnection.executeSelect(query);
             try {

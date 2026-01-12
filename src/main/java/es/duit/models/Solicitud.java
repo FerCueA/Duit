@@ -9,9 +9,29 @@ public class Solicitud {
     private String titulo;
     private String descripcion;
     private Date fechaSolicitud;
-    private String estado;
+    private Date fechaActualizacion;
+    private EstadoSolicitud estado;
+
+    public enum EstadoSolicitud {
+        ABIERTA, CERRADA, CANCELADA
+    }
 
     public Solicitud() {}
+    public Date getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
+    public void setFechaActualizacion(Date fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
+    }
+
+    public EstadoSolicitud getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoSolicitud estado) {
+        this.estado = estado;
+    }
 
     public int getIdSolicitud() {
         return idSolicitud;
@@ -61,11 +81,4 @@ public class Solicitud {
         this.fechaSolicitud = fechaSolicitud;
     }
 
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
 }

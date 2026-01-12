@@ -13,9 +13,11 @@ public class Usuario {
     private String password;
     private String telefono;
     private int idRol;
+    private Integer idDireccion; // Puede ser null
     private boolean activo;
     private Timestamp fechaRegistro;
     private Rol rol;
+    private Direccion direccion; // Relación opcional
 
     public Rol getRol() {
         return rol;
@@ -29,7 +31,7 @@ public class Usuario {
     }
 
     public Usuario(int idUsuario, String nombre, String apellidos, String username, String email, String password,
-            String telefono, int idRol, boolean activo, Timestamp fechaRegistro) {
+            String telefono, int idRol, Integer idDireccion, boolean activo, Timestamp fechaRegistro) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -38,6 +40,7 @@ public class Usuario {
         this.password = password;
         this.telefono = telefono;
         this.idRol = idRol;
+        this.idDireccion = idDireccion;
         this.activo = activo;
         this.fechaRegistro = fechaRegistro;
     }
@@ -106,6 +109,14 @@ public class Usuario {
         this.idRol = idRol;
     }
 
+    public Integer getIdDireccion() {
+        return idDireccion;
+    }
+
+    public void setIdDireccion(Integer idDireccion) {
+        this.idDireccion = idDireccion;
+    }
+
     public boolean isActivo() {
         return activo;
     }
@@ -120,6 +131,14 @@ public class Usuario {
 
     public void setFechaRegistro(Timestamp fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
     }
 
     @Override

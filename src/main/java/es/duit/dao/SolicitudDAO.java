@@ -16,7 +16,7 @@ public class SolicitudDAO {
         objMySQLConnection = new MySqlConnection();
     }
 
-     private Solicitud mapearSolicitud(ResultSet rs) throws SQLException {
+    private Solicitud mapearSolicitud(ResultSet rs) throws SQLException {
         Solicitud solicitud = new Solicitud();
         solicitud.setIdSolicitud(rs.getInt("id_solicitud"));
         solicitud.setIdCliente(rs.getInt("id_cliente"));
@@ -24,8 +24,38 @@ public class SolicitudDAO {
         solicitud.setTitulo(rs.getString("titulo"));
         solicitud.setDescripcion(rs.getString("descripcion"));
         solicitud.setFechaSolicitud(rs.getTimestamp("fecha_solicitud"));
-        solicitud.setEstado(rs.getString("estado"));
+        solicitud.setFechaActualizacion(rs.getTimestamp("fecha_actualizacion"));
+        String estadoStr = rs.getString("estado");
+        solicitud.setEstado(Solicitud.EstadoSolicitud.valueOf(estadoStr));
         return solicitud;
+    }
+
+    public Solicitud obtenerPorId(int id) throws SQLException {
+        objMySQLConnection.open();
+        Solicitud solicitud = null;
+        if (!objMySQLConnection.isError()) {
+            String sql = "SELECT * FROM solicitud WHERE id_solicitud = " + id;
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            if (rs != null && rs.next()) {
+                solicitud = mapearSolicitud(rs);
+            }
+        }
+        objMySQLConnection.close();
+        return solicitud;
+    }
+
+    public ArrayList<Solicitud> obtenerTodas() throws SQLException {
+        ArrayList<Solicitud> lista = new ArrayList<>();
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = "SELECT * FROM solicitud";
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            while (rs != null && rs.next()) {
+                lista.add(mapearSolicitud(rs));
+            }
+        }
+        objMySQLConnection.close();
+        return lista;
     }
 
     public Solicitud obtenerSolicitudPorId(int id) throws SQLException {
@@ -73,7 +103,7 @@ public class SolicitudDAO {
         if (!objMySQLConnection.isError()) {
             String sql = String.format(
                 "INSERT INTO solicitud (id_cliente, id_categoria, titulo, descripcion, fecha_solicitud, estado) VALUES (%d, %d, '%s', '%s', '%tF %<tT', '%s')",
-                solicitud.getIdCliente(), solicitud.getIdCategoria(), solicitud.getTitulo(), solicitud.getDescripcion(), solicitud.getFechaSolicitud(), solicitud.getEstado()
+                solicitud.getIdCliente(), solicitud.getIdCategoria(), solicitud.getTitulo(), solicitud.getDescripcion(), solicitud.getFechaSolicitud(), solicitud.getEstado().name()
             );
             objMySQLConnection.executeInsert(sql);
         }

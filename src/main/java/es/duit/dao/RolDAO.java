@@ -27,6 +27,34 @@ public class RolDAO {
         return objRol;
     }
 
+    public Rol obtenerPorId(int id) throws SQLException {
+        objMySQLConnection.open();
+        Rol rol = null;
+        if (!objMySQLConnection.isError()) {
+            String sql = "SELECT * FROM rol WHERE id_rol = " + id;
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            if (rs != null && rs.next()) {
+                rol = mapearRol(rs);
+            }
+        }
+        objMySQLConnection.close();
+        return rol;
+    }
+
+    public ArrayList<Rol> obtenerTodos() throws SQLException {
+        ArrayList<Rol> lista = new ArrayList<>();
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = "SELECT * FROM rol";
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            while (rs != null && rs.next()) {
+                lista.add(mapearRol(rs));
+            }
+        }
+        objMySQLConnection.close();
+        return lista;
+    }
+
     // Obtener todos los roles
     public ArrayList<Rol> obtenerTodosRoles() throws SQLException {
         ArrayList<Rol> listaRoles = new ArrayList<>();
@@ -35,7 +63,7 @@ public class RolDAO {
             String sql = "SELECT id_rol, nombre, descripcion FROM rol";
             ResultSet resultSet = objMySQLConnection.executeSelect(sql);
             try {
-                while (resultSet.next()) {
+                while (resultSet != null && resultSet.next()) {
                     listaRoles.add(mapearRol(resultSet));
                 }
             } catch (Exception e) {

@@ -4,8 +4,16 @@ public class Categoria {
     private int idCategoria;
     private String nombre;
     private String descripcion;
+    private boolean activo;
 
     public Categoria() {}
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
 
     public int getIdCategoria() {
         return idCategoria;

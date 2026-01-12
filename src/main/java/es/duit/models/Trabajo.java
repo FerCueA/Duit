@@ -4,12 +4,16 @@ import java.util.Date;
 
 public class Trabajo {
     private int idTrabajo;
-    private int idSolicitud;
-    private int idTrabajador;
+    private int idPostulacion;
     private double precioAcordado;
     private Date fechaInicio;
     private Date fechaFin;
-    private String estado;
+    private EstadoTrabajo estado;
+    private String observaciones;
+
+    public enum EstadoTrabajo {
+        EN_PROCESO, FINALIZADO, CANCELADO
+    }
 
     public Trabajo() {}
 
@@ -21,20 +25,12 @@ public class Trabajo {
         this.idTrabajo = idTrabajo;
     }
 
-    public int getIdSolicitud() {
-        return idSolicitud;
+    public int getIdPostulacion() {
+        return idPostulacion;
     }
 
-    public void setIdSolicitud(int idSolicitud) {
-        this.idSolicitud = idSolicitud;
-    }
-
-    public int getIdTrabajador() {
-        return idTrabajador;
-    }
-
-    public void setIdTrabajador(int idTrabajador) {
-        this.idTrabajador = idTrabajador;
+    public void setIdPostulacion(int idPostulacion) {
+        this.idPostulacion = idPostulacion;
     }
 
     public double getPrecioAcordado() {
@@ -61,11 +57,19 @@ public class Trabajo {
         this.fechaFin = fechaFin;
     }
 
-    public String getEstado() {
+    public EstadoTrabajo getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(EstadoTrabajo estado) {
         this.estado = estado;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 }

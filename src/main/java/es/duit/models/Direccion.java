@@ -2,10 +2,11 @@ package es.duit.models;
 
 public class Direccion {
     private int idDireccion;
-    private int idUsuario;
     private String direccion;
     private String ciudad;
     private String codigoPostal;
+    private String provincia;
+    private String pais;
 
     public Direccion() {}
 
@@ -17,12 +18,20 @@ public class Direccion {
         this.idDireccion = idDireccion;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public String getProvincia() {
+        return provincia;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
     }
 
     public String getDireccion() {

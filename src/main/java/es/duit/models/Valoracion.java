@@ -7,12 +7,28 @@ public class Valoracion {
     private int idTrabajo;
     private int idEmisor;
     private int idReceptor;
-    private String tipo;
+    private TipoValoracion tipo;
     private int puntuacion;
     private String comentario;
     private Date fechaValoracion;
 
+    public enum TipoValoracion {
+        CLIENTE_A_PROFESIONAL, PROFESIONAL_A_CLIENTE
+    }
+
     public Valoracion() {}
+    public TipoValoracion getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoValoracion tipo) {
+        this.tipo = tipo;
+    }
+
+    public int getPuntuacion() {
+        return puntuacion;
+    }
+
 
     public int getIdValoracion() {
         return idValoracion;
@@ -46,17 +62,6 @@ public class Valoracion {
         this.idReceptor = idReceptor;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public int getPuntuacion() {
-        return puntuacion;
-    }
 
     public void setPuntuacion(int puntuacion) {
         this.puntuacion = puntuacion;

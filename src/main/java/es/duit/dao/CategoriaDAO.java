@@ -16,12 +16,41 @@ public class CategoriaDAO {
         objMySQLConnection = new MySqlConnection();
     }
 
-     private Categoria mapearCategoria(ResultSet rs) throws SQLException {
+    private Categoria mapearCategoria(ResultSet rs) throws SQLException {
         Categoria categoria = new Categoria();
         categoria.setIdCategoria(rs.getInt("id_categoria"));
         categoria.setNombre(rs.getString("nombre"));
         categoria.setDescripcion(rs.getString("descripcion"));
+        categoria.setActivo(rs.getBoolean("activo"));
         return categoria;
+    }
+
+    public Categoria obtenerPorId(int id) throws SQLException {
+        objMySQLConnection.open();
+        Categoria categoria = null;
+        if (!objMySQLConnection.isError()) {
+            String sql = "SELECT * FROM categoria WHERE id_categoria = " + id;
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            if (rs != null && rs.next()) {
+                categoria = mapearCategoria(rs);
+            }
+        }
+        objMySQLConnection.close();
+        return categoria;
+    }
+
+    public ArrayList<Categoria> obtenerTodas() throws SQLException {
+        ArrayList<Categoria> lista = new ArrayList<>();
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = "SELECT * FROM categoria";
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            while (rs != null && rs.next()) {
+                lista.add(mapearCategoria(rs));
+            }
+        }
+        objMySQLConnection.close();
+        return lista;
     }
 
     public Categoria obtenerCategoriaPorId(int id) throws SQLException {
