@@ -9,26 +9,27 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <!-- Sección: Encabezado de usuario -->
+    <!-- ENCABEZADO DE USUARIO -->
     <div th:replace="~{componentes/headerUsuario :: headerUsuario}"></div>
-    <!-- Sección principal de tipos de trabajo -->
+    <!-- SECCIÓN PRINCIPAL DE TIPOS DE TRABAJO -->
     <div class="container-fluid flex-grow-1 d-flex align-items-center justify-content-center" style="min-height: 80vh">
         <div class="w-100" style="max-width: 900px">
-            <!-- Título principal de la sección -->
+            <!-- TÍTULO PRINCIPAL DE LA SECCIÓN -->
             <h2 class="text-center mb-4">
                 <i class="bi bi-tags"></i> Tipos de Trabajo
             </h2>
-            <!-- Card principal de gestión de tipos -->
+            <!-- CARD PRINCIPAL DE TIPOS DE TRABAJO -->
             <div class="card shadow">
                 <div class="card-body">
                  
-                    <!-- Gestión de tipos de trabajo -->
+                    <!-- CABECERA CARD -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="mb-0">Listado de tipos de trabajo</h5>
                         <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalNuevoTipo">
                             <i class="bi bi-plus-circle"></i> Añadir nuevo
                         </button>
                     </div>
+                    <!-- TABLA DE TIPOS DE TRABAJO -->
                     <div class="table-responsive">
                         <table class="table table-bordered align-middle">
                             <thead class="table-light">
@@ -39,18 +40,23 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <!-- FILA DE CATEGORÍA -->
                                 <tr th:each="categoria : ${categorias}">
+                                    <!-- NOMBRE CATEGORÍA -->
                                     <td th:text="${categoria.nombre}"></td>
+                                    <!-- DESCRIPCIÓN CATEGORÍA -->
                                     <td th:text="${categoria.descripcion}"></td>
+                                    <!-- ACCIONES CATEGORÍA -->
                                     <td class="text-center">
-                                        <!-- Botón para abrir modal de edición -->
+                                        <!-- BOTÓN EDITAR -->
                                         <button class="btn btn-outline-primary btn-sm me-1" data-bs-toggle="modal" th:attr="data-bs-target='#modalEditarTipo' + ${categoria.idCategoria}" type="button">
                                             <i class="bi bi-pencil"></i> Editar
                                         </button>
-                                        <!-- Modal de edición -->
+                                        <!-- MODAL EDITAR TIPO -->
                                         <div class="modal fade" th:id="'modalEditarTipo' + ${categoria.idCategoria}" tabindex="-1" aria-labelledby="modalEditarTipoLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
+                                                    <!-- FORMULARIO EDITAR TIPO -->
                                                     <form th:action="@{/tiposTrabajo/editar}" method="post">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="modalEditarTipoLabel">Editar tipo de trabajo</h5>
@@ -75,7 +81,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- Botón para eliminar -->
+                                        <!-- FORMULARIO ELIMINAR TIPO -->
                                         <form th:action="@{/tiposTrabajo/eliminar}" method="post" style="display:inline">
                                             <input type="hidden" name="idCategoria" th:value="${categoria.idCategoria}" />
                                             <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este tipo de trabajo?');">
@@ -87,10 +93,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- Modal para crear nuevo tipo de trabajo -->
+                    <!-- MODAL NUEVO TIPO -->
                     <div class="modal fade" id="modalNuevoTipo" tabindex="-1" aria-labelledby="modalNuevoTipoLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
+                                <!-- FORMULARIO NUEVO TIPO -->
                                 <form th:action="@{/tiposTrabajo/crear}" method="post">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="modalNuevoTipoLabel">Añadir tipo de trabajo</h5>
@@ -114,7 +121,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Botón de volver al panel -->
+                    <!-- BOTÓN VOLVER AL PANEL -->
                     <div class="mt-4 text-center">
                         <a th:href="@{/home}" class="btn btn-outline-secondary">
                             <i class="bi bi-arrow-left-circle"></i> Volver al panel
@@ -124,7 +131,7 @@
             </div>
         </div>
     </div>
-    <!-- Pie de página -->
+    <!-- PIE DE PÁGINA -->
     <div th:replace="~{componentes/footer :: footer}"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>

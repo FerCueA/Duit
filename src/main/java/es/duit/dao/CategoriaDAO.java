@@ -8,14 +8,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Repository;
+
+
 @Repository
 public class CategoriaDAO {
+    // CONEXIÓN MYSQL
     private MySqlConnection objMySQLConnection;
 
+    // CONSTRUCTOR
     public CategoriaDAO() {
         objMySQLConnection = new MySqlConnection();
     }
 
+    // MAPEO DE RESULTSET A CATEGORIA
     private Categoria mapearCategoria(ResultSet rs) throws SQLException {
         Categoria categoria = new Categoria();
         categoria.setIdCategoria(rs.getInt("id_categoria"));
@@ -25,35 +30,8 @@ public class CategoriaDAO {
         return categoria;
     }
 
+    // OBTENER CATEGORÍA POR ID
     public Categoria obtenerPorId(int id) throws SQLException {
-        objMySQLConnection.open();
-        Categoria categoria = null;
-        if (!objMySQLConnection.isError()) {
-            String sql = "SELECT * FROM categoria WHERE id_categoria = " + id;
-            ResultSet rs = objMySQLConnection.executeSelect(sql);
-            if (rs != null && rs.next()) {
-                categoria = mapearCategoria(rs);
-            }
-        }
-        objMySQLConnection.close();
-        return categoria;
-    }
-
-    public ArrayList<Categoria> obtenerTodas() throws SQLException {
-        ArrayList<Categoria> lista = new ArrayList<>();
-        objMySQLConnection.open();
-        if (!objMySQLConnection.isError()) {
-            String sql = "SELECT * FROM categoria";
-            ResultSet rs = objMySQLConnection.executeSelect(sql);
-            while (rs != null && rs.next()) {
-                lista.add(mapearCategoria(rs));
-            }
-        }
-        objMySQLConnection.close();
-        return lista;
-    }
-
-    public Categoria obtenerCategoriaPorId(int id) throws SQLException {
         objMySQLConnection.open();
         Categoria categoria = null;
         if (!objMySQLConnection.isError()) {
@@ -73,7 +51,8 @@ public class CategoriaDAO {
         return categoria;
     }
 
-    public ArrayList<Categoria> obtenerTodasCategorias() throws SQLException {
+    // OBTENER TODAS LAS CATEGORÍAS
+    public ArrayList<Categoria> obtenerTodas() throws SQLException {
         ArrayList<Categoria> lista = new ArrayList<>();
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -93,6 +72,9 @@ public class CategoriaDAO {
         return lista;
     }
 
+
+
+    // INSERTAR CATEGORÍA
     public void insertarCategoria(Categoria categoria) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -105,6 +87,7 @@ public class CategoriaDAO {
         objMySQLConnection.close();
     }
 
+    // ACTUALIZAR CATEGORÍA
     public void actualizarCategoria(Categoria categoria) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -117,6 +100,7 @@ public class CategoriaDAO {
         objMySQLConnection.close();
     }
 
+    // ELIMINAR CATEGORÍA
     public void eliminarCategoria(int id) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -126,5 +110,4 @@ public class CategoriaDAO {
         objMySQLConnection.close();
     }
 
-   
 }

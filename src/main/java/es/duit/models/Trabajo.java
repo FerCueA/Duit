@@ -9,7 +9,7 @@ public class Trabajo {
     private Date fechaInicio;
     private Date fechaFin;
     private EstadoTrabajo estado;
-    private String observaciones;
+    // private String observaciones;
 
     public enum EstadoTrabajo {
         EN_PROCESO, FINALIZADO, CANCELADO
@@ -65,11 +65,6 @@ public class Trabajo {
         this.estado = estado;
     }
 
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
+    // public String getObservaciones() { return observaciones; }
+    // public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
 }

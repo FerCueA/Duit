@@ -8,14 +8,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Repository;
+
 @Repository
 public class SolicitudDAO {
+    // CONEXIÓN MYSQL
     private MySqlConnection objMySQLConnection;
 
+    // CONSTRUCTOR
     public SolicitudDAO() {
         objMySQLConnection = new MySqlConnection();
     }
 
+    // MAPEO DE RESULTSET A SOLICITUD
     private Solicitud mapearSolicitud(ResultSet rs) throws SQLException {
         Solicitud solicitud = new Solicitud();
         solicitud.setIdSolicitud(rs.getInt("id_solicitud"));
@@ -29,6 +33,7 @@ public class SolicitudDAO {
         return solicitud;
     }
 
+    // OBTENER SOLICITUD POR ID
     public Solicitud obtenerPorId(int id) throws SQLException {
         objMySQLConnection.open();
         Solicitud solicitud = null;
@@ -43,6 +48,7 @@ public class SolicitudDAO {
         return solicitud;
     }
 
+    // OBTENER TODAS LAS SOLICITUDES
     public ArrayList<Solicitud> obtenerTodas() throws SQLException {
         ArrayList<Solicitud> lista = new ArrayList<>();
         objMySQLConnection.open();
@@ -57,26 +63,8 @@ public class SolicitudDAO {
         return lista;
     }
 
-    public Solicitud obtenerSolicitudPorId(int id) throws SQLException {
-        objMySQLConnection.open();
-        Solicitud solicitud = null;
-        if (!objMySQLConnection.isError()) {
-            String sql = "SELECT * FROM solicitud WHERE id_solicitud = " + id;
-            ResultSet rs = objMySQLConnection.executeSelect(sql);
-            try {
-                if (rs != null && rs.next()) {
-                    solicitud = mapearSolicitud(rs);
-                }
-            } catch (Exception e) {
-                System.err.println("Error inesperado ejecutando la consulta SQL: " + sql);
-                System.err.println("Mensaje de error: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-        objMySQLConnection.close();
-        return solicitud;
-    }
 
+    // OBTENER SOLICITUDES POR CLIENTE
     public ArrayList<Solicitud> obtenerSolicitudesPorCliente(int idCliente) throws SQLException {
         ArrayList<Solicitud> lista = new ArrayList<>();
         objMySQLConnection.open();
@@ -97,6 +85,7 @@ public class SolicitudDAO {
         return lista;
     }
 
+    // INSERTAR SOLICITUD
     public void insertarSolicitud(Solicitud solicitud) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -109,6 +98,7 @@ public class SolicitudDAO {
         objMySQLConnection.close();
     }
 
+    // ACTUALIZAR SOLICITUD
     public void actualizarSolicitud(Solicitud solicitud) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -121,6 +111,7 @@ public class SolicitudDAO {
         objMySQLConnection.close();
     }
 
+    // ELIMINAR SOLICITUD
     public void eliminarSolicitud(int id) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -130,6 +121,4 @@ public class SolicitudDAO {
         objMySQLConnection.close();
     }
 
-    
-   
 }

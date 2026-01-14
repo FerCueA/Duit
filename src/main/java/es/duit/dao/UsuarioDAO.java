@@ -36,36 +36,8 @@ public class UsuarioDAO {
         return usuario;
     }
 
-    public Usuario obtenerPorId(int id) throws SQLException {
-        objMySQLConnection.open();
-        Usuario usuario = null;
-        if (!objMySQLConnection.isError()) {
-            String sql = "SELECT * FROM usuario WHERE id_usuario = " + id;
-            ResultSet rs = objMySQLConnection.executeSelect(sql);
-            if (rs != null && rs.next()) {
-                usuario = mapearUsuario(rs);
-            }
-        }
-        objMySQLConnection.close();
-        return usuario;
-    }
-
-    public ArrayList<Usuario> obtenerTodos() throws SQLException {
-        ArrayList<Usuario> lista = new ArrayList<>();
-        objMySQLConnection.open();
-        if (!objMySQLConnection.isError()) {
-            String sql = "SELECT * FROM usuario";
-            ResultSet rs = objMySQLConnection.executeSelect(sql);
-            while (rs != null && rs.next()) {
-                lista.add(mapearUsuario(rs));
-            }
-        }
-        objMySQLConnection.close();
-        return lista;
-    }
     
-
-    // Obtener todos los usuarios
+    // ===================== OBTENER TODOS LOS USUARIOS =====================
     public ArrayList<Usuario> obtenerTodosUsuarios() throws SQLException {
         ArrayList<Usuario> objListaUsuarios = new ArrayList<>();
         objMySQLConnection.open();
@@ -85,9 +57,7 @@ public class UsuarioDAO {
         objMySQLConnection.close();
         return objListaUsuarios;
     }
-
-    // Obtener datos de un usuario por su username
-
+    // ===================== OBTENER USUARIO POR USERNAME =====================
     public Usuario obtenerUsuarioPorUsername(String username) {
         Usuario objUsuario = null;
         objMySQLConnection.open();
@@ -110,8 +80,7 @@ public class UsuarioDAO {
     }
 
  
-
-    // Insertar un nuevo usuario
+    // ===================== INSERTAR USUARIO =====================
     public void insertarUsuario(Usuario usuario) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -126,8 +95,7 @@ public class UsuarioDAO {
         }
         objMySQLConnection.close();
     }
-
-    // Eliminar usuario por ID
+    // ===================== ELIMINAR USUARIO POR ID =====================
     public void eliminarUsuario(int idUsuario) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -136,8 +104,7 @@ public class UsuarioDAO {
         }
         objMySQLConnection.close();
     }
-
-    // Actualizar usuario
+    // ===================== ACTUALIZAR USUARIO =====================
     public void actualizarUsuario(Usuario usuario) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -151,8 +118,7 @@ public class UsuarioDAO {
         }
         objMySQLConnection.close();
     }
-
-        // Obtener usuario por ID
+    // ===================== OBTENER USUARIO POR ID  =====================
     public Usuario obtenerUsuarioPorId(int idUsuario) {
         Usuario objUsuario = null;
         objMySQLConnection.open();
@@ -172,8 +138,7 @@ public class UsuarioDAO {
         objMySQLConnection.close();
         return objUsuario;
     }
-
-    // Buscar usuarios por nombre, apellidos, username o email
+    // ===================== BUSCAR USUARIOS POR FILTRO =====================
     public ArrayList<Usuario> buscarUsuarios(String filtro) throws SQLException {
         ArrayList<Usuario> lista = new ArrayList<>();
         objMySQLConnection.open();

@@ -7,14 +7,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import org.springframework.stereotype.Repository;
 
+
 @Repository
 public class ProfesionalCategoriaDAO {
+    // CONEXIÓN MYSQL
     private MySqlConnection objMySQLConnection;
 
+    // CONSTRUCTOR
     public ProfesionalCategoriaDAO() {
         objMySQLConnection = new MySqlConnection();
     }
 
+    // MAPEO DE RESULTSET A PROFESIONALCATEGORIA
     private ProfesionalCategoria mapearPC(ResultSet rs) throws SQLException {
         ProfesionalCategoria pc = new ProfesionalCategoria();
         pc.setIdProfesional(rs.getInt("id_profesional"));
@@ -22,6 +26,7 @@ public class ProfesionalCategoriaDAO {
         return pc;
     }
 
+    // OBTENER TODAS LAS RELACIONES PROFESIONAL-CATEGORÍA
     public ArrayList<ProfesionalCategoria> obtenerTodas() throws SQLException {
         ArrayList<ProfesionalCategoria> lista = new ArrayList<>();
         objMySQLConnection.open();
@@ -36,6 +41,7 @@ public class ProfesionalCategoriaDAO {
         return lista;
     }
 
+    // OBTENER RELACIÓN POR IDS
     public ProfesionalCategoria obtenerPorIds(int idProfesional, int idCategoria) throws SQLException {
         objMySQLConnection.open();
         ProfesionalCategoria pc = null;

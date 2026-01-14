@@ -9,59 +9,69 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <!-- Encabezado de usuario -->
+    <!-- ENCABEZADO DE USUARIO -->
     <div th:replace="~{componentes/headerUsuario :: headerUsuario}"></div>
     <div class="container py-5 flex-grow-1 d-flex align-items-center justify-content-center bg-light">
         <div class="w-100" style="max-width:600px;">
-            <div class="text-center mb-4">
-                <span class="d-inline-block bg-primary bg-opacity-10 rounded-circle p-3 mb-2">
-                    <i class="bi bi-pencil fs-1 text-primary"></i>
-                </span>
-                <h2 class="fw-bold mb-0">Editar Perfil Profesional</h2>
-                <small class="text-muted">Actualiza tus datos y presentación profesional</small>
+            <!-- ALERTA SOLO PROFESIONALES -->
+            <div th:if="${errorNoProfesional}" class="alert alert-danger text-center mb-4">
+                <i class="bi bi-exclamation-triangle-fill"></i> Solo los profesionales pueden editar su perfil profesional.
             </div>
-            <div class="card border-0 shadow rounded-4">
-                <div class="card-body p-4">
-                    <form action="/perfilProfesional/editar" method="post" autocomplete="off">
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold"><i class="bi bi-briefcase text-primary"></i> Especialidad
-                            </label>
-                            <input type="text" name="especialidad" class="form-control form-control-lg"
-                                th:value="${perfilProfesional.descripcion}" placeholder="Ejemplo: Electricista" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold"><i class="bi bi-currency-euro text-primary"></i> Precio
-                                por hora (€)</label>
-                            <input type="number" name="precioHora" class="form-control form-control-lg"
-                                th:value="${perfilProfesional.precioHora}" min="0" step="0.01"
-                                placeholder="Ejemplo: 20.00" required />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold"><i class="bi bi-card-text text-primary"></i> Descripción
-                                profesional</label>
-                            <textarea name="descripcion" class="form-control form-control-lg" rows="4"
-                                th:text="${perfilProfesional.descripcion}"
-                                placeholder="Describe tu experiencia, habilidades, etc." required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold"><i class="bi bi-file-earmark-text text-primary"></i>
-                                NIF</label>
-                            <input type="text" name="nif" class="form-control form-control-lg"
-                                th:value="${perfilProfesional.nif}" placeholder="NIF" required />
-                        </div>
-                        <div class="mt-4 text-end">
-                            <button type="submit" class="btn btn-success btn-lg px-4 shadow"><i class="bi bi-pencil"></i> Guardar cambios</button>
-                        </div>
-                    </form>
+            <!-- FORMULARIO EDICIÓN PERFIL PROFESIONAL -->
+            <div th:unless="${errorNoProfesional}">
+                <!-- TÍTULO PRINCIPAL DE LA SECCIÓN -->
+                <div class="text-center mb-4">
+                    <span class="d-inline-block bg-primary bg-opacity-10 rounded-circle p-3 mb-2">
+                        <i class="bi bi-pencil fs-1 text-primary"></i>
+                    </span>
+                    <h2 class="fw-bold mb-0">Editar Perfil Profesional</h2>
+                    <small class="text-muted">Actualiza tus datos y presentación profesional</small>
+                </div>
+                <!-- CARD PRINCIPAL PARA EDITAR DATOS PROFESIONALES -->
+                <div class="card border-0 shadow rounded-4">
+                    <div class="card-body p-4">
+                        <form action="/perfilProfesional/editar" method="post" autocomplete="off">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold"><i class="bi bi-briefcase text-primary"></i> Especialidad
+                                </label>
+                                <input type="text" name="especialidad" class="form-control form-control-lg"
+                                    th:value="${perfilProfesional.descripcion}" placeholder="Ejemplo: Electricista" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold"><i class="bi bi-currency-euro text-primary"></i> Precio
+                                    por hora (€)</label>
+                                <input type="number" name="precioHora" class="form-control form-control-lg"
+                                    th:value="${perfilProfesional.precioHora}" min="0" step="0.01"
+                                    placeholder="Ejemplo: 20.00" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold"><i class="bi bi-card-text text-primary"></i> Descripción
+                                    profesional</label>
+                                <textarea name="descripcion" class="form-control form-control-lg" rows="4"
+                                    th:text="${perfilProfesional.descripcion}"
+                                    placeholder="Describe tu experiencia, habilidades, etc." required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold"><i class="bi bi-file-earmark-text text-primary"></i>
+                                    NIF</label>
+                                <input type="text" name="nif" class="form-control form-control-lg"
+                                    th:value="${perfilProfesional.nif}" placeholder="NIF" required />
+                            </div>
+                            <div class="mt-4 text-end">
+                                <button type="submit" class="btn btn-success btn-lg px-4 shadow"><i class="bi bi-pencil"></i> Guardar cambios</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
+            <!-- BOTÓN VOLVER AL PANEL -->
             <div class="mt-4 text-center">
                 <a th:href="@{/home}" class="btn btn-outline-secondary btn-lg"><i class="bi bi-arrow-left"></i> Volver al
                     panel</a>
             </div>
         </div>
     </div>
-    <!-- Pie de página -->
+    <!-- PIE DE PÁGINA -->
     <div th:replace="~{componentes/footer :: footer}"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>

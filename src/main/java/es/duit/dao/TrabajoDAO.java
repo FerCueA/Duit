@@ -18,6 +18,7 @@ public class TrabajoDAO {
     }
 
 
+    // MAPEO DE RESULTSET A TRABAJO
     private Trabajo mapearTrabajo(ResultSet rs) throws SQLException {
         Trabajo trabajo = new Trabajo();
         trabajo.setIdTrabajo(rs.getInt("id_trabajo"));
@@ -25,12 +26,12 @@ public class TrabajoDAO {
         trabajo.setPrecioAcordado(rs.getDouble("precio_acordado"));
         trabajo.setFechaInicio(rs.getTimestamp("fecha_inicio"));
         trabajo.setFechaFin(rs.getTimestamp("fecha_fin"));
-        trabajo.setObservaciones(rs.getString("observaciones"));
         String estadoStr = rs.getString("estado");
         trabajo.setEstado(Trabajo.EstadoTrabajo.valueOf(estadoStr));
         return trabajo;
     }
 
+    // ===================== OBTENER TRABAJO POR ID =====================
     public Trabajo obtenerPorId(int id) throws SQLException {
         objMySQLConnection.open();
         Trabajo trabajo = null;
@@ -45,6 +46,7 @@ public class TrabajoDAO {
         return trabajo;
     }
 
+    // ===================== OBTENER TODOS LOS TRABAJOS =====================
     public ArrayList<Trabajo> obtenerTodos() throws SQLException {
         ArrayList<Trabajo> lista = new ArrayList<>();
         objMySQLConnection.open();
@@ -58,31 +60,11 @@ public class TrabajoDAO {
         objMySQLConnection.close();
         return lista;
     }
-    public Trabajo obtenerTrabajoPorId(int id) throws SQLException {
-        objMySQLConnection.open();
-        Trabajo trabajo = null;
-        if (!objMySQLConnection.isError()) {
-            String sql = "SELECT * FROM trabajo WHERE id_trabajo = " + id;
-            ResultSet rs = objMySQLConnection.executeSelect(sql);
-            try {
-                if (rs != null && rs.next()) {
-                    trabajo = mapearTrabajo(rs);
-                }
-            } catch (Exception e) {
-                System.err.println("Error inesperado ejecutando la consulta SQL: " + sql);
-                System.err.println("Mensaje de error: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-        objMySQLConnection.close();
-        return trabajo;
-    }
 
+    // OBTENER TRABAJOS POR SOLICITUD
     public ArrayList<Trabajo> obtenerTrabajosPorSolicitud(int idSolicitud) throws SQLException {
         ArrayList<Trabajo> lista = new ArrayList<>();
         objMySQLConnection.open();
-        // La tabla trabajo ahora tiene id_postulacion, no id_solicitud
-        // Si necesitas obtener trabajos por solicitud, deberías hacer un JOIN con postulacion
         if (!objMySQLConnection.isError()) {
             String sql = "SELECT t.* FROM trabajo t JOIN postulacion p ON t.id_postulacion = p.id_postulacion WHERE p.id_solicitud = " + idSolicitud;
             ResultSet rs = objMySQLConnection.executeSelect(sql);
@@ -104,13 +86,13 @@ public class TrabajoDAO {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
             String sql = String.format(
-                "INSERT INTO trabajo (id_postulacion, precio_acordado, fecha_inicio, fecha_fin, estado, observaciones) VALUES (%d, %.2f, %s, %s, '%s', '%s')",
+                "INSERT INTO trabajo (id_postulacion, precio_acordado, fecha_inicio, fecha_fin, estado) VALUES (%d, %.2f, %s, %s, '%s')",
                 trabajo.getIdPostulacion(), trabajo.getPrecioAcordado(),
                 trabajo.getFechaInicio() != null ? String.format("'%tF %<tT'", trabajo.getFechaInicio()) : "NULL",
                 trabajo.getFechaFin() != null ? String.format("'%tF %<tT'", trabajo.getFechaFin()) : "NULL",
-                trabajo.getEstado().name(),
-                trabajo.getObservaciones() != null ? trabajo.getObservaciones().replace("'", "''") : ""
+                trabajo.getEstado().name()
             );
+            System.out.println("[DEBUG] SQL generado para insertar trabajo: " + sql);
             objMySQLConnection.executeInsert(sql);
         }
         objMySQLConnection.close();
@@ -120,12 +102,11 @@ public class TrabajoDAO {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
             String sql = String.format(
-                "UPDATE trabajo SET id_postulacion = %d, precio_acordado = %.2f, fecha_inicio = %s, fecha_fin = %s, estado = '%s', observaciones = '%s' WHERE id_trabajo = %d",
+                "UPDATE trabajo SET id_postulacion = %d, precio_acordado = %.2f, fecha_inicio = %s, fecha_fin = %s, estado = '%s' WHERE id_trabajo = %d",
                 trabajo.getIdPostulacion(), trabajo.getPrecioAcordado(),
                 trabajo.getFechaInicio() != null ? String.format("'%tF %<tT'", trabajo.getFechaInicio()) : "NULL",
                 trabajo.getFechaFin() != null ? String.format("'%tF %<tT'", trabajo.getFechaFin()) : "NULL",
                 trabajo.getEstado().name(),
-                trabajo.getObservaciones() != null ? trabajo.getObservaciones().replace("'", "''") : "",
                 trabajo.getIdTrabajo()
             );
             objMySQLConnection.executeUpdateOrDelete(sql);

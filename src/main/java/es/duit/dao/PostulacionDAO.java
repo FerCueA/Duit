@@ -1,3 +1,5 @@
+
+
 package es.duit.dao;
 
 import es.duit.connections.MySqlConnection;
@@ -9,12 +11,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class PostulacionDAO {
+    // CONEXIÓN MYSQL
     private MySqlConnection objMySQLConnection;
 
+    // CONSTRUCTOR
     public PostulacionDAO() {
         objMySQLConnection = new MySqlConnection();
     }
 
+    // MAPEO DE RESULTSET A POSTULACION
     private Postulacion mapearPostulacion(ResultSet rs) throws SQLException {
         Postulacion postulacion = new Postulacion();
         postulacion.setIdPostulacion(rs.getInt("id_postulacion"));
@@ -28,6 +33,7 @@ public class PostulacionDAO {
         return postulacion;
     }
 
+    // OBTENER POSTULACIÓN POR ID
     public Postulacion obtenerPorId(int id) throws SQLException {
         objMySQLConnection.open();
         Postulacion postulacion = null;
@@ -42,6 +48,7 @@ public class PostulacionDAO {
         return postulacion;
     }
 
+    // OBTENER TODAS LAS POSTULACIONES
     public ArrayList<Postulacion> obtenerTodas() throws SQLException {
         ArrayList<Postulacion> lista = new ArrayList<>();
         objMySQLConnection.open();
@@ -56,13 +63,50 @@ public class PostulacionDAO {
         return lista;
     }
 
+    // INSERTAR POSTULACIÓN
     public void insertarPostulacion(Postulacion postulacion) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
+            String mensajeSeguro = postulacion.getMensaje().replace("'", "''");
             String sql = String.format(
-                    "INSERT INTO postulacion (id_solicitud, id_profesional, mensaje, precio_propuesto, fecha_postulacion, estado) VALUES (%d, %d, '%s', %.2f, NOW(), '%s')",
-                    postulacion.getIdSolicitud(), postulacion.getIdProfesional(), postulacion.getMensaje(),
-                    postulacion.getPrecioPropuesto(), postulacion.getEstado().name());
+                "INSERT INTO postulacion (id_solicitud, id_profesional, mensaje, precio_propuesto, fecha_postulacion, estado) VALUES (%d, %d, '%s', %.2f, NOW(), '%s')",
+                postulacion.getIdSolicitud(), postulacion.getIdProfesional(), mensajeSeguro,
+                postulacion.getPrecioPropuesto(), postulacion.getEstado().name());
+            objMySQLConnection.executeInsert(sql);
+        }
+        objMySQLConnection.close();
+    }
+
+    // OBTENER POSTULACIONES POR SOLICITUD
+    public ArrayList<Postulacion> obtenerPorSolicitud(int idSolicitud) throws SQLException {
+        ArrayList<Postulacion> lista = new ArrayList<>();
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = "SELECT * FROM postulacion WHERE id_solicitud = " + idSolicitud;
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            while (rs != null && rs.next()) {
+                lista.add(mapearPostulacion(rs));
+            }
+        }
+        objMySQLConnection.close();
+        return lista;
+    }
+
+    // CANCELAR POSTULACIÓN
+    public void cancelarPostulacion(int idPostulacion) throws SQLException {
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = "UPDATE postulacion SET estado = 'CANCELADA' WHERE id_postulacion = " + idPostulacion;
+            objMySQLConnection.executeInsert(sql);
+        }
+        objMySQLConnection.close();
+    }
+
+    // ACEPTAR POSTULACIÓN
+    public void aceptarPostulacion(int idPostulacion) throws SQLException {
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = "UPDATE postulacion SET estado = 'ACEPTADA' WHERE id_postulacion = " + idPostulacion;
             objMySQLConnection.executeInsert(sql);
         }
         objMySQLConnection.close();

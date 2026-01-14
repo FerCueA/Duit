@@ -9,19 +9,19 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <!-- Sección: Encabezado de usuario -->
+    <!-- ENCABEZADO DE USUARIO -->
     <div th:replace="~{componentes/headerUsuario :: headerUsuario}"></div>
-    <!-- Sección principal de usuarios registrados -->
+    <!-- SECCIÓN PRINCIPAL DE USUARIOS REGISTRADOS -->
     <div class="container-fluid flex-grow-1 d-flex align-items-center justify-content-center" style="min-height: 80vh">
         <div class="w-100" style="max-width: 900px">
-            <!-- Título principal de la sección -->
+            <!-- TÍTULO PRINCIPAL DE LA SECCIÓN -->
             <h2 class="text-center mb-4">
                 <i class="bi bi-people"></i> Usuarios Registrados
             </h2>
-            <!-- Card principal de usuarios -->
+            <!-- CARD PRINCIPAL DE USUARIOS -->
             <div class="card shadow">
                 <div class="card-body">
-                    <!-- Buscador de usuarios -->
+                    <!-- BUSCADOR DE USUARIOS -->
                     <form class="mb-3" th:action="@{/verUsuarios}" method="get">
                         <div class="input-group input-group-lg">
                             <span class="input-group-text bg-primary text-white"><i class="bi bi-search"></i></span>
@@ -29,7 +29,7 @@
                             <button class="btn btn-primary" type="submit">Buscar</button>
                         </div>
                     </form>
-                    <!-- Tabla de usuarios de ejemplo (solo nombre, email, rol, username) -->
+                    <!-- TABLA DE USUARIOS -->
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
                             <thead class="table-primary">
@@ -45,21 +45,30 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <!-- FILA DE USUARIO -->
                                 <tr th:each="usuario : ${usuarios}">
+                                    <!-- NOMBRE USUARIO -->
                                     <td th:text="${usuario.nombre} + ' ' + ${usuario.apellidos}"></td>
+                                    <!-- EMAIL USUARIO -->
                                     <td th:text="${usuario.email}"></td>
+                                    <!-- ROL USUARIO -->
                                     <td th:text="${usuario.rol != null ? usuario.rol.nombre : 'Usuario'}"></td>
+                                    <!-- USERNAME USUARIO -->
                                     <td th:text="${usuario.username}"></td>
+                                    <!-- TELÉFONO USUARIO -->
                                     <td th:text="${usuario.telefono}"></td>
+                                    <!-- ESTADO USUARIO -->
                                     <td th:text="${usuario.activo ? 'Activo' : 'Inactivo'}"></td>
+                                    <!-- FECHA REGISTRO USUARIO -->
                                     <td th:text="${#dates.format(usuario.fechaRegistro, 'dd/MM/yyyy HH:mm')}"></td>
+                                    <!-- ACCIONES USUARIO -->
                                     <td>
                                         <div class="d-flex flex-row gap-2">
-                                            <!-- Botón para abrir modal de edición -->
+                                            <!-- BOTÓN EDITAR -->
                                             <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" th:attr="data-bs-target='#modalEditarUsuario' + ${usuario.idUsuario}" type="button">
                                                 <i class="bi bi-pencil-square"></i> Editar
                                             </button>
-                                            <!-- Modal de edición -->
+                                            <!-- MODAL EDICIÓN USUARIO -->
                                             <div class="modal fade" th:id="'modalEditarUsuario' + ${usuario.idUsuario}" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
@@ -107,7 +116,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Botón para eliminar -->
+                                            <!-- BOTÓN ELIMINAR -->
                                             <form th:action="@{/verUsuarios/eliminar}" method="post" style="display:inline">
                                                 <input type="hidden" name="idUsuario" th:value="${usuario.idUsuario}" />
                                                 <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Seguro que deseas eliminar este usuario?');">
@@ -120,6 +129,7 @@
                             </tbody>
                         </table>
                     </div>
+                    <!-- BOTÓN VOLVER AL PANEL -->
                     <div class="mt-4 text-center">
                         <a th:href="@{/home}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Volver al panel</a>
                     </div>
@@ -127,7 +137,7 @@
             </div>
         </div>
     </div>
-    <!-- Pie de página -->
+    <!-- PIE DE PÁGINA -->
     <div th:replace="~{componentes/footer :: footer}"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 

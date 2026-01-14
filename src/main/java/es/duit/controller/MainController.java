@@ -1,3 +1,8 @@
+
+// ====================
+// CONTROLADOR DEL MAIN (MainController)
+// ====================
+
 package es.duit.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +15,6 @@ import es.duit.dao.UsuarioDAO;
 import es.duit.models.Usuario;
 import java.sql.Timestamp;
 
-
 // Controlador principal para rutas públicas y registro/login
 @Controller
 public class MainController {
@@ -19,13 +23,11 @@ public class MainController {
     @Autowired
     private UsuarioDAO usuarioDAO;
 
-
     // Mapeo para la página principal
     @GetMapping({ "/", "/index" })
     public String index() {
         return "index";
     }
-
 
     // Mapeo para la página de login
     @GetMapping("/login")
@@ -33,13 +35,11 @@ public class MainController {
         return "login";
     }
 
-
     // Mapeo para la página de registro
     @GetMapping("/register")
     public String register() {
         return "register";
     }
-
 
     // Procesa el formulario de registro de usuario
     @PostMapping("/register")
@@ -64,7 +64,7 @@ public class MainController {
             usuario.setApellidos(apellidos);
             usuario.setUsername(username);
             usuario.setEmail(email);
-            usuario.setPassword(password); 
+            usuario.setPassword(password);
             usuario.setTelefono(telefono);
             usuario.setIdRol(idRol);
             usuario.setActivo(true);

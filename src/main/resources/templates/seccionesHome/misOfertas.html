@@ -9,40 +9,132 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <!-- Sección: Encabezado de usuario -->
+    <!-- ENCABEZADO DE USUARIO -->
     <div th:replace="~{componentes/headerUsuario :: headerUsuario}"></div>
     <div class="container-fluid flex-grow-1 d-flex align-items-center justify-content-center" style="min-height:80vh;">
         <div class="w-100" style="max-width:800px;">
-            <!-- Título principal de la página de ofertas del usuario -->
+            <!-- TÍTULO PRINCIPAL DE LA PÁGINA DE OFERTAS DEL USUARIO -->
             <h2 class="mb-4 text-center">Mis Ofertas</h2>
-            <!-- Cards de ofertas del usuario -->
+            <!-- CARDS DE OFERTAS DEL USUARIO -->
             <div class="row g-4">
-                <!-- Cards horizontales de ofertas propias -->
-                <div th:if="${ofertasPropias != null and !ofertasPropias.isEmpty()}" class="d-flex flex-column gap-4">
-                    <div th:each="oferta : ${ofertasPropias}" class="card mb-3 shadow-lg border-3 rounded-4 flex-row">
+                <!-- CARDS HORIZONTALES DE OFERTAS PROPIAS -->
+                <div th:if="${ofertasPropias != null and #lists.size(ofertasPropias) > 0}" class="d-flex flex-column gap-4">
+                    <!-- CARD DE OFERTA PROPIA -->
+                    <div th:each="oferta : ${ofertasPropias}" th:if="${oferta != null}" class="card mb-3 shadow-lg border-3 rounded-4 flex-row">
                         <div class="card-body d-flex flex-row align-items-center w-100">
+                            <!-- ICONO Y ESTADO DE OFERTA -->
                             <div class="me-4 d-flex flex-column align-items-center justify-content-center">
                                 <i class="bi bi-file-earmark-text-fill text-secondary" style="font-size:2.5rem;"></i>
                                 <span th:text="${oferta.estado}" class="badge bg-warning text-dark mt-2"
                                     style="font-size:1rem;"></span>
                             </div>
+                            <!-- INFORMACIÓN DE LA OFERTA -->
                             <div class="flex-grow-1">
                                 <h5 class="card-title mb-2 fw-bold" th:text="${oferta.titulo}"></h5>
+                                <!-- CATEGORÍA -->
                                 <div class="mb-2">
                                     <span class="fw-semibold text-secondary">Categoría:</span>
-                                    <span class="text-dark ms-2" th:text="${oferta.idCategoria}"></span>
+                                    <span class="text-dark ms-2" th:text="${oferta.categoria != null ? oferta.categoria.nombre : oferta.idCategoria}"></span>
                                 </div>
+                                <!-- DESCRIPCIÓN -->
                                 <div class="mb-2">
                                     <span class="fw-semibold text-secondary">Descripción:</span>
                                     <span class="text-dark ms-2" th:text="${oferta.descripcion}"></span>
                                 </div>
+                                <!-- FECHA PUBLICACIÓN -->
                                 <div class="mb-2">
                                     <span class="fw-semibold text-secondary">Fecha publicación:</span>
                                     <span class="text-dark ms-2"
                                         th:text="${#dates.format(oferta.fechaSolicitud, 'dd/MM/yyyy HH:mm')}"></span>
                                 </div>
+                                <!-- POSTULACIONES RECIBIDAS -->
                                 <div class="mb-2">
-
+                                    <h6 class="mt-3 mb-1">Postulaciones recibidas:</h6>
+                                    <!-- SIN POSTULACIONES -->
+                                    <div th:if="${postulacionesPorOferta != null and (postulacionesPorOferta[oferta.idSolicitud] == null or #lists.isEmpty(postulacionesPorOferta[oferta.idSolicitud]))}">
+                                        <span class="text-muted">No hay postulaciones aún.</span>
+                                    </div>
+                                    <!-- LISTA DE POSTULACIONES -->
+                                    <div th:if="${postulacionesPorOferta != null and postulacionesPorOferta[oferta.idSolicitud] != null}" th:each="post : ${postulacionesPorOferta[oferta.idSolicitud]}">
+                                        <!-- CARD DE POSTULACIÓN -->
+                                        <div class="border rounded p-2 mb-2 d-flex align-items-center justify-content-between">
+                                            <!-- INFORMACIÓN DE LA POSTULACIÓN -->
+                                            <div th:if="${post != null}">
+                                                <strong th:text="${post.mensaje}"></strong> -
+                                                <span th:text="${post.precioPropuesto}"></span> €
+                                                <span class="badge bg-secondary ms-2" th:text="${post.estado}"></span>
+                                            </div>
+                                            <!-- BOTÓN VER DETALLES -->
+                                            <div>
+                                                <button class="btn btn-outline-info btn-sm ms-2" data-bs-toggle="modal"
+                                                    th:attr="data-bs-target='#modalPostulacion__' + ${post.idPostulacion}"><i
+                                                        class="bi bi-eye"></i> Ver detalles</button>
+                                            </div>
+                                        </div>
+                                        <!-- MODAL DETALLES POSTULACIÓN -->
+                                        <div class="modal fade" th:id="'modalPostulacion__' + ${post.idPostulacion}"
+                                            tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <!-- CABECERA MODAL -->
+                                                    <div class="modal-header bg-primary text-white">
+                                                        <h5 class="modal-title">Detalles de la Postulación</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Cerrar"></button>
+                                                    </div>
+                                                    <!-- CUERPO MODAL -->
+                                                    <div class="modal-body">
+                                                        <p><strong>Mensaje:</strong> <span
+                                                                th:text="${post.mensaje}"></span></p>
+                                                        <p><strong>Precio propuesto:</strong> <span
+                                                                th:text="${post.precioPropuesto}"></span> €</p>
+                                                        <p><strong>Estado:</strong> <span
+                                                                th:text="${post.estado}"></span></p>
+                                                        <p><strong>Fecha de postulación:</strong> <span
+                                                                th:text="${#dates.format(post.fechaPostulacion, 'dd/MM/yyyy HH:mm')}"></span>
+                                                        </p>
+                                                        <hr />
+                                                        <!-- DATOS DEL PROFESIONAL -->
+                                                        <h6 class="mb-2">Datos del profesional</h6>
+                                                        <div th:with="profesional=${@usuarioDAO.obtenerUsuarioPorId(post.idProfesional)}">
+                                                            <div th:if="${profesional != null}">
+                                                                <p><strong>Nombre:</strong> <span th:text="${profesional.nombre}"></span> <span th:text="${profesional.apellidos}"></span></p>
+                                                                <p><strong>Email:</strong> <span th:text="${profesional.email}"></span></p>
+                                                                <p><strong>Teléfono:</strong> <span th:text="${profesional.telefono}"></span></p>
+                                                                <!-- BOTÓN WHATSAPP -->
+                                                                <a th:if="${profesional.telefono != null && profesional.telefono != ''}"
+                                                                    th:href="${'https://wa.me/' + profesional.telefono}"
+                                                                    target="_blank"
+                                                                    class="btn btn-success btn-sm mt-2 d-flex align-items-center gap-1">
+                                                                    <i class="bi bi-whatsapp"></i> WhatsApp
+                                                                </a>
+                                                            </div>
+                                                            <div th:if="${profesional == null}">
+                                                                <span class="text-danger">Profesional no encontrado.</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- PIE MODAL -->
+                                                    <div class="modal-footer">
+                                                        <form th:action="@{/confirmarPostulacion}" method="post">
+                                                            <input type="hidden" name="idPostulacion"
+                                                                th:value="${post.idPostulacion}" />
+                                                            <button type="submit"
+                                                                class="btn btn-success">Aceptar</button>
+                                                        </form>
+                                                        <form th:action="@{/cancelarPostulacion}" method="post">
+                                                            <input type="hidden" name="idPostulacion"
+                                                                th:value="${post.idPostulacion}" />
+                                                            <button type="submit"
+                                                                class="btn btn-danger">Cancelar</button>
+                                                        </form>
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Cerrar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -52,7 +144,7 @@
                     <div class="alert alert-info mt-4">No tienes ofertas publicadas.</div>
                 </div>
             </div>
-            <!-- Botón para volver al panel -->
+            <!-- BOTÓN VOLVER AL PANEL -->
             <div class="mt-4 text-center">
                 <a th:href="@{/home}" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left-circle me-1"></i> Volver al panel
@@ -60,7 +152,7 @@
             </div>
         </div>
     </div>
-    <!-- Pie de página -->
+    <!-- PIE DE PÁGINA -->
     <div th:replace="~{componentes/footer :: footer}"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -9,14 +9,18 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Repository;
 
+
 @Repository
 public class DireccionDAO {
+    // CONEXIÓN MYSQL
     private MySqlConnection objMySQLConnection;
 
+    // CONSTRUCTOR
     public DireccionDAO() {
         objMySQLConnection = new MySqlConnection();
     }
 
+    // MAPEO DE RESULTSET A DIRECCION
     private Direccion mapearDireccion(ResultSet rs) throws SQLException {
         Direccion direccion = new Direccion();
         direccion.setIdDireccion(rs.getInt("id_direccion"));
@@ -28,6 +32,7 @@ public class DireccionDAO {
         return direccion;
     }
 
+    // OBTENER DIRECCIÓN POR ID
     public Direccion obtenerPorId(int id) throws SQLException {
         objMySQLConnection.open();
         Direccion direccion = null;
@@ -42,6 +47,7 @@ public class DireccionDAO {
         return direccion;
     }
 
+    // OBTENER TODAS LAS DIRECCIONES
     public ArrayList<Direccion> obtenerTodas() throws SQLException {
         ArrayList<Direccion> lista = new ArrayList<>();
         objMySQLConnection.open();
@@ -55,26 +61,9 @@ public class DireccionDAO {
         objMySQLConnection.close();
         return lista;
     }
-    public Direccion obtenerDireccionPorId(int id) throws SQLException {
-        objMySQLConnection.open();
-        Direccion direccion = null;
-        if (!objMySQLConnection.isError()) {
-            String sql = "SELECT * FROM direccion WHERE id_direccion = " + id;
-            ResultSet rs = objMySQLConnection.executeSelect(sql);
-            try {
-                if (rs != null && rs.next()) {
-                    direccion = mapearDireccion(rs);
-                }
-            } catch (Exception e) {
-                System.err.println("Error inesperado ejecutando la consulta SQL: " + sql);
-                System.err.println("Mensaje de error: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-        objMySQLConnection.close();
-        return direccion;
-    }
 
+
+    // OBTENER DIRECCIONES POR USUARIO
     public ArrayList<Direccion> obtenerDireccionesPorUsuario(int idUsuario) throws SQLException {
         ArrayList<Direccion> lista = new ArrayList<>();
         objMySQLConnection.open();
@@ -95,6 +84,7 @@ public class DireccionDAO {
         return lista;
     }
 
+    // INSERTAR DIRECCIÓN
     public void insertarDireccion(Direccion direccion) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -107,6 +97,7 @@ public class DireccionDAO {
         objMySQLConnection.close();
     }
 
+    // ACTUALIZAR DIRECCIÓN
     public void actualizarDireccion(Direccion direccion) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -119,6 +110,7 @@ public class DireccionDAO {
         objMySQLConnection.close();
     }
 
+    // ELIMINAR DIRECCIÓN
     public void eliminarDireccion(int id) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
@@ -128,5 +120,4 @@ public class DireccionDAO {
         objMySQLConnection.close();
     }
 
-  
 }

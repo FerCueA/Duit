@@ -18,7 +18,7 @@ public class RolDAO {
         objMySQLConnection = new MySqlConnection();
     }
 
-    // Método para mapear un ResultSet a un objeto Rol
+    // MAPEO DE RESULTSET A ROL
     private Rol mapearRol(ResultSet rs) throws SQLException {
         Rol objRol = new Rol();
         objRol.setIdRol(rs.getInt("id_rol"));
@@ -27,35 +27,8 @@ public class RolDAO {
         return objRol;
     }
 
-    public Rol obtenerPorId(int id) throws SQLException {
-        objMySQLConnection.open();
-        Rol rol = null;
-        if (!objMySQLConnection.isError()) {
-            String sql = "SELECT * FROM rol WHERE id_rol = " + id;
-            ResultSet rs = objMySQLConnection.executeSelect(sql);
-            if (rs != null && rs.next()) {
-                rol = mapearRol(rs);
-            }
-        }
-        objMySQLConnection.close();
-        return rol;
-    }
 
-    public ArrayList<Rol> obtenerTodos() throws SQLException {
-        ArrayList<Rol> lista = new ArrayList<>();
-        objMySQLConnection.open();
-        if (!objMySQLConnection.isError()) {
-            String sql = "SELECT * FROM rol";
-            ResultSet rs = objMySQLConnection.executeSelect(sql);
-            while (rs != null && rs.next()) {
-                lista.add(mapearRol(rs));
-            }
-        }
-        objMySQLConnection.close();
-        return lista;
-    }
-
-    // Obtener todos los roles
+    // OBTENER TODOS LOS ROLES
     public ArrayList<Rol> obtenerTodosRoles() throws SQLException {
         ArrayList<Rol> listaRoles = new ArrayList<>();
         objMySQLConnection.open();
@@ -76,7 +49,7 @@ public class RolDAO {
         return listaRoles;
     }
 
-    // Obtener un rol por su ID
+    // OBTENER ROL POR ID
     public Rol obtenerRolPorId(int idRol) throws SQLException {
         Rol objRol = null;
         objMySQLConnection.open();
