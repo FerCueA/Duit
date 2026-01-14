@@ -91,7 +91,7 @@
                                             <p><strong>Estado:</strong> <span th:text="${oferta.estado}"></span></p>
                                             <p><strong>Descripción:</strong> <span th:text="${oferta.descripcion}"></span></p>
                                             <p><strong>Fecha de solicitud:</strong> <span th:text="${#dates.format(oferta.fechaSolicitud, 'dd/MM/yyyy HH:mm')}"></span></p>
-                                            <p><strong>ID Cliente:</strong> <span th:text="${oferta.idCliente}"></span></p>
+                                            <p><strong>ID Cliente:</strong> <span th:text="${oferta.idUsuario}"></span></p>
                                             <hr>
                                             <!-- FORMULARIO DE POSTULACION -->
                                             <input type="hidden" name="idSolicitud" th:value="${oferta.idSolicitud}" />

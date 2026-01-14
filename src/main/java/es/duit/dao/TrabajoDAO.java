@@ -86,6 +86,7 @@ public class TrabajoDAO {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
             String sql = String.format(
+                java.util.Locale.US,
                 "INSERT INTO trabajo (id_postulacion, precio_acordado, fecha_inicio, fecha_fin, estado) VALUES (%d, %.2f, %s, %s, '%s')",
                 trabajo.getIdPostulacion(), trabajo.getPrecioAcordado(),
                 trabajo.getFechaInicio() != null ? String.format("'%tF %<tT'", trabajo.getFechaInicio()) : "NULL",

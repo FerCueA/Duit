@@ -171,6 +171,7 @@ public class HomeController {
         Solicitud s = solicitudDAO.obtenerPorId(p.getIdSolicitud());
         s.setEstado(Solicitud.EstadoSolicitud.CERRADA);
         solicitudDAO.actualizarSolicitud(s);
+        // Crear trabajo
         Trabajo t = new Trabajo();
         t.setIdPostulacion(idPostulacion);
         t.setPrecioAcordado(p.getPrecioPropuesto());
