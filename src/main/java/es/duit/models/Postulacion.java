@@ -3,6 +3,9 @@ package es.duit.models;
 import java.util.Date;
 
 public class Postulacion {
+        private Solicitud solicitud;
+        public Solicitud getSolicitud() { return solicitud; }
+        public void setSolicitud(Solicitud solicitud) { this.solicitud = solicitud; }
     private int idPostulacion;
     private int idSolicitud;
     private int idProfesional;

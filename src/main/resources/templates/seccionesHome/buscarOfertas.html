@@ -10,7 +10,7 @@
 
 <body class="d-flex flex-column min-vh-100">
     <!-- Sección: Encabezado de usuario -->
-    <div th:replace="componentes/headerUsuario :: headerUsuario"></div>
+    <div th:replace="~{componentes/headerUsuario :: headerUsuario}"></div>
     <div class="container-fluid flex-grow-1 d-flex align-items-center justify-content-center" style="min-height:80vh;">
         <div class="w-100" style="max-width:800px;">
             <!-- Título principal de la página de búsqueda -->
@@ -25,11 +25,8 @@
                                 <label class="form-label fw-bold"><i class="bi bi-tags"></i> Tipo</label>
                                 <select name="tipo" class="form-select">
                                     <option value="">Todos</option>
-                                    <option value="Limpieza">Limpieza</option>
-                                    <option value="Reparaciones">Reparaciones</option>
-                                    <option value="Jardinería">Jardinería</option>
-                                    <option value="Informática">Informática</option>
-                                    <option value="Otro">Otro</option>
+                                    <option th:each="cat : ${categorias}" th:value="${cat.idCategoria}"
+                                        th:text="${cat.nombre}"></option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -46,39 +43,76 @@
                         <div class="mt-4 text-end">
                             <button type="submit" class="btn btn-primary px-4"><i class="bi bi-search"></i>
                                 Buscar</button>
-                            <button type="button" class="btn btn-outline-secondary ms-2 px-4"
-                                id="mostrar-todo-btn">Mostrar todo</button>
                         </div>
                     </form>
                 </div>
             </div>
             <!-- Resultados de ofertas: se muestran debajo del filtro -->
             <div id="resultados-ofertas" class="mx-auto mt-4 p-4 bg-white rounded-3 shadow border"
-                style="display:none; max-width:700px;">
+                style="max-width:700px;">
                 <!-- Título de resultados -->
                 <h4 class="mb-4 text-center"><i class="bi bi-list-ul"></i> Resultados de la búsqueda:</h4>
                 <!-- Ejemplo de ofertas mostradas -->
                 <div class="row g-4" id="ofertas-ejemplo">
-                    <div class="col-md-12">
+                    <div th:each="oferta : ${ofertas}" class="col-md-12">
                         <div class="card mb-3 border-0 shadow-sm">
-                            <div
-                                class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                            <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center">
                                 <div>
-                                    <h5 class="card-title mb-1 fw-bold">Limpieza de oficina <span
-                                            class="badge bg-success ms-2">Activa</span></h5>
-                                    <p class="mb-0"><span class="fw-semibold">Zona:</span> 35001 <span
-                                            class="fw-semibold ms-3">Precio:</span> 30€</p>
-                                    <small class="text-muted">Descripción: Limpieza semanal de oficinas en el
-                                        centro.</small>
+                                    <h5 class="card-title mb-1 fw-bold" th:text="${oferta.titulo}"></h5>
+                                    <p class="mb-0">
+                                        <span class="fw-semibold">Categoría:</span> <span th:text="${oferta.idCategoria}"></span>
+                                        <span class="fw-semibold ms-3">Estado:</span> <span th:text="${oferta.estado}"></span>
+                                    </p>
+                                    <small class="text-muted">Descripción: <span th:text="${oferta.descripcion}"></span></small>
                                 </div>
                                 <div class="text-end">
-                                    <button class="btn btn-outline-info btn-sm mt-2"><i class="bi bi-eye"></i> Ver
-                                        detalles</button>
+                                    <button class="btn btn-outline-info btn-sm mt-2" data-bs-toggle="modal"
+                                        th:attr="data-bs-target='#modalUnico__' + ${oferta.idSolicitud}"><i class="bi bi-eye"></i> Ver detalles / Postularse</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal único para detalles y postulación -->
+                        <div class="modal fade" th:id="'modalUnico__' + ${oferta.idSolicitud}" tabindex="-1"
+                            th:attr="aria-labelledby='modalUnicoLabel__' + ${oferta.idSolicitud}"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary text-white">
+                                        <h5 class="modal-title" th:id="'modalUnicoLabel__' + ${oferta.idSolicitud}">
+                                            <i class="bi bi-info-circle me-2"></i>Detalles de la Solicitud y Postulación
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                    </div>
+                                    <form th:action="@{/postularse}" method="post">
+                                        <div class="modal-body">
+                                            <!-- Detalles de la oferta -->
+                                            <h4 class="mb-2" th:text="${oferta.titulo}"></h4>
+                                            <p><strong>Categoría:</strong> <span th:text="${oferta.idCategoria}"></span></p>
+                                            <p><strong>Estado:</strong> <span th:text="${oferta.estado}"></span></p>
+                                            <p><strong>Descripción:</strong> <span th:text="${oferta.descripcion}"></span></p>
+                                            <p><strong>Fecha de solicitud:</strong> <span th:text="${#dates.format(oferta.fechaSolicitud, 'dd/MM/yyyy HH:mm')}"></span></p>
+                                            <p><strong>ID Cliente:</strong> <span th:text="${oferta.idCliente}"></span></p>
+                                            <hr>
+                                            <!-- Formulario de postulación -->
+                                            <input type="hidden" name="idSolicitud" th:value="${oferta.idSolicitud}" />
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">Mensaje para el cliente</label>
+                                                <textarea name="mensaje" class="form-control" rows="3" placeholder="Escribe tu mensaje..." required></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">Precio propuesto (€)</label>
+                                                <input type="number" name="precioPropuesto" class="form-control" min="0" step="0.01" placeholder="Ej: 50.00" required />
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-success" >Enviar postulación</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Puedes añadir más ofertas de ejemplo aquí -->
                 </div>
             </div>
             <div class="mt-4 text-center">
@@ -88,123 +122,10 @@
         </div>
     </div>
     <!-- Pie de página -->
-    <div th:replace="componentes/footer :: footer"></div>
+    <div th:replace="~{componentes/footer :: footer}"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Script para mostrar resultados y controlar modales -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Botón para mostrar todas las ofertas de ejemplo
-            const mostrarTodoBtn = document.getElementById('mostrar-todo-btn');
-            const resultadosOfertas = document.getElementById('resultados-ofertas');
-            mostrarTodoBtn.addEventListener('click', function () {
-                resultadosOfertas.style.display = 'block';
-            });
-            // Ocultar resultados al cargar
-            resultadosOfertas.style.display = 'none';
 
-            // Abrir modal de detalles al pulsar 'Ver detalles'
-            document.getElementById('ofertas-ejemplo').addEventListener('click', function (e) {
-                if (e.target.closest('.btn-outline-info')) {
-                    const modal = new bootstrap.Modal(document.getElementById('modalDetallesOferta'));
-                    modal.show();
-                }
-            });
 
-            // Abrir segundo modal de contacto al pulsar 'Reservar'
-            document.getElementById('modalDetallesOferta').addEventListener('click', function (e) {
-                if (e.target.closest('#btnReservarOferta')) {
-                    const modalDetalles = bootstrap.Modal.getInstance(document.getElementById('modalDetallesOferta'));
-                    if (modalDetalles) modalDetalles.hide();
-                    setTimeout(function () {
-                        const modalContacto = new bootstrap.Modal(document.getElementById('modalContactoOferta'));
-                        modalContacto.show();
-                    }, 400);
-                }
-            });
-        });
-    </script>
-
-    <!-- Modal: Detalles de la oferta -->
-    <div class="modal fade" id="modalDetallesOferta" tabindex="-1" aria-labelledby="modalDetallesOfertaLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalDetallesOfertaLabel"><i class="bi bi-info-circle me-2"></i>Detalles
-                        de la Oferta</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Datos principales de la oferta -->
-                    <div id="modal-oferta-datos">
-                        <h4 class="mb-2">Limpieza de oficina <span class="badge bg-success ms-2">Activa</span></h4>
-                        <p><strong>Zona:</strong> 35001</p>
-                        <p><strong>Precio:</strong> <span id="precioOferta">30€</span></p>
-                        <p><strong>Fecha:</strong> 10/01/2026</p>
-                        <p><strong>Duración:</strong> 2 horas</p>
-                        <p><strong>Descripción:</strong> Limpieza semanal de oficinas en el centro.</p>
-                    </div>
-                </div>
-                <div class="modal-footer" id="modal-oferta-footer-inicial" style="display:flex;">
-                    <button type="button" class="btn btn-primary" id="btnReservarOferta">
-                        <i class="bi bi-bookmark-check"></i> Reservar
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal: Contacto y reserva de la oferta -->
-    <div class="modal fade" id="modalContactoOferta" tabindex="-1" aria-labelledby="modalContactoOfertaLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="modalContactoOfertaLabel"><i
-                            class="bi bi-person-circle me-2"></i>Contacto y Reserva</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <h4 class="mb-2">Limpieza de oficina <span class="badge estado-oferta bg-success ms-2">Activa</span>
-                    </h4>
-                    <p><strong>Zona:</strong> 35001</p>
-                    <div class="mb-2">
-                        <label for="editarPrecio2" class="form-label"><strong>Editar precio:</strong></label>
-                        <input type="number" class="form-control w-50" id="editarPrecio2" value="30" min="0">
-                    </div>
-                    <p><strong>Fecha:</strong> 10/01/2026</p>
-                    <p><strong>Duración:</strong> 2 horas</p>
-                    <p><strong>Descripción:</strong> Limpieza semanal de oficinas en el centro.</p>
-                    <hr>
-                    <h5 class="mb-2"><i class="bi bi-person-circle"></i> Datos de contacto</h5>
-                    <p><strong>Nombre:</strong> Juan Pérez</p>
-                    <p><strong>Teléfono:</strong> 600 123 456</p>
-                    <p><strong>Dirección:</strong> Calle Mayor 10, 35001</p>
-                    <div id="mensaje-reserva"></div>
-                </div>
-                <div class="modal-footer flex-column flex-md-row gap-2">
-                    <div class="d-flex gap-2">
-                        <a href="tel:600123456" class="btn btn-info d-flex align-items-center gap-2 btn-comunicar">
-                            <i class="bi bi-telephone"></i> Comunicar por teléfono
-                        </a>
-                        <a href="https://wa.me/34600123456" target="_blank"
-                            class="btn btn-success d-flex align-items-center gap-2 btn-comunicar">
-                            <i class="bi bi-whatsapp"></i> Comunicar por WhatsApp
-                        </a>
-                    </div>
-                    <div id="botones-confirmar-cancelar" class="d-flex gap-2" style="display:none;">
-                        <button type="button" class="btn btn-primary" id="btnConfirmarReserva">
-                            <i class="bi bi-check-circle"></i> Confirmar reserva
-                        </button>
-                        <button type="button" class="btn btn-outline-danger" id="btnCancelarReserva">
-                            <i class="bi bi-x-circle"></i> Cancelar reserva
-                        </button>
-                    </div>
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </body>
 

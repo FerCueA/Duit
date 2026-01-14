@@ -12,7 +12,7 @@
 
 <body class="d-flex flex-column min-vh-100">
     <!-- Sección: Encabezado público -->
-    <div th:replace="componentes/headerPublico :: headerPublico"></div>
+    <div th:replace="~{componentes/headerPublico :: headerPublico}"></div>
     <!-- Sección principal de registro de usuario -->
     <main class="container flex-grow-1 d-flex flex-column justify-content-center align-items-center py-4">
         <div class="mx-auto w-100" style="max-width:800px;">
@@ -117,7 +117,7 @@
     </main>
     <!-- FOOTER -->
     <!-- Pie de página -->
-    <div th:replace="componentes/footer :: footer"></div>
+    <div th:replace="~{componentes/footer :: footer}"></div>
     <!-- Script para selección de rol y validación visual -->
     <script>
         // Selecciona el rol automáticamente según el parámetro idRol en la URL y oculta el selector si está preseleccionado

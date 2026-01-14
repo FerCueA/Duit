@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Duit | Mis Postulaciones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Header usuario -->
+    <div th:replace="~{componentes/headerUsuario :: headerUsuario}"></div>
+    <div class="container py-5 flex-grow-1">
+        <h2 class="text-center mb-4 fw-bold text-primary"><i class="bi bi-send"></i> Mis postulaciones</h2>
+        <div th:if="${postulaciones != null and !postulaciones.isEmpty()}">
+            <div class="row g-4">
+                <div class="col-12" th:each="post : ${postulaciones}">
+                    <div class="card flex-row shadow-sm border-primary h-100">
+                        <div class="card-header bg-primary bg-opacity-10 border-0 d-flex align-items-center" style="min-width:220px;">
+                            <div>
+                                <h5 class="card-title mb-2 text-primary"><i class="bi bi-briefcase"></i> <span th:text="${post.solicitud.titulo}"></span></h5>
+                                <p class="mb-1"><strong>Cliente:</strong> <span th:text="${post.solicitud.idCliente}"></span></p>
+                                <div class="d-flex gap-2 mt-2">
+                                    <a th:href="${'https://wa.me/' + (post.solicitud.idCliente != null ? @usuarioDAO.obtenerPorId(post.solicitud.idCliente)?.telefono : '')}" target="_blank" class="btn btn-success btn-sm d-flex align-items-center gap-1" th:if="${post.solicitud.idCliente != null}">
+                                        <i class="bi bi-whatsapp"></i> WhatsApp
+                                    </a>
+                                    <a th:href="${'tel:' + (post.solicitud.idCliente != null ? @usuarioDAO.obtenerPorId(post.solicitud.idCliente)?.telefono : '')}" class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1" th:if="${post.solicitud.idCliente != null}">
+                                        <i class="bi bi-telephone"></i> Llamar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body d-flex flex-column justify-content-center">
+                            <p class="mb-1"><strong>Mensaje:</strong> <span th:text="${post.mensaje}"></span></p>
+                            <p class="mb-1"><strong>Precio propuesto:</strong> <span th:text="${post.precioPropuesto}"></span> €</p>
+                            <p class="mb-1"><strong>Estado:</strong> <span th:text="${post.estado}"></span></p>
+                            <p class="mb-1"><strong>Fecha:</strong> <span th:text="${#dates.format(post.fechaPostulacion, 'dd/MM/yyyy HH:mm')}"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${postulaciones == null or postulaciones.isEmpty()}">
+            <p class="text-muted text-center">No tienes postulaciones realizadas.</p>
+        </div>
+    </div>
+    <!-- Footer -->
+    <div th:replace="~{componentes/footer :: footer}"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

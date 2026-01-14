@@ -24,7 +24,6 @@ public class SolicitudDAO {
         solicitud.setTitulo(rs.getString("titulo"));
         solicitud.setDescripcion(rs.getString("descripcion"));
         solicitud.setFechaSolicitud(rs.getTimestamp("fecha_solicitud"));
-        solicitud.setFechaActualizacion(rs.getTimestamp("fecha_actualizacion"));
         String estadoStr = rs.getString("estado");
         solicitud.setEstado(Solicitud.EstadoSolicitud.valueOf(estadoStr));
         return solicitud;

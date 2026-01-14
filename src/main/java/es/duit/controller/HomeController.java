@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.duit.dao.PostulacionDAO;
+import es.duit.models.Postulacion;
 import es.duit.dao.TrabajoDAO;
 import es.duit.dao.DireccionDAO;
 import es.duit.dao.ProfesionalCategoriaDAO;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 
 @Controller
 public class HomeController {
+
     // ==== INYECCIÓN DE DEPENDENCIAS (DAOs y servicios) ====
 
     @Autowired
@@ -58,7 +60,7 @@ public class HomeController {
     // ==== MÉTODOS AUXILIARES ====
 
     private void obtenerDatosUsuario(Model model, Authentication authentication) throws Exception {
-            // Añade el usuario autenticado al modelo para su uso en las vistas
+        // Añade el usuario autenticado al modelo para su uso en las vistas
         if (authentication != null) {
             Usuario usuario = usuarioDAO.obtenerUsuarioPorUsername(authentication.getName());
             if (usuario != null) {
@@ -80,6 +82,19 @@ public class HomeController {
     @GetMapping("/buscarOfertas")
     public String buscarOfertas(Model model, Authentication authentication) throws Exception {
         obtenerDatosUsuario(model, authentication);
+        ArrayList<Solicitud> ofertas = solicitudDAO.obtenerTodas();
+        ArrayList<Categoria> categorias = categoriaDAO.obtenerTodasCategorias();
+        // Asociar cada oferta con su objeto Categoria
+        for (Solicitud oferta : ofertas) {
+            for (Categoria cat : categorias) {
+                if (oferta.getIdCategoria() == cat.getIdCategoria()) {
+                    oferta.setCategoria(cat);
+                    break;
+                }
+            }
+        }
+        model.addAttribute("ofertas", ofertas);
+        model.addAttribute("categorias", categorias);
         return "seccionesHome/buscarOfertas";
     }
 
@@ -87,14 +102,40 @@ public class HomeController {
     @GetMapping("/misOfertas")
     public String misOfertas(Model model, Authentication authentication) throws Exception {
         obtenerDatosUsuario(model, authentication);
+        Usuario usuario = usuarioDAO.obtenerUsuarioPorUsername(authentication.getName());
+        if (usuario != null) {
+            ArrayList<Solicitud> ofertasPropias = solicitudDAO.obtenerSolicitudesPorCliente(usuario.getIdUsuario());
+            model.addAttribute("ofertasPropias", ofertasPropias);
+        }
         return "seccionesHome/misOfertas";
     }
 
+    // ==== CREACIÓN DE NUEVA OFERTA MAPPING ====
     @GetMapping("/anadirOferta")
     public String mostrarFormularioOferta(Model model, Authentication authentication) throws Exception {
         obtenerDatosUsuario(model, authentication);
         model.addAttribute("categorias", categoriaDAO.obtenerTodasCategorias());
         return "seccionesHome/anadirOferta";
+    }
+
+    // ==== CREACIÓN DE NUEVA OFERTA MAPPING ====
+    @GetMapping("/postulaciones")
+    public String postulaciones(Model model, Authentication authentication) throws Exception {
+        obtenerDatosUsuario(model, authentication);
+        Usuario usuario = usuarioDAO.obtenerUsuarioPorUsername(authentication.getName());
+        if (usuario != null) {
+            ArrayList<Postulacion> postulaciones = postulacionDAO.obtenerTodas();
+            ArrayList<Postulacion> postulacionesUsuario = new ArrayList<>();
+            for (Postulacion post : postulaciones) {
+                if (post.getIdProfesional() == usuario.getIdUsuario()) {
+                    Solicitud solicitud = solicitudDAO.obtenerPorId(post.getIdSolicitud());
+                    post.setSolicitud(solicitud);
+                    postulacionesUsuario.add(post);
+                }
+            }
+            model.addAttribute("postulaciones", postulacionesUsuario);
+        }
+        return "seccionesHome/postulaciones";
     }
 
     // ==== CREACIÓN DE NUEVA OFERTA ====
@@ -120,6 +161,28 @@ public class HomeController {
         solicitud.setEstado(Solicitud.EstadoSolicitud.ABIERTA);
         solicitudDAO.insertarSolicitud(solicitud);
         return "redirect:/misOfertas";
+    }
+
+    // ==== POSTULARSE A UNA OFERTA ====
+    @PostMapping("/postularse")
+    public String postularse(
+            @RequestParam("idSolicitud") int idSolicitud,
+            @RequestParam("mensaje") String mensaje,
+            @RequestParam("precioPropuesto") double precioPropuesto,
+            Authentication authentication,
+            Model model) throws Exception {
+        Usuario usuario = usuarioDAO.obtenerUsuarioPorUsername(authentication.getName());
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+        Postulacion postulacion = new Postulacion();
+        postulacion.setIdSolicitud(idSolicitud);
+        postulacion.setIdProfesional(usuario.getIdUsuario());
+        postulacion.setMensaje(mensaje);
+        postulacion.setPrecioPropuesto(precioPropuesto);
+        postulacion.setEstado(Postulacion.EstadoPostulacion.PENDIENTE);
+        postulacionDAO.insertarPostulacion(postulacion);
+        return "redirect:/postulaciones";
     }
 
     // ==== HISTORIAL DEL USUARIO ====
@@ -261,4 +324,5 @@ public class HomeController {
         obtenerDatosUsuario(model, authentication);
         return "seccionesHome/verEstadisticas";
     }
+
 }
