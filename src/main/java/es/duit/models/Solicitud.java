@@ -3,13 +3,15 @@ package es.duit.models;
 import java.util.Date;
 
 public class Solicitud {
+        private Categoria categoria;
+        public Categoria getCategoria() { return categoria; }
+        public void setCategoria(Categoria categoria) { this.categoria = categoria; }
     private int idSolicitud;
     private int idCliente;
     private int idCategoria;
     private String titulo;
     private String descripcion;
     private Date fechaSolicitud;
-    private Date fechaActualizacion;
     private EstadoSolicitud estado;
 
     public enum EstadoSolicitud {
@@ -17,13 +19,6 @@ public class Solicitud {
     }
 
     public Solicitud() {}
-    public Date getFechaActualizacion() {
-        return fechaActualizacion;
-    }
-
-    public void setFechaActualizacion(Date fechaActualizacion) {
-        this.fechaActualizacion = fechaActualizacion;
-    }
 
     public EstadoSolicitud getEstado() {
         return estado;

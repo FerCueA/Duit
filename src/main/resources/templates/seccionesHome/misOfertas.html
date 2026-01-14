@@ -10,132 +10,46 @@
 
 <body class="d-flex flex-column min-vh-100">
     <!-- Sección: Encabezado de usuario -->
-    <div th:replace="componentes/headerUsuario :: headerUsuario"></div>
+    <div th:replace="~{componentes/headerUsuario :: headerUsuario}"></div>
     <div class="container-fluid flex-grow-1 d-flex align-items-center justify-content-center" style="min-height:80vh;">
         <div class="w-100" style="max-width:800px;">
             <!-- Título principal de la página de ofertas del usuario -->
             <h2 class="mb-4 text-center">Mis Ofertas</h2>
             <!-- Cards de ofertas del usuario -->
             <div class="row g-4">
-                <!-- Card de ejemplo de oferta activa -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card border-warning shadow-lg rounded-4" style="background: linear-gradient(135deg, #f8fafc 60%, #e3e6f3 100%); border-width:2.5px; border-style:solid;">
-                        <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="me-3">
-                                    <i class="bi bi-file-earmark-text-fill text-secondary" style="font-size:2.2rem;"></i>
-                                </div>
-                                <div>
-                                    <h5 class="card-title mb-0 fw-bold">Reparar enchufe</h5>
-                                    <span class="badge bg-warning text-dark d-inline-flex align-items-center mt-1" style="font-size:1rem;">
-                                        <!-- Estado de la oferta: Activa -->
-                                        Activa
-                                    </span>
-                                </div>
+                <!-- Cards horizontales de ofertas propias -->
+                <div th:if="${ofertasPropias != null and !ofertasPropias.isEmpty()}" class="d-flex flex-column gap-4">
+                    <div th:each="oferta : ${ofertasPropias}" class="card mb-3 shadow-lg border-3 rounded-4 flex-row">
+                        <div class="card-body d-flex flex-row align-items-center w-100">
+                            <div class="me-4 d-flex flex-column align-items-center justify-content-center">
+                                <i class="bi bi-file-earmark-text-fill text-secondary" style="font-size:2.5rem;"></i>
+                                <span th:text="${oferta.estado}" class="badge bg-warning text-dark mt-2"
+                                    style="font-size:1rem;"></span>
                             </div>
-                            <hr>
-                            <!-- Detalles de la oferta -->
-                            <ul class="list-group list-group-flush">
+                            <div class="flex-grow-1">
+                                <h5 class="card-title mb-2 fw-bold" th:text="${oferta.titulo}"></h5>
                                 <div class="mb-2">
                                     <span class="fw-semibold text-secondary">Categoría:</span>
-                                    <span class="text-dark ms-2">Electricidad</span>
+                                    <span class="text-dark ms-2" th:text="${oferta.idCategoria}"></span>
                                 </div>
                                 <div class="mb-2">
                                     <span class="fw-semibold text-secondary">Descripción:</span>
-                                    <span class="text-dark ms-2">
-                                        <p class="mb-0 text-break">
-                                            <!-- Descripción larga de la oferta -->
-                                            El enchufe del salón no funciona y salta el diferencial. Este texto es un ejemplo de descripción larga para mostrar cómo se adapta el contenido en la card, permitiendo saltos de línea y ajuste automático.
-                                        </p>
-                                    </span>
-                                </div>
-                                <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Precio:</span>
-                                    <span class="text-success ms-2">45.00 €</span>
-                                </div>
-                                <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Zona:</span>
-                                    <span class="text-dark ms-2">Madrid</span>
+                                    <span class="text-dark ms-2" th:text="${oferta.descripcion}"></span>
                                 </div>
                                 <div class="mb-2">
                                     <span class="fw-semibold text-secondary">Fecha publicación:</span>
-                                    <span class="text-dark ms-2">03/01/2026 <span class="badge bg-light text-secondary border ms-1">10:00</span></span>
+                                    <span class="text-dark ms-2"
+                                        th:text="${#dates.format(oferta.fechaSolicitud, 'dd/MM/yyyy HH:mm')}"></span>
                                 </div>
                                 <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Fecha finalización:</span>
-                                    <span class="text-dark ms-2">03/01/2026 <span class="badge bg-light text-secondary border ms-1">12:00</span></span>
+
                                 </div>
-                                <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Valoración:</span>
-                                    <span class="badge bg-warning text-dark ms-2" style="font-size:1rem;"><i class="bi bi-star-fill me-1"></i> 5.0</span>
-                                </div>
-                                <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Profesional:</span>
-                                    <span class="text-primary ms-2">Juan Pérez</span>
-                                </div>
-                            </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- Card de ejemplo de oferta finalizada -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card border-success shadow-lg rounded-4" style="background: linear-gradient(135deg, #f8fafc 60%, #e3e6f3 100%); border-width:2.5px; border-style:solid;">
-                        <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="me-3">
-                                    <i class="bi bi-file-earmark-text-fill text-secondary" style="font-size:2.2rem;"></i>
-                                </div>
-                                <div>
-                                    <h5 class="card-title mb-0 fw-bold">Pintar habitación</h5>
-                                    <span class="badge bg-success d-inline-flex align-items-center mt-1" style="font-size:1rem;">
-                                        <!-- Estado de la oferta: Finalizada -->
-                                        Finalizada
-                                    </span>
-                                </div>
-                            </div>
-                            <hr>
-                            <!-- Detalles de la oferta finalizada -->
-                            <ul class="list-group list-group-flush">
-                                <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Categoría:</span>
-                                    <span class="text-dark ms-2">Pintura</span>
-                                </div>
-                                <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Descripción:</span>
-                                    <span class="text-dark ms-2">
-                                        <p class="mb-0 text-break">
-                                            <!-- Descripción larga de la oferta -->
-                                            Pintar paredes y techo de la habitación principal. Este texto es un ejemplo de descripción larga para mostrar cómo se adapta el contenido en la card, permitiendo saltos de línea y ajuste automático.
-                                        </p>
-                                    </span>
-                                </div>
-                                <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Precio:</span>
-                                    <span class="text-success ms-2">80.00 €</span>
-                                </div>
-                                <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Zona:</span>
-                                    <span class="text-dark ms-2">Madrid</span>
-                                </div>
-                                <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Fecha publicación:</span>
-                                    <span class="text-dark ms-2">01/01/2026 <span class="badge bg-light text-secondary border ms-1">09:00</span></span>
-                                </div>
-                                <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Fecha finalización:</span>
-                                    <span class="text-dark ms-2">02/01/2026 <span class="badge bg-light text-secondary border ms-1">18:00</span></span>
-                                </div>
-                                <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Valoración:</span>
-                                    <span class="badge bg-warning text-dark ms-2" style="font-size:1rem;"><i class="bi bi-star-fill me-1"></i> 4.0</span>
-                                </div>
-                                <div class="mb-2">
-                                    <span class="fw-semibold text-secondary">Profesional:</span>
-                                    <span class="text-primary ms-2">María López</span>
-                                </div>
-                            </ul>
-                        </div>
-                    </div>
+                <div th:if="${ofertasPropias == null or ofertasPropias.isEmpty()}" class="text-center w-100">
+                    <div class="alert alert-info mt-4">No tienes ofertas publicadas.</div>
                 </div>
             </div>
             <!-- Botón para volver al panel -->
@@ -147,7 +61,7 @@
         </div>
     </div>
     <!-- Pie de página -->
-    <div th:replace="componentes/footer :: footer"></div>
+    <div th:replace="~{componentes/footer :: footer}"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

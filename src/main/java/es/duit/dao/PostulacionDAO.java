@@ -23,7 +23,6 @@ public class PostulacionDAO {
         postulacion.setMensaje(rs.getString("mensaje"));
         postulacion.setPrecioPropuesto(rs.getDouble("precio_propuesto"));
         postulacion.setFechaPostulacion(rs.getTimestamp("fecha_postulacion"));
-        postulacion.setFechaRespuesta(rs.getTimestamp("fecha_respuesta"));
         String estadoStr = rs.getString("estado");
         postulacion.setEstado(Postulacion.EstadoPostulacion.valueOf(estadoStr));
         return postulacion;
@@ -55,5 +54,17 @@ public class PostulacionDAO {
         }
         objMySQLConnection.close();
         return lista;
+    }
+
+    public void insertarPostulacion(Postulacion postulacion) throws SQLException {
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = String.format(
+                    "INSERT INTO postulacion (id_solicitud, id_profesional, mensaje, precio_propuesto, fecha_postulacion, estado) VALUES (%d, %d, '%s', %.2f, NOW(), '%s')",
+                    postulacion.getIdSolicitud(), postulacion.getIdProfesional(), postulacion.getMensaje(),
+                    postulacion.getPrecioPropuesto(), postulacion.getEstado().name());
+            objMySQLConnection.executeInsert(sql);
+        }
+        objMySQLConnection.close();
     }
 }
