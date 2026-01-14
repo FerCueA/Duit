@@ -122,11 +122,11 @@
                                                             <button type="submit"
                                                                 class="btn btn-success">Aceptar</button>
                                                         </form>
-                                                        <form th:action="@{/cancelarPostulacion}" method="post">
+                                                        <form th:action="@{/rechazarPostulacion}" method="post">
                                                             <input type="hidden" name="idPostulacion"
                                                                 th:value="${post.idPostulacion}" />
                                                             <button type="submit"
-                                                                class="btn btn-danger">Cancelar</button>
+                                                                class="btn btn-danger">Rechazar</button>
                                                         </form>
                                                         <button type="button" class="btn btn-secondary"
                                                             data-bs-dismiss="modal">Cerrar</button>

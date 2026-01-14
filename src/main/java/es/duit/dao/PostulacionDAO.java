@@ -93,10 +93,10 @@ public class PostulacionDAO {
     }
 
     // CANCELAR POSTULACIÓN
-    public void cancelarPostulacion(int idPostulacion) throws SQLException {
+    public void rechazarPostulacion(int idPostulacion) throws SQLException {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
-            String sql = "UPDATE postulacion SET estado = 'CANCELADA' WHERE id_postulacion = " + idPostulacion;
+            String sql = "UPDATE postulacion SET estado = 'RECHAZADA' WHERE id_postulacion = " + idPostulacion;
             objMySQLConnection.executeInsert(sql);
         }
         objMySQLConnection.close();

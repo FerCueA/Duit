@@ -157,9 +157,9 @@ public class HomeController {
     }
 
     // CANCELAR POSTULACION
-    @PostMapping("/cancelarPostulacion")
-    public String cancelarPostulacion(@RequestParam("idPostulacion") int idPostulacion) throws Exception {
-        postulacionDAO.cancelarPostulacion(idPostulacion);
+    @PostMapping("/rechazarPostulacion")
+    public String rechazarPostulacion(@RequestParam("idPostulacion") int idPostulacion) throws Exception {
+        postulacionDAO.rechazarPostulacion(idPostulacion);
         return "redirect:/misOfertas";
     }
 
