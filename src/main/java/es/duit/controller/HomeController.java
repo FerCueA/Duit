@@ -41,7 +41,7 @@ public class HomeController {
     }
 
     // VALORACIONES
-    @GetMapping("/verValoracionesgit ")
+    @GetMapping("/verValoraciones")
     public String verValoraciones(Model model, Authentication auth) throws Exception {
         usuarioModelHelper.ponerUsuario(model, auth);
         return "seccionesHome/verValoraciones";
