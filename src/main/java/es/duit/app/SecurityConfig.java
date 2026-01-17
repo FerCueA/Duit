@@ -27,7 +27,8 @@ public class SecurityConfig {
                                         "/", "/index",
                                         "/login", "/loginprocess",
                                         "/register",
-                                        "/css/**", "/js/**", "/images/**"
+                                        "/css/**", "/js/**", "/images/**",
+                                        "/terminos", "/privacidad", "/ayudaIndex"
                                 ).permitAll()
                                 .requestMatchers("/home").authenticated()
                                 .anyRequest().authenticated()

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body class="bg-light">
+    <div th:replace="~{componentes/headerPublico :: headerPublico}"></div>
+    <div class="container py-5" style="min-height: 70vh;">
+        <h1 class="mb-4">Términos y Condiciones</h1>
+        <p>Bienvenido a Duit. Al utilizar esta plataforma, aceptas los siguientes términos y condiciones:</p>
+        <ul>
+            <li>Debes proporcionar información veraz y actualizada.</li>
+            <li>El uso indebido de la plataforma puede conllevar la suspensión de tu cuenta.</li>
+            <li>La plataforma puede actualizar estos términos en cualquier momento.</li>
+            <li>Para más información, contacta con soporte.</li>
+        </ul>
+    </div>
+    <div th:replace="~{componentes/footer :: footer}"></div>
+</body>
+</html>

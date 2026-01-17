@@ -12,7 +12,6 @@ public class Postulacion {
     private Date fechaPostulacion;
     private Date fechaRespuesta;
     private EstadoPostulacion estado;
-
     private Solicitud solicitud;
 
     public Solicitud getSolicitud() {

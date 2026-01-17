@@ -85,4 +85,22 @@ public class MainController {
     public String logout() {
         return "redirect:/index";
     }
+
+    // TÉRMINOS Y CONDICIONES 
+    @GetMapping("/terminos")
+    public String terminos() {
+        return "terminos";
+    }
+
+    // POLÍTICA DE PRIVACIDAD 
+    @GetMapping("/privacidad")
+    public String privacidad() {
+        return "privacidad";
+    }
+
+    // AYUDA (público)
+    @GetMapping("/ayudaIndex")
+    public String ayudaIndex() {
+        return "ayudaIndex";
+    }
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body class="bg-light">
+    <div th:replace="~{componentes/headerPublico :: headerPublico}"></div>
+    <div class="container py-5" style="min-height: 70vh;">
+        <h1 class="mb-4">Ayuda</h1>
+        <p>¿Tienes dudas sobre el funcionamiento de Duit? Aquí tienes algunas respuestas rápidas:</p>
+        <ul>
+            <li>Para registrarte, haz clic en “Registrarse” en la página principal.</li>
+            <li>Si olvidaste tu contraseña, utiliza la opción “¿Olvidaste tu contraseña?” en el login.</li>
+            <li>Para contactar con soporte, utiliza el formulario de contacto o escribe a soporte@duit.com.</li>
+            <li>Consulta la sección de preguntas frecuentes para más información.</li>
+        </ul>
+    </div>
+    <div th:replace="~{componentes/footer :: footer}"></div>
+</body>
+
+</html>
