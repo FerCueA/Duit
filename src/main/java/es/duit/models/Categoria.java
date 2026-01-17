@@ -6,7 +6,9 @@ public class Categoria {
     private String descripcion;
     private boolean activo;
 
-    public Categoria() {}
+    public Categoria() {
+    }
+
     public boolean isActivo() {
         return activo;
     }

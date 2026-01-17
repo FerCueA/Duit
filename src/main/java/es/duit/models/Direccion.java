@@ -8,7 +8,8 @@ public class Direccion {
     private String provincia;
     private String pais;
 
-    public Direccion() {}
+    public Direccion() {
+    }
 
     public int getIdDireccion() {
         return idDireccion;

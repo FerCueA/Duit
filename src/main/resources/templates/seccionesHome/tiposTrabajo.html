@@ -21,7 +21,7 @@
             <!-- CARD PRINCIPAL DE TIPOS DE TRABAJO -->
             <div class="card shadow">
                 <div class="card-body">
-                 
+
                     <!-- CABECERA CARD -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="mb-0">Listado de tipos de trabajo</h5>
@@ -49,42 +49,56 @@
                                     <!-- ACCIONES CATEGORÍA -->
                                     <td class="text-center">
                                         <!-- BOTÓN EDITAR -->
-                                        <button class="btn btn-outline-primary btn-sm me-1" data-bs-toggle="modal" th:attr="data-bs-target='#modalEditarTipo' + ${categoria.idCategoria}" type="button">
+                                        <button class="btn btn-outline-primary btn-sm me-1" data-bs-toggle="modal"
+                                            th:attr="data-bs-target='#modalEditarTipo' + ${categoria.idCategoria}"
+                                            type="button">
                                             <i class="bi bi-pencil"></i> Editar
                                         </button>
                                         <!-- MODAL EDITAR TIPO -->
-                                        <div class="modal fade" th:id="'modalEditarTipo' + ${categoria.idCategoria}" tabindex="-1" aria-labelledby="modalEditarTipoLabel" aria-hidden="true">
+                                        <div class="modal fade" th:id="'modalEditarTipo' + ${categoria.idCategoria}"
+                                            tabindex="-1" aria-labelledby="modalEditarTipoLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <!-- FORMULARIO EDITAR TIPO -->
                                                     <form th:action="@{/tiposTrabajo/editar}" method="post">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="modalEditarTipoLabel">Editar tipo de trabajo</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                            <h5 class="modal-title" id="modalEditarTipoLabel">Editar
+                                                                tipo de trabajo</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Cerrar"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <input type="hidden" name="idCategoria" th:value="${categoria.idCategoria}" />
+                                                            <input type="hidden" name="idCategoria"
+                                                                th:value="${categoria.idCategoria}" />
                                                             <div class="mb-3">
                                                                 <label class="form-label">Nombre</label>
-                                                                <input type="text" name="nombre" class="form-control" th:value="${categoria.nombre}" required />
+                                                                <input type="text" name="nombre" class="form-control"
+                                                                    th:value="${categoria.nombre}" required />
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label class="form-label">Descripción</label>
-                                                                <textarea name="descripcion" class="form-control" rows="3" th:text="${categoria.descripcion}" required></textarea>
+                                                                <textarea name="descripcion" class="form-control"
+                                                                    rows="3" th:text="${categoria.descripcion}"
+                                                                    required></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-primary">Guardar
+                                                                cambios</button>
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
                                         </div>
                                         <!-- FORMULARIO ELIMINAR TIPO -->
-                                        <form th:action="@{/tiposTrabajo/eliminar}" method="post" style="display:inline">
-                                            <input type="hidden" name="idCategoria" th:value="${categoria.idCategoria}" />
-                                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este tipo de trabajo?');">
+                                        <form th:action="@{/tiposTrabajo/eliminar}" method="post"
+                                            style="display:inline">
+                                            <input type="hidden" name="idCategoria"
+                                                th:value="${categoria.idCategoria}" />
+                                            <button type="submit" class="btn btn-outline-danger btn-sm"
+                                                onclick="return confirm('¿Seguro que deseas eliminar este tipo de trabajo?');">
                                                 <i class="bi bi-trash"></i> Eliminar
                                             </button>
                                         </form>
@@ -94,14 +108,16 @@
                         </table>
                     </div>
                     <!-- MODAL NUEVO TIPO -->
-                    <div class="modal fade" id="modalNuevoTipo" tabindex="-1" aria-labelledby="modalNuevoTipoLabel" aria-hidden="true">
+                    <div class="modal fade" id="modalNuevoTipo" tabindex="-1" aria-labelledby="modalNuevoTipoLabel"
+                        aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <!-- FORMULARIO NUEVO TIPO -->
                                 <form th:action="@{/tiposTrabajo/crear}" method="post">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="modalNuevoTipoLabel">Añadir tipo de trabajo</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Cerrar"></button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="mb-3">
@@ -110,11 +126,13 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Descripción</label>
-                                            <textarea name="descripcion" class="form-control" rows="3" required></textarea>
+                                            <textarea name="descripcion" class="form-control" rows="3"
+                                                required></textarea>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancelar</button>
                                         <button type="submit" class="btn btn-success">Crear tipo</button>
                                     </div>
                                 </form>

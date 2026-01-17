@@ -36,7 +36,7 @@ public class HomeController {
     // HISTORIAL
     @GetMapping("/consultarHistorial")
     public String consultarHistorial(Model model, Authentication auth) throws Exception {
-        usuarioModelHelper.ponerUsuario(model, auth); 
+        usuarioModelHelper.ponerUsuario(model, auth);
         return "seccionesHome/consultarHistorial";
     }
 
@@ -57,18 +57,24 @@ public class HomeController {
     // EDITAR PERFIL PROFESIONAL
     @GetMapping("/editarPerfilProfesional")
     public String editarPerfilProfesional(Model model, Authentication auth) throws Exception {
+
         usuarioModelHelper.ponerUsuario(model, auth);
+
         Usuario u = (Usuario) model.getAttribute("usuario");
+
         if (u == null || u.getRol() == null) {
             model.addAttribute("errorNoProfesional", true);
             return "seccionesHome/editarPerfilProfesional";
         }
+
         String nombreRol = u.getRol().getNombre();
         if (nombreRol == null || !nombreRol.equalsIgnoreCase("PROFESIONAL")) {
             model.addAttribute("errorNoProfesional", true);
             return "seccionesHome/editarPerfilProfesional";
         }
+
         PerfilProfesional p = perfilProfesionalDAO.obtenerPorId(u.getIdUsuario());
+
         model.addAttribute("perfilProfesional", p);
         return "seccionesHome/editarPerfilProfesional";
     }

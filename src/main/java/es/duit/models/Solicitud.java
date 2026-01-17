@@ -3,9 +3,8 @@ package es.duit.models;
 import java.util.Date;
 
 public class Solicitud {
-        private Categoria categoria;
-        public Categoria getCategoria() { return categoria; }
-        public void setCategoria(Categoria categoria) { this.categoria = categoria; }
+    
+
     private int idSolicitud;
     private int idCliente;
     private int idCategoria;
@@ -14,11 +13,22 @@ public class Solicitud {
     private Date fechaSolicitud;
     private EstadoSolicitud estado;
 
+    private Categoria categoria;
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
     public enum EstadoSolicitud {
         ABIERTA, CERRADA, CANCELADA
     }
 
-    public Solicitud() {}
+    public Solicitud() {
+    }
 
     public EstadoSolicitud getEstado() {
         return estado;

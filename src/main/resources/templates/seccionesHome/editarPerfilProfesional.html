@@ -15,7 +15,8 @@
         <div class="w-100" style="max-width:600px;">
             <!-- ALERTA SOLO PROFESIONALES -->
             <div th:if="${errorNoProfesional}" class="alert alert-danger text-center mb-4">
-                <i class="bi bi-exclamation-triangle-fill"></i> Solo los profesionales pueden editar su perfil profesional.
+                <i class="bi bi-exclamation-triangle-fill"></i> Solo los profesionales pueden editar su perfil
+                profesional.
             </div>
             <!-- FORMULARIO EDICIÓN PERFIL PROFESIONAL -->
             <div th:unless="${errorNoProfesional}">
@@ -32,33 +33,39 @@
                     <div class="card-body p-4">
                         <form action="/perfilProfesional/editar" method="post" autocomplete="off">
                             <div class="mb-3">
-                                <label class="form-label fw-semibold"><i class="bi bi-briefcase text-primary"></i> Especialidad
+                                <label class="form-label fw-semibold"><i class="bi bi-briefcase text-primary"></i>
+                                    Especialidad
                                 </label>
                                 <input type="text" name="especialidad" class="form-control form-control-lg"
-                                    th:value="${perfilProfesional.descripcion}" placeholder="Ejemplo: Electricista" required />
+                                    th:value="${perfilProfesional.descripcion}" placeholder="Ejemplo: Electricista"
+                                    required />
                             </div>
                             <div class="mb-3">
-                                <label class="form-label fw-semibold"><i class="bi bi-currency-euro text-primary"></i> Precio
+                                <label class="form-label fw-semibold"><i class="bi bi-currency-euro text-primary"></i>
+                                    Precio
                                     por hora (€)</label>
                                 <input type="number" name="precioHora" class="form-control form-control-lg"
                                     th:value="${perfilProfesional.precioHora}" min="0" step="0.01"
                                     placeholder="Ejemplo: 20.00" required />
                             </div>
                             <div class="mb-3">
-                                <label class="form-label fw-semibold"><i class="bi bi-card-text text-primary"></i> Descripción
+                                <label class="form-label fw-semibold"><i class="bi bi-card-text text-primary"></i>
+                                    Descripción
                                     profesional</label>
                                 <textarea name="descripcion" class="form-control form-control-lg" rows="4"
                                     th:text="${perfilProfesional.descripcion}"
                                     placeholder="Describe tu experiencia, habilidades, etc." required></textarea>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label fw-semibold"><i class="bi bi-file-earmark-text text-primary"></i>
+                                <label class="form-label fw-semibold"><i
+                                        class="bi bi-file-earmark-text text-primary"></i>
                                     NIF</label>
                                 <input type="text" name="nif" class="form-control form-control-lg"
                                     th:value="${perfilProfesional.nif}" placeholder="NIF" required />
                             </div>
                             <div class="mt-4 text-end">
-                                <button type="submit" class="btn btn-success btn-lg px-4 shadow"><i class="bi bi-pencil"></i> Guardar cambios</button>
+                                <button type="submit" class="btn btn-success btn-lg px-4 shadow"><i
+                                        class="bi bi-pencil"></i> Guardar cambios</button>
                             </div>
                         </form>
                     </div>
@@ -66,7 +73,8 @@
             </div>
             <!-- BOTÓN VOLVER AL PANEL -->
             <div class="mt-4 text-center">
-                <a th:href="@{/home}" class="btn btn-outline-secondary btn-lg"><i class="bi bi-arrow-left"></i> Volver al
+                <a th:href="@{/home}" class="btn btn-outline-secondary btn-lg"><i class="bi bi-arrow-left"></i> Volver
+                    al
                     panel</a>
             </div>
         </div>

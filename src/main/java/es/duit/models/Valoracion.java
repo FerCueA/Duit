@@ -16,7 +16,9 @@ public class Valoracion {
         CLIENTE_A_PROFESIONAL, PROFESIONAL_A_CLIENTE
     }
 
-    public Valoracion() {}
+    public Valoracion() {
+    }
+
     public TipoValoracion getTipo() {
         return tipo;
     }
@@ -28,7 +30,6 @@ public class Valoracion {
     public int getPuntuacion() {
         return puntuacion;
     }
-
 
     public int getIdValoracion() {
         return idValoracion;
@@ -61,7 +62,6 @@ public class Valoracion {
     public void setIdReceptor(int idReceptor) {
         this.idReceptor = idReceptor;
     }
-
 
     public void setPuntuacion(int puntuacion) {
         this.puntuacion = puntuacion;

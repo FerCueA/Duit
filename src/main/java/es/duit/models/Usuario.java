@@ -17,7 +17,6 @@ public class Usuario {
     private boolean activo;
     private Timestamp fechaRegistro;
     private Rol rol;
-    private Direccion direccion; // Relación opcional
 
     public Rol getRol() {
         return rol;
@@ -133,13 +132,7 @@ public class Usuario {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public Direccion getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(Direccion direccion) {
-        this.direccion = direccion;
-    }
+  
 
     @Override
     public boolean equals(Object o) {

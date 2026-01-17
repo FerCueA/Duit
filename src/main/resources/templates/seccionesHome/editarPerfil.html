@@ -21,7 +21,8 @@
                     <!-- AVATAR Y ROL DEL USUARIO -->
                     <div class="d-flex flex-column align-items-center mb-3">
                         <div class="bg-white border border-3 border-primary rounded-circle p-2 mb-2">
-                            <img src="/images/avatarPlaceholder.png" alt="Avatar" class="rounded-circle" width="90" height="90">
+                            <img src="/images/avatarPlaceholder.png" alt="Avatar" class="rounded-circle" width="90"
+                                height="90">
                         </div>
                         <span class="badge bg-secondary">Usuario</span>
                         <small class="text-muted mt-2">La imagen de perfil no se puede cambiar</small>
@@ -32,27 +33,36 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label"><i class="bi bi-person fs-5 text-primary"></i> Nombre</label>
-                                <input type="text" name="nombre" class="form-control" th:value="${usuario.nombre}" required />
+                                <input type="text" name="nombre" class="form-control" th:value="${usuario.nombre}"
+                                    required />
                                 <div class="invalid-feedback">Por favor, introduce tu nombre.</div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label"><i class="bi bi-person fs-5 text-primary"></i> Apellidos</label>
-                                <input type="text" name="apellidos" class="form-control" th:value="${usuario.apellidos}" required />
+                                <label class="form-label"><i class="bi bi-person fs-5 text-primary"></i>
+                                    Apellidos</label>
+                                <input type="text" name="apellidos" class="form-control" th:value="${usuario.apellidos}"
+                                    required />
                                 <div class="invalid-feedback">Por favor, introduce tus apellidos.</div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label"><i class="bi bi-person fs-5 text-primary"></i> Nombre de usuario</label>
-                                <input type="text" name="username" class="form-control" th:value="${usuario.username}" required />
+                                <label class="form-label"><i class="bi bi-person fs-5 text-primary"></i> Nombre de
+                                    usuario</label>
+                                <input type="text" name="username" class="form-control" th:value="${usuario.username}"
+                                    required />
                                 <div class="invalid-feedback">Por favor, introduce un nombre de usuario.</div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label"><i class="bi bi-envelope fs-5 text-primary"></i> Correo electrónico</label>
-                                <input type="email" name="email" class="form-control" th:value="${usuario.email}" required />
+                                <label class="form-label"><i class="bi bi-envelope fs-5 text-primary"></i> Correo
+                                    electrónico</label>
+                                <input type="email" name="email" class="form-control" th:value="${usuario.email}"
+                                    required />
                                 <div class="invalid-feedback">Introduce un correo válido.</div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label"><i class="bi bi-telephone fs-5 text-primary"></i> Teléfono</label>
-                                <input type="tel" name="telefono" class="form-control" th:value="${usuario.telefono}" required />
+                                <label class="form-label"><i class="bi bi-telephone fs-5 text-primary"></i>
+                                    Teléfono</label>
+                                <input type="tel" name="telefono" class="form-control" th:value="${usuario.telefono}"
+                                    required />
                                 <div class="invalid-feedback">Introduce un teléfono válido.</div>
                             </div>
                         </div>
@@ -62,30 +72,35 @@
                         <div class="row g-3">
                             <div class="col-md-8">
                                 <label class="form-label"><i class="bi bi-geo fs-5 text-primary"></i> Dirección</label>
-                                <input type="text" name="direccion" class="form-control" value="Calle Ejemplo 123, Las Palmas" required />
+                                <input type="text" name="direccion" class="form-control"
+                                    value="Calle Ejemplo 123, Las Palmas" required />
                                 <div class="invalid-feedback">Introduce tu dirección.</div>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label"><i class="bi bi-building fs-5 text-primary"></i> Ciudad</label>
+                                <label class="form-label"><i class="bi bi-building fs-5 text-primary"></i>
+                                    Ciudad</label>
                                 <input type="text" name="ciudad" class="form-control" value="Las Palmas" required />
                                 <div class="invalid-feedback">Introduce tu ciudad.</div>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label"><i class="bi bi-geo-alt fs-5 text-primary"></i> Código Postal</label>
+                                <label class="form-label"><i class="bi bi-geo-alt fs-5 text-primary"></i> Código
+                                    Postal</label>
                                 <input type="text" name="cp" class="form-control" value="35001" required />
                                 <div class="invalid-feedback">Introduce tu código postal.</div>
                             </div>
                         </div>
                         <!-- BOTÓN PARA GUARDAR CAMBIOS -->
                         <div class="mt-4 text-end">
-                            <button type="submit" class="btn btn-success px-4"><i class="bi bi-pencil"></i> Guardar cambios</button>
+                            <button type="submit" class="btn btn-success px-4"><i class="bi bi-pencil"></i> Guardar
+                                cambios</button>
                         </div>
                     </form>
                 </div>
             </div>
             <!-- BOTÓN VOLVER AL PANEL -->
             <div class="mt-4 text-center">
-                <a th:href="@{/home}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Volver al panel</a>
+                <a th:href="@{/home}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Volver al
+                    panel</a>
             </div>
         </div>
     </div>

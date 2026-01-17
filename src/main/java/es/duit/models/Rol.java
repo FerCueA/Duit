@@ -75,10 +75,10 @@ public class Rol {
     @Override
     public String toString() {
         return "{" +
-            " idRol='" + getIdRol() + "'" +
-            ", nombre='" + getNombre() + "'" +
-            ", descripcion='" + getDescripcion() + "'" +
-            "}";
+                " idRol='" + getIdRol() + "'" +
+                ", nombre='" + getNombre() + "'" +
+                ", descripcion='" + getDescripcion() + "'" +
+                "}";
     }
 
 }

@@ -21,17 +21,14 @@ public class AdminController {
     private CategoriaDAO categoriaDAO;
     @Autowired
     private UsuarioDAO usuarioDAO;
-   
-
-    // MÉTODO PARA PONER EL USUARIO EN EL MODEL
-        @Autowired
-        private UsuarioModelHelper usuarioModelHelper;
+    @Autowired
+    private UsuarioModelHelper usuarioModelHelper;
 
     // GESTIÓN DE TIPOS DE TRABAJO
 
     @GetMapping("/tiposTrabajo")
     public String tiposTrabajo(Model model, Authentication auth) throws Exception {
-            usuarioModelHelper.ponerUsuario(model, auth);
+        usuarioModelHelper.ponerUsuario(model, auth);
         ArrayList<Categoria> categorias = categoriaDAO.obtenerTodas();
         model.addAttribute("categorias", categorias);
         return "seccionesHome/tiposTrabajo";
@@ -70,7 +67,7 @@ public class AdminController {
     @GetMapping("/verUsuarios")
     public String verUsuarios(@RequestParam(value = "filtro", required = false) String filtro, Model model,
             Authentication auth) throws Exception {
-            usuarioModelHelper.ponerUsuario(model, auth);
+        usuarioModelHelper.ponerUsuario(model, auth);
         ArrayList<Usuario> usuarios;
         if (filtro != null && !filtro.trim().isEmpty()) {
             usuarios = usuarioDAO.buscarUsuarios(filtro.trim());
@@ -82,7 +79,6 @@ public class AdminController {
         return "seccionesHome/verUsuarios";
     }
 
-    
     @PostMapping("/verUsuarios/editar")
     public String editarUsuario(@RequestParam int idUsuario,
             @RequestParam String nombre,
@@ -107,20 +103,16 @@ public class AdminController {
         return "redirect:/verUsuarios";
     }
 
-    
     @PostMapping("/verUsuarios/eliminar")
     public String eliminarUsuario(@RequestParam int idUsuario, Model model, Authentication auth) throws Exception {
         usuarioDAO.eliminarUsuario(idUsuario);
         return "redirect:/verUsuarios";
     }
 
-
-    
-
     // ESTADISTICAS
     @GetMapping("/verEstadisticas")
     public String verEstadisticas(Model model, Authentication auth) throws Exception {
-            usuarioModelHelper.ponerUsuario(model, auth);
+        usuarioModelHelper.ponerUsuario(model, auth);
         return "seccionesHome/verEstadisticas";
     }
 }

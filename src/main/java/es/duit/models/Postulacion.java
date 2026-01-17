@@ -3,9 +3,7 @@ package es.duit.models;
 import java.util.Date;
 
 public class Postulacion {
-        private Solicitud solicitud;
-        public Solicitud getSolicitud() { return solicitud; }
-        public void setSolicitud(Solicitud solicitud) { this.solicitud = solicitud; }
+
     private int idPostulacion;
     private int idSolicitud;
     private int idProfesional;
@@ -15,11 +13,22 @@ public class Postulacion {
     private Date fechaRespuesta;
     private EstadoPostulacion estado;
 
+    private Solicitud solicitud;
+
+    public Solicitud getSolicitud() {
+        return solicitud;
+    }
+
+    public void setSolicitud(Solicitud solicitud) {
+        this.solicitud = solicitud;
+    }
+
     public enum EstadoPostulacion {
         PENDIENTE, ACEPTADA, RECHAZADA, CANCELADA
     }
 
-    public Postulacion() {}
+    public Postulacion() {
+    }
 
     public int getIdPostulacion() {
         return idPostulacion;

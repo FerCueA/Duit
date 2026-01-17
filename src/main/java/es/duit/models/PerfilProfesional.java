@@ -9,7 +9,8 @@ public class PerfilProfesional {
     private String nif;
     private Date fechaAlta;
 
-    public PerfilProfesional() {}
+    public PerfilProfesional() {
+    }
 
     public int getIdProfesional() {
         return idProfesional;

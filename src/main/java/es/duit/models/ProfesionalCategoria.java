@@ -4,7 +4,8 @@ public class ProfesionalCategoria {
     private int idProfesional;
     private int idCategoria;
 
-    public ProfesionalCategoria() {}
+    public ProfesionalCategoria() {
+    }
 
     public int getIdProfesional() {
         return idProfesional;
