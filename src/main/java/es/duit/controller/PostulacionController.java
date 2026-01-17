@@ -64,4 +64,26 @@ public class PostulacionController {
 
         return "redirect:/misOfertas";
     }
+
+    // Crear nueva postulación
+    @PostMapping("/postulaciones/crear")
+    public String crearPostulacion(@RequestParam("idSolicitud") int idSolicitud,
+                                   @RequestParam("mensaje") String mensaje,
+                                   @RequestParam("precioPropuesto") Double precioPropuesto,
+                                   Authentication auth,
+                                   Model model) throws Exception {
+        usuarioModelHelper.ponerUsuario(model, auth);
+        Usuario profesional = usuarioDAO.obtenerUsuarioPorUsername(auth.getName());
+        if (profesional == null) {
+            return "redirect:/login";
+        }
+        Postulacion postulacion = new Postulacion();
+        postulacion.setIdSolicitud(idSolicitud);
+        postulacion.setIdProfesional(profesional.getIdUsuario());
+        postulacion.setMensaje(mensaje);
+        postulacion.setPrecioPropuesto(precioPropuesto);
+        postulacion.setEstado(Postulacion.EstadoPostulacion.PENDIENTE);
+        postulacionDAO.insertarPostulacion(postulacion);
+        return "redirect:/postulaciones";
+    }
 }

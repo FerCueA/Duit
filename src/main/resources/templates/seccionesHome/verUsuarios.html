@@ -21,7 +21,15 @@
             <!-- CARD PRINCIPAL DE USUARIOS -->
             <div class="card shadow">
                 <div class="card-body">
-                    <!-- BUSCADOR DE USUARIOS -->
+
+                     <!-- CARD AÑADIR -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Listado de tipos de trabajo</h5>
+                        <button class="btn btn-success btn-lg rounded-pill px-4 py-2 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNuevoTipo">
+                            <i class="bi bi-plus-circle"></i> Añadir nuevo
+                        </button>
+                    </div>
+                    <!-- CARD BUSCAR -->
                     <form class="mb-3" th:action="@{/verUsuarios}" method="get">
                         <div class="input-group input-group-lg">
                             <span class="input-group-text bg-primary text-white"><i class="bi bi-search"></i></span>

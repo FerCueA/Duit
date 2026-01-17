@@ -1,5 +1,3 @@
-
-
 package es.duit.dao;
 
 import es.duit.connections.MySqlConnection;
@@ -68,11 +66,22 @@ public class PostulacionDAO {
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
             String mensajeSeguro = postulacion.getMensaje().replace("'", "''");
+            // Usar punto como separador decimal
+            String precioStr = String.format(java.util.Locale.US, "%.2f", postulacion.getPrecioPropuesto());
             String sql = String.format(
-                "INSERT INTO postulacion (id_solicitud, id_profesional, mensaje, precio_propuesto, fecha_postulacion, estado) VALUES (%d, %d, '%s', %.2f, NOW(), '%s')",
-                postulacion.getIdSolicitud(), postulacion.getIdProfesional(), mensajeSeguro,
-                postulacion.getPrecioPropuesto(), postulacion.getEstado().name());
+                    "INSERT INTO postulacion (id_solicitud, id_profesional, mensaje, precio_propuesto, fecha_postulacion, estado) VALUES (%d, %d, '%s', %s, NOW(), '%s')",
+                    postulacion.getIdSolicitud(), postulacion.getIdProfesional(), mensajeSeguro,
+                    precioStr, postulacion.getEstado().name());
+            System.out.println("[DEBUG] SQL a ejecutar: " + sql);
             objMySQLConnection.executeInsert(sql);
+            if (objMySQLConnection.isError()) {
+                System.err.println("[ERROR] Error al insertar postulación: " + objMySQLConnection.msgError());
+            } else {
+                System.out.println("[DEBUG] Postulación insertada correctamente");
+            }
+        } else {
+            System.err.println(
+                    "[ERROR] Error de conexión antes de insertar postulación: " + objMySQLConnection.msgError());
         }
         objMySQLConnection.close();
     }

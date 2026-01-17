@@ -27,10 +27,16 @@ public class AdminController {
     // GESTIÓN DE TIPOS DE TRABAJO
 
     @GetMapping("/tiposTrabajo")
-    public String tiposTrabajo(Model model, Authentication auth) throws Exception {
+    public String tiposTrabajo(@RequestParam(value = "filtro", required = false) String filtro, Model model, Authentication auth) throws Exception {
         usuarioModelHelper.ponerUsuario(model, auth);
-        ArrayList<Categoria> categorias = categoriaDAO.obtenerTodas();
+        ArrayList<Categoria> categorias;
+        if (filtro != null && !filtro.trim().isEmpty()) {
+            categorias = categoriaDAO.buscarPorFiltro(filtro.trim());
+        } else {
+            categorias = categoriaDAO.obtenerTodas();
+        }
         model.addAttribute("categorias", categorias);
+        model.addAttribute("filtro", filtro);
         return "seccionesHome/tiposTrabajo";
     }
 

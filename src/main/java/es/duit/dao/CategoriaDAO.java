@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Repository;
 
-
 @Repository
 public class CategoriaDAO {
     // CONEXIÓN MYSQL
@@ -51,6 +50,40 @@ public class CategoriaDAO {
         return categoria;
     }
 
+    // INSERTAR CATEGORÍA
+    public void insertarCategoria(Categoria categoria) throws SQLException {
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = String.format(
+                    "INSERT INTO categoria (nombre, descripcion) VALUES ('%s', '%s')",
+                    categoria.getNombre(), categoria.getDescripcion());
+            objMySQLConnection.executeInsert(sql);
+        }
+        objMySQLConnection.close();
+    }
+
+    // ACTUALIZAR CATEGORÍA
+    public void actualizarCategoria(Categoria categoria) throws SQLException {
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = String.format(
+                    "UPDATE categoria SET nombre = '%s', descripcion = '%s' WHERE id_categoria = %d",
+                    categoria.getNombre(), categoria.getDescripcion(), categoria.getIdCategoria());
+            objMySQLConnection.executeUpdateOrDelete(sql);
+        }
+        objMySQLConnection.close();
+    }
+
+    // ELIMINAR CATEGORÍA
+    public void eliminarCategoria(int id) throws SQLException {
+        objMySQLConnection.open();
+        if (!objMySQLConnection.isError()) {
+            String sql = "DELETE FROM categoria WHERE id_categoria = " + id;
+            objMySQLConnection.executeUpdateOrDelete(sql);
+        }
+        objMySQLConnection.close();
+    }
+
     // OBTENER TODAS LAS CATEGORÍAS
     public ArrayList<Categoria> obtenerTodas() throws SQLException {
         ArrayList<Categoria> lista = new ArrayList<>();
@@ -72,42 +105,27 @@ public class CategoriaDAO {
         return lista;
     }
 
-
-
-    // INSERTAR CATEGORÍA
-    public void insertarCategoria(Categoria categoria) throws SQLException {
+    // BUSCAR CATEGORÍAS POR FILTRO (nombre o descripción)
+    public ArrayList<Categoria> buscarPorFiltro(String filtro) throws SQLException {
+        ArrayList<Categoria> lista = new ArrayList<>();
         objMySQLConnection.open();
         if (!objMySQLConnection.isError()) {
             String sql = String.format(
-                "INSERT INTO categoria (nombre, descripcion) VALUES ('%s', '%s')",
-                categoria.getNombre(), categoria.getDescripcion()
-            );
-            objMySQLConnection.executeInsert(sql);
+                    "SELECT * FROM categoria WHERE nombre LIKE '%%%s%%' OR descripcion LIKE '%%%s%%'",
+                    filtro, filtro);
+            ResultSet rs = objMySQLConnection.executeSelect(sql);
+            try {
+                while (rs != null && rs.next()) {
+                    lista.add(mapearCategoria(rs));
+                }
+            } catch (Exception e) {
+                System.err.println("Error inesperado ejecutando la consulta SQL: " + sql);
+                System.err.println("Mensaje de error: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
         objMySQLConnection.close();
-    }
-
-    // ACTUALIZAR CATEGORÍA
-    public void actualizarCategoria(Categoria categoria) throws SQLException {
-        objMySQLConnection.open();
-        if (!objMySQLConnection.isError()) {
-            String sql = String.format(
-                "UPDATE categoria SET nombre = '%s', descripcion = '%s' WHERE id_categoria = %d",
-                categoria.getNombre(), categoria.getDescripcion(), categoria.getIdCategoria()
-            );
-            objMySQLConnection.executeUpdateOrDelete(sql);
-        }
-        objMySQLConnection.close();
-    }
-
-    // ELIMINAR CATEGORÍA
-    public void eliminarCategoria(int id) throws SQLException {
-        objMySQLConnection.open();
-        if (!objMySQLConnection.isError()) {
-            String sql = "DELETE FROM categoria WHERE id_categoria = " + id;
-            objMySQLConnection.executeUpdateOrDelete(sql);
-        }
-        objMySQLConnection.close();
+        return lista;
     }
 
 }
