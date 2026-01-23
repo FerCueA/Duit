@@ -5,11 +5,19 @@ Aplicación web para la gestión de servicios y ofertas de trabajo. Permite a lo
 
 ---
 
+
 ## 🚀 Demo en producción
 
-Accede a la app desplegada en Netlify:
+- **Frontend:** desplegado en Netlify
+	[https://duitapp.netlify.app/](https://duitapp.netlify.app/)
 
-[https://duitapp.netlify.app/](https://duitapp.netlify.app/)
+- **Backend:** desplegado en Koyeb
+	[https://overall-kippie-8fercuea8-dbe9588c.koyeb.app/](https://overall-kippie-8fercuea8-dbe9588c.koyeb.app/)
+
+- **Base de datos:** PostgreSQL en Neon
+	[https://neon.tech/](https://neon.tech/)
+
+---
 
 ---
 
