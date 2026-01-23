@@ -1,0 +1,9 @@
+<div th:fragment="cardIndex(icon, color, titulo, texto)">
+    <div class="card h-100 border shadow rounded-3" th:classappend="' border-' + ${color}">
+        <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+            <i th:class="'bi ' + ${icon} + ' fs-1 text-' + ${color} + ' mb-3'"></i>
+            <h5 class="card-title fw-bold" th:text="${titulo}">Título</h5>
+            <p class="card-text text-muted" th:text="${texto}">Texto</p>
+        </div>
+    </div>
+</div>
