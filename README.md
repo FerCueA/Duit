@@ -96,13 +96,6 @@ Consulta la documentación oficial del proyecto:
 
 ---
 
-## 🌐 Despliegue en Netlify
-
-La aplicación está desplegada en Netlify:
-
-[https://duitapp.netlify.app/](https://duitapp.netlify.app/)
-
----
 
 ## 🗺️ Rutas principales
 
