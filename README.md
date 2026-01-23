@@ -15,6 +15,7 @@ Aplicación web orientada a la gestión de servicios y ofertas de trabajo.
 - **Thymeleaf**
 - **Lombok** 
 
+
 ## Dependencias principales
 - spring-boot-starter-data-jpa
 - spring-boot-starter-mail
@@ -27,6 +28,19 @@ Aplicación web orientada a la gestión de servicios y ofertas de trabajo.
 - lombok
 - spring-boot-starter-test (test)
 - spring-security-test (test)
+- spring-dotenv (para cargar variables de entorno desde un archivo `.env`)
+
+### Uso de variables de entorno con `.env`
+El proyecto utiliza la dependencia [`spring-dotenv`](https://github.com/paulschwarz/spring-dotenv) para cargar automáticamente las variables definidas en un archivo `.env` en la raíz del proyecto. Esto permite definir credenciales y configuraciones sensibles fuera del código fuente.
+
+Ejemplo de archivo `.env`:
+
+```env
+DB_URL=jdbc:postgresql://<host>:<port>/<database>
+DB_USER=usuario
+DB_PASS=contraseña
+```
+
 
 
 ## Enlaces útiles
