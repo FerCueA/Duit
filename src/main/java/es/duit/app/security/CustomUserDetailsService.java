@@ -1,4 +1,4 @@
-package es.duit.app.service;
+package es.duit.app.security;
 
 import es.duit.app.entity.AppUser;
 import es.duit.app.repository.AppUserRepository;
