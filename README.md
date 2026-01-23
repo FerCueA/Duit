@@ -1,22 +1,53 @@
+
 # Duit
 
-Aplicación web orientada a la gestión de servicios y ofertas de trabajo.
+Aplicación web para la gestión de servicios y ofertas de trabajo. Permite a los usuarios registrarse, iniciar sesión y acceder a funcionalidades según su rol.
 
-## Estado inicial
-- Proyecto Spring Boot generado y configurado.
-- Estructura básica de carpetas y archivos creada.
-- Dependencias principales añadidas en el pom.xml.
+---
 
-## Tecnologías y versiones
-- **Java**: 21
-- **Spring Boot**: 3.5.10
+## 🚀 Demo en producción
+
+Accede a la app desplegada en Netlify:
+
+[https://duitapp.netlify.app/](https://duitapp.netlify.app/)
+
+---
+
+
+## 🛠️ Instalación rápida
+
+1. Clona el repositorio:
+	```bash
+	git clone <url-del-repo>
+	```
+2. Configura tu base de datos PostgreSQL (local o en la nube).
+3. Crea el archivo `.env` en la raíz con tus credenciales:
+	```env
+	DB_URL=jdbc:postgresql://<host>:<port>/<database>
+	DB_USER=usuario
+	DB_PASS=contraseña
+	```
+4. Instala dependencias y ejecuta:
+	```bash
+	./mvnw spring-boot:run
+	```
+
+---
+
+
+## ⚙️ Tecnologías principales
+
+- **Java 21**
+- **Spring Boot 3.5.10**
 - **Maven**
-- **PostgreSQL** 
+- **PostgreSQL**
 - **Thymeleaf**
-- **Lombok** 
+- **Lombok**
 
 
-## Dependencias principales
+
+## 📦 Dependencias destacadas
+
 - spring-boot-starter-data-jpa
 - spring-boot-starter-mail
 - spring-boot-starter-security
@@ -26,26 +57,63 @@ Aplicación web orientada a la gestión de servicios y ofertas de trabajo.
 - thymeleaf-extras-springsecurity6
 - postgresql
 - lombok
-- spring-boot-starter-test (test)
-- spring-security-test (test)
-- spring-dotenv (para cargar variables de entorno desde un archivo `.env`)
+- spring-dotenv
 
-### Uso de variables de entorno con `.env`
-El proyecto utiliza la dependencia [`spring-dotenv`](https://github.com/paulschwarz/spring-dotenv) para cargar automáticamente las variables definidas en un archivo `.env` en la raíz del proyecto. Esto permite definir credenciales y configuraciones sensibles fuera del código fuente.
+---
 
-Ejemplo de archivo `.env`:
+### Variables de entorno
+El proyecto utiliza [`spring-dotenv`](https://github.com/paulschwarz/spring-dotenv) para cargar automáticamente las variables definidas en un archivo `.env` en la raíz del proyecto.
 
+Ejemplo de `.env`:
 ```env
 DB_URL=jdbc:postgresql://<host>:<port>/<database>
 DB_USER=usuario
 DB_PASS=contraseña
 ```
 
+En `application.properties`:
+```
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USER}
+spring.datasource.password=${DB_PASS}
+```
+
+---
+
+
+
+## 📚 Documentación oficial
+
+Consulta la documentación oficial del proyecto:
+
+[Documentación Duit](https://e.pcloud.link/publink/show?code=kZnwjaZ15u7S4qnaebz8Iq21LSKvRrC4nGX)
+
+
+---
+
+## 🌐 Despliegue en Netlify
+
+La aplicación está desplegada en Netlify:
+
+[https://duitapp.netlify.app/](https://duitapp.netlify.app/)
+
+---
+
+## 🗺️ Rutas principales
+
+| Ruta         | Descripción                       | Acceso           |
+|--------------|-----------------------------------|------------------|
+| `/index`     | Página de inicio                  | Público          |
+| `/login`     | Formulario de inicio de sesión    | Público          |
+| `/home`      | Home de usuario autenticado       | Solo logueados   |
+
+
+---
+
 
 
 ## Enlaces útiles
 - **Trello**: [Tablero PRW](https://trello.com/b/WuKam2k1/prw)
 - **Figma**: [Diseño PRW](https://www.figma.com/design/y0dsqYgpwDFsx5Hy0YNVtL/PRW?t=IcXPDrcEpCyz3U7G-0)
-- **Documentación**: _pendiente_
 
 
