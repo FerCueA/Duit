@@ -44,11 +44,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         String roleName = user.getRole().getName();
-        
+
         return User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .roles(roleName) // Spring Security agregará automáticamente "ROLE_" como prefijo
+                .roles(roleName)
                 .accountExpired(false)
                 .accountLocked(!user.getActive())
                 .credentialsExpired(false)
