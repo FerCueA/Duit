@@ -36,7 +36,7 @@ public class Rating extends BaseEntity {
     @JoinColumn(name = "id_job", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Job job;
+    private ServiceJob job;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -82,7 +82,6 @@ public class Rating extends BaseEntity {
         }
     }
 
-    // Método de utilidad para verificar si la valoración es positiva
     public boolean isPositive() {
         return score >= 4;
     }

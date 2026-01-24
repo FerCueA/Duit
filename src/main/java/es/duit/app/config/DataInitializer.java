@@ -1,7 +1,7 @@
 package es.duit.app.config;
 
 import es.duit.app.entity.AppUser;
-import es.duit.app.entity.Role;
+import es.duit.app.entity.UserRole;
 import es.duit.app.repository.AppUserRepository;
 import es.duit.app.repository.RoleRepository;
 import org.slf4j.Logger;
@@ -57,7 +57,7 @@ public class DataInitializer implements CommandLineRunner {
 
     private void createRoleIfNotExists(String roleName, String description, boolean active) {
         if (!roleRepository.findByName(roleName).isPresent()) {
-            Role role = new Role();
+            UserRole role = new UserRole();
             role.setName(roleName);
             role.setDescription(description);
             role.setActive(active);
@@ -80,7 +80,7 @@ public class DataInitializer implements CommandLineRunner {
         
         if (!appUserRepository.findByUsername(adminUsername).isPresent()) {
             // Buscar el rol ADMIN
-            Role adminRole = roleRepository.findByName("ADMIN")
+            UserRole adminRole = roleRepository.findByName("ADMIN")
                     .orElseThrow(() -> new RuntimeException("No se encontró el rol ADMIN"));
             
             // Crear usuario administrador

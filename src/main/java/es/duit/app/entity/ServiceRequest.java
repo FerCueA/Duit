@@ -13,12 +13,13 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "request", indexes = {
+@Table(name = "service_request", indexes = {
     @Index(name = "idx_request_category", columnList = "id_category"),
     @Index(name = "idx_request_client", columnList = "id_client"),
-    @Index(name = "idx_request_status", columnList = "status")
+    @Index(name = "idx_request_status", columnList = "status"),
+    @Index(name = "idx_request_service_address", columnList = "id_service_address")
 })
-public class Request extends BaseEntity {
+public class ServiceRequest extends BaseEntity {
 
     public enum Status {
         DRAFT, PUBLISHED, IN_PROGRESS, COMPLETED, CANCELLED, EXPIRED
@@ -28,20 +29,6 @@ public class Request extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_request")
     private Long id;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_client", nullable = false)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private AppUser client;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_category", nullable = false)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Category category;
 
     @NotBlank(message = "El título es obligatorio")
     @Size(min = 5, max = 150, message = "El título debe tener entre 5 y 150 caracteres")
@@ -61,15 +48,35 @@ public class Request extends BaseEntity {
     @Column(name = "status", nullable = false)
     private Status status = Status.DRAFT;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_client", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Application> applications = new ArrayList<>();
+    private AppUser client;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_category", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_service_address")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Address serviceAddress;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Job> jobs = new ArrayList<>();
+    private List<JobApplication> applications = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "request", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServiceJob> jobs = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
@@ -78,7 +85,6 @@ public class Request extends BaseEntity {
         }
     }
 
-    // Métodos de utilidad
     public boolean isActive() {
         return status == Status.PUBLISHED || status == Status.IN_PROGRESS;
     }
@@ -86,5 +92,12 @@ public class Request extends BaseEntity {
     public int getApplicationCount() {
         return applications != null ? applications.size() : 0;
     }
-}
 
+    public Address getEffectiveServiceAddress() {
+        return serviceAddress != null ? serviceAddress : (client != null ? client.getAddress() : null);
+    }
+
+    public boolean hasSpecificServiceAddress() {
+        return serviceAddress != null;
+    }
+}

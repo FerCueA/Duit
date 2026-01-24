@@ -13,8 +13,8 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "job")
-public class Job extends BaseEntity {
+@Table(name = "service_job")
+public class ServiceJob extends BaseEntity {
 
     public enum Status {
         CREATED, IN_PROGRESS, COMPLETED, CANCELLED, PAUSED
@@ -24,20 +24,6 @@ public class Job extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_job")
     private Long id;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_request", nullable = false)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Request request;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_application", nullable = false)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Application application;
 
     @NotNull
     @DecimalMin(value = "0.00", message = "El precio acordado debe ser positivo")
@@ -50,14 +36,28 @@ public class Job extends BaseEntity {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
+    @Size(max = 2000, message = "Las notas no pueden exceder los 2000 caracteres")
+    @Column(name = "notes", columnDefinition = "TEXT")
+    private String notes;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status = Status.CREATED;
 
-    @Size(max = 2000, message = "Las notas no pueden exceder los 2000 caracteres")
-    @Column(name = "notes", columnDefinition = "TEXT")
-    private String notes;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_request", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private ServiceRequest request;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_application", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private JobApplication application;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -71,7 +71,6 @@ public class Job extends BaseEntity {
         }
     }
 
-    // Método de utilidad para verificar si el trabajo está activo
     public boolean isActive() {
         return status == Status.CREATED || status == Status.IN_PROGRESS;
     }

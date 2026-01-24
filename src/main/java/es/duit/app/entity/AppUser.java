@@ -61,19 +61,6 @@ public class AppUser extends BaseEntity {
     @Column(name = "phone", length = 20)
     private String phone;
 
-    @NotNull(message = "El rol es obligatorio")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_role", nullable = false)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Role role;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_address")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Address address;
-
     @Column(name = "active", nullable = false)
     private Boolean active = true;
 
@@ -83,6 +70,19 @@ public class AppUser extends BaseEntity {
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 
+    @NotNull(message = "El rol es obligatorio")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_role", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private UserRole role;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_address")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Address address;
+
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -91,7 +91,7 @@ public class AppUser extends BaseEntity {
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Request> requests = new ArrayList<>();
+    private List<ServiceRequest> requests = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
@@ -117,15 +117,12 @@ public class AppUser extends BaseEntity {
 
     @PreUpdate
     protected void onUpdate() {
-        // Se podría actualizar lastLoginAt aquí si fuera necesario
     }
 
-    // Método de utilidad para obtener el nombre completo
     public String getFullName() {
         return lastName != null ? firstName + " " + lastName : firstName;
     }
 
-    // Método de utilidad para verificar si es profesional
     public boolean isProfessional() {
         return professionalProfile != null;
     }
