@@ -16,8 +16,61 @@ Aplicación web para la gestión de servicios y ofertas de trabajo. Permite a lo
 
 ---
 
+
+## 📚 Documentación oficial
+
+Consulta la documentación oficial del proyecto:
+
+[Documentación Duit](https://e.pcloud.link/publink/show?code=kZnwjaZ15u7S4qnaebz8Iq21LSKvRrC4nGX)
+
+
 ---
 
+
+## Enlaces útiles
+- **Trello**: [Tablero PRW](https://trello.com/b/WuKam2k1/prw)
+- **Figma**: [Diseño PRW](https://www.figma.com/design/y0dsqYgpwDFsx5Hy0YNVtL/PRW?t=IcXPDrcEpCyz3U7G-0)
+
+---
+
+
+## 🗺️ Rutas principales
+
+| Ruta           | Descripción                          | Acceso           |
+|----------------|--------------------------------------|------------------|
+| `/index`       | Página de inicio                     | Público          |
+| `/login`       | Formulario de inicio de sesión       | Público          |
+| `/registro`    | Registro de nuevos usuarios          | Público          |
+| `/terminos`    | Términos y condiciones               | Público          |
+| `/privacidad`  | Política de privacidad               | Público          |
+| `/ayuda`       | Página de ayuda                      | Público          |
+| `/home`        | Panel principal (dashboard)          | Solo logueados   |
+
+Al iniciar sesión, el usuario accede a `/home`, donde se muestran sus datos y opciones según su rol. El header muestra el username y el rol autenticado.
+
+---
+
+## 📁 Estructura del proyecto
+
+```
+src/main/resources/
+	templates/
+		public/         # Vistas públicas: index, login, registro, terminos, privacidad, ayuda
+		dashboard/      # Vistas privadas: home de usuario autenticado
+		fragments/      # Fragmentos Thymeleaf reutilizables (header, footer, etc.)
+	static/
+		css/            # Hojas de estilo
+		js/             # Scripts
+		img/            # Imágenes
+src/main/java/es/duit/app/
+	controller/       # Controladores Spring Boot
+	entity/           # Entidades JPA
+	repository/       # Repositorios JPA
+	security/         # Seguridad y autenticación
+	config/           # Configuración de la app
+```
+
+---
 
 ## 🛠️ Instalación rápida
 
@@ -84,34 +137,5 @@ spring.datasource.password=${DB_PASS}
 ```
 
 ---
-
-
-
-## 📚 Documentación oficial
-
-Consulta la documentación oficial del proyecto:
-
-[Documentación Duit](https://e.pcloud.link/publink/show?code=kZnwjaZ15u7S4qnaebz8Iq21LSKvRrC4nGX)
-
-
----
-
-
-## 🗺️ Rutas principales
-
-| Ruta         | Descripción                       | Acceso           |
-|--------------|-----------------------------------|------------------|
-| `/index`     | Página de inicio                  | Público          |
-| `/login`     | Formulario de inicio de sesión    | Público          |
-| `/home`      | Home de usuario autenticado       | Solo logueados   |
-
-
----
-
-
-
-## Enlaces útiles
-- **Trello**: [Tablero PRW](https://trello.com/b/WuKam2k1/prw)
-- **Figma**: [Diseño PRW](https://www.figma.com/design/y0dsqYgpwDFsx5Hy0YNVtL/PRW?t=IcXPDrcEpCyz3U7G-0)
 
 
