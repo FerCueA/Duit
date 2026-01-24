@@ -1,6 +1,7 @@
 package es.duit.app.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -10,45 +11,80 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "rating")
+@Table(name = "rating", indexes = {
+    @Index(name = "idx_rating_job", columnList = "id_job"),
+    @Index(name = "idx_rating_sender", columnList = "id_sender"),
+    @Index(name = "idx_rating_receiver", columnList = "id_receiver")
+})
 public class Rating extends BaseEntity {
+
+    public enum Type {
+        CLIENT_TO_PROFESSIONAL, PROFESSIONAL_TO_CLIENT
+    }
+
+    public enum Status {
+        PENDING, PUBLISHED, HIDDEN
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_rating")
     private Long id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_job", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Job job;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_sender", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private AppUser sender;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_receiver", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private AppUser receiver;
 
-    @Column(name = "type")
-    private Short type;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private Type type;
 
-    @Column(name = "score")
-    private Short score;
+    @NotNull
+    @Min(value = 1, message = "La puntuación mínima es 1")
+    @Max(value = 5, message = "La puntuación máxima es 5")
+    @Column(name = "score", nullable = false)
+    private Integer score;
 
-    @Column(name = "comment", length = 300)
+    @Size(max = 500, message = "El comentario no puede exceder los 500 caracteres")
+    @Column(name = "comment", length = 500)
     private String comment;
 
     @Column(name = "rated_at")
     private LocalDateTime ratedAt;
 
-    @Column(name = "status")
-    private Short status;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Status status = Status.PENDING;
+
+    @PrePersist
+    protected void onCreate() {
+        if (ratedAt == null) {
+            ratedAt = LocalDateTime.now();
+        }
+    }
+
+    // Método de utilidad para verificar si la valoración es positiva
+    public boolean isPositive() {
+        return score >= 4;
+    }
 }
 

@@ -1,16 +1,22 @@
 package es.duit.app.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "category")
+@Table(name = "category", indexes = {
+    @Index(name = "idx_category_name", columnList = "name"),
+    @Index(name = "idx_category_active", columnList = "active")
+})
 public class Category extends BaseEntity {
 
     @Id
@@ -18,9 +24,12 @@ public class Category extends BaseEntity {
     @Column(name = "id_category")
     private Long id;
 
-    @Column(name = "name", length = 100, nullable = false)
+    @NotBlank(message = "El nombre de la categoría es obligatorio")
+    @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
+    @Column(name = "name", length = 100, nullable = false, unique = true)
     private String name;
 
+    @Size(max = 200, message = "La descripción no puede exceder los 200 caracteres")
     @Column(name = "description", length = 200)
     private String description;
 
@@ -30,5 +39,24 @@ public class Category extends BaseEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<Request> requests;
+    private List<Request> requests = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<ProfessionalCategory> professionalCategories = new ArrayList<>();
+
+    // Método de utilidad para verificar si la categoría está activa
+    public boolean isActive() {
+        return Boolean.TRUE.equals(active);
+    }
+
+    // Método para obtener el número de solicitudes activas
+    public long getActiveRequestsCount() {
+        return requests != null ? 
+            requests.stream()
+                .filter(request -> request.getStatus() == Request.Status.PUBLISHED || 
+                                request.getStatus() == Request.Status.IN_PROGRESS)
+                .count() : 0;
+    }
 }
