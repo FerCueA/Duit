@@ -39,24 +39,22 @@ public class Category extends BaseEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<Request> requests = new ArrayList<>();
+    private List<ServiceRequest> requests = new ArrayList<>();
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<ProfessionalCategory> professionalCategories = new ArrayList<>();
 
-    // Método de utilidad para verificar si la categoría está activa
     public boolean isActive() {
         return Boolean.TRUE.equals(active);
     }
 
-    // Método para obtener el número de solicitudes activas
     public long getActiveRequestsCount() {
         return requests != null ? 
             requests.stream()
-                .filter(request -> request.getStatus() == Request.Status.PUBLISHED || 
-                                request.getStatus() == Request.Status.IN_PROGRESS)
+                .filter(request -> request.getStatus() == ServiceRequest.Status.PUBLISHED || 
+                                request.getStatus() == ServiceRequest.Status.IN_PROGRESS)
                 .count() : 0;
     }
 }

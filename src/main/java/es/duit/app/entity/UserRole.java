@@ -13,8 +13,8 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "role")
-public class Role extends BaseEntity {
+@Table(name = "user_role")
+public class UserRole extends BaseEntity {
 
     public enum RoleName {
         ADMIN, USER, PROFESSIONAL, MODERATOR
@@ -42,22 +42,18 @@ public class Role extends BaseEntity {
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     private List<AppUser> users = new ArrayList<>();
 
-    // Método de utilidad para verificar si el rol está activo
     public boolean isActive() {
         return Boolean.TRUE.equals(active);
     }
 
-    // Método de utilidad para verificar si es rol de administrador
     public boolean isAdmin() {
         return RoleName.ADMIN.name().equalsIgnoreCase(name);
     }
 
-    // Método de utilidad para verificar si es rol de profesional
     public boolean isProfessional() {
         return RoleName.PROFESSIONAL.name().equalsIgnoreCase(name);
     }
 
-    // Método para obtener el número de usuarios con este rol
     public int getUsersCount() {
         return users != null ? users.size() : 0;
     }

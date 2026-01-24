@@ -22,13 +22,6 @@ public class AccessLog {
     @Column(name = "id_log")
     private Long id;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_user", nullable = false)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private AppUser user;
-
     @Column(name = "accessed_at")
     private LocalDateTime accessedAt;
 
@@ -39,6 +32,13 @@ public class AccessLog {
     @NotNull
     @Column(name = "success", nullable = false)
     private Boolean success = false;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_user", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private AppUser user;
 
     @PrePersist
     protected void onCreate() {

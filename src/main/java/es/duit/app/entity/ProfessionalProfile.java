@@ -48,7 +48,7 @@ public class ProfessionalProfile extends BaseEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "professional", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Application> applications = new ArrayList<>();
+    private List<JobApplication> applications = new ArrayList<>();
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -62,7 +62,6 @@ public class ProfessionalProfile extends BaseEntity {
         }
     }
 
-    // Métodos de utilidad
     public boolean isProfileComplete() {
         return description != null && !description.trim().isEmpty() &&
                hourlyRate != null &&

@@ -23,7 +23,7 @@ public class Address extends BaseEntity {
 
     @NotBlank(message = "La dirección es obligatoria")
     @Size(min = 5, max = 200, message = "La dirección debe tener entre 5 y 200 caracteres")
-    @Column(name = "address", length = 200, nullable = false)
+    @Column(name = "street_address", length = 200, nullable = false)
     private String address;
 
     @NotBlank(message = "La ciudad es obligatoria")
@@ -50,7 +50,11 @@ public class Address extends BaseEntity {
     @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
     private List<AppUser> users = new ArrayList<>();
 
-    // Método de utilidad para obtener la dirección completa
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "serviceAddress", fetch = FetchType.LAZY)
+    private List<ServiceRequest> serviceRequests = new ArrayList<>();
+
     public String getFullAddress() {
         StringBuilder fullAddress = new StringBuilder(address);
         if (city != null) {

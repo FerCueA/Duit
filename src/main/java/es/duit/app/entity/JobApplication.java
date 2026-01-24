@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "application")
-public class Application extends BaseEntity {
+@Table(name = "job_application")
+public class JobApplication extends BaseEntity {
 
     public enum Status {
         PENDING, ACCEPTED, REJECTED, WITHDRAWN
@@ -29,7 +29,7 @@ public class Application extends BaseEntity {
     @JoinColumn(name = "id_request", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Request request;
+    private ServiceRequest request;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
