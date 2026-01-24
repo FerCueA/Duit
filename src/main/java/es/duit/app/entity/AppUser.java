@@ -1,57 +1,77 @@
 package es.duit.app.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@ToString
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "app_user")
+@Table(name = "app_user", indexes = {
+    @Index(name = "idx_user_email", columnList = "email"),
+    @Index(name = "idx_user_username", columnList = "username"),
+    @Index(name = "idx_user_dni", columnList = "dni")
+})
 public class AppUser extends BaseEntity {
 
-    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_user")
     private Long id;
 
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
     @Column(name = "first_name", length = 100, nullable = false)
     private String firstName;
 
+    @Size(max = 150, message = "El apellido no puede exceder los 150 caracteres")
     @Column(name = "last_name", length = 150)
     private String lastName;
 
+    @NotBlank(message = "El DNI es obligatorio")
+    @Pattern(regexp = "^[0-9]{8}[A-Z]$", message = "El DNI debe tener el formato correcto")
     @Column(name = "dni", length = 9, nullable = false, unique = true)
     private String dni;
 
+    @NotBlank(message = "El nombre de usuario es obligatorio")
+    @Size(min = 3, max = 50, message = "El nombre de usuario debe tener entre 3 y 50 caracteres")
     @Column(name = "username", length = 50, nullable = false, unique = true)
     private String username;
 
+    @NotBlank(message = "El email es obligatorio")
+    @Email(message = "El email debe tener un formato válido")
+    @Size(max = 100, message = "El email no puede exceder los 100 caracteres")
     @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 60, max = 255, message = "La contraseña encriptada debe tener la longitud correcta")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
+    @Pattern(regexp = "^[+]?[0-9]{9,20}$", message = "El teléfono debe tener un formato válido")
     @Column(name = "phone", length = 20)
     private String phone;
 
+    @NotNull(message = "El rol es obligatorio")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_role", nullable = false)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_address")
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Address address;
 
     @Column(name = "active", nullable = false)
@@ -63,23 +83,50 @@ public class AppUser extends BaseEntity {
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private ProfessionalProfile professionalProfile;
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Request> requests = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<AccessLog> accessLogs = new ArrayList<>();
 
     @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Rating> ratingsSent = new ArrayList<>();
 
     @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Rating> ratingsReceived = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        if (registeredAt == null) {
+            registeredAt = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        // Se podría actualizar lastLoginAt aquí si fuera necesario
+    }
+
+    // Método de utilidad para obtener el nombre completo
+    public String getFullName() {
+        return lastName != null ? firstName + " " + lastName : firstName;
+    }
+
+    // Método de utilidad para verificar si es profesional
+    public boolean isProfessional() {
+        return professionalProfile != null;
+    }
 }
