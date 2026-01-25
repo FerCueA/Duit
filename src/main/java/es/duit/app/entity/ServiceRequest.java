@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +45,6 @@ public class ServiceRequest extends BaseEntity {
 
     @Column(name = "deadline")
     private LocalDateTime deadline;
-
-    @DecimalMin(value = "0.00", message = "El presupuesto estimado debe ser positivo")
-    @DecimalMax(value = "99999.99", message = "El presupuesto estimado no puede exceder los 99,999€")
-    @Column(name = "estimated_budget", precision = 8, scale = 2)
-    private BigDecimal estimatedBudget;
 
     @NotNull
     @Enumerated(EnumType.STRING)
