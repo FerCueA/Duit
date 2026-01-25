@@ -11,7 +11,7 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-	<div th:replace="~{fragments/headerPublico :: headerPublico}"></div>
+	<div th:replace="~{components/headerPublico :: headerPublico}"></div>
 	<main class="flex-fill">
 		<div class="container my-5">
 			<h1 class="mb-4 text-primary">Ayuda</h1>
@@ -37,8 +37,7 @@
 			<a th:href="@{/index}" class="btn btn-secondary mt-4">Volver al inicio</a>
 		</div>
 	</main>
-	<div th:replace="~{fragments/footerPublico :: footerPublico}"></div>
-	<p>me esta volviendo loco</p>
+	<div th:replace="~{components/footerPublico :: footerPublico}"></div>
 </body>
 
 </html>
