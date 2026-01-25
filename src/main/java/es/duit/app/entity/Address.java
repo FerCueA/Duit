@@ -2,6 +2,7 @@ package es.duit.app.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +14,13 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "address")
+@Table(name = "address", indexes = {
+        @Index(name = "idx_address_city", columnList = "city"),
+        @Index(name = "idx_address_postal", columnList = "postal_code"),
+        @Index(name = "idx_address_province", columnList = "province"),
+        @Index(name = "idx_address_location", columnList = "city, province"),
+        @Index(name = "idx_address_full_location", columnList = "city, postal_code, province")
+})
 public class Address extends BaseEntity {
 
     @Id
@@ -31,8 +38,8 @@ public class Address extends BaseEntity {
     @Column(name = "city", length = 100, nullable = false)
     private String city;
 
-    @Size(max = 10, message = "El código postal no puede exceder los 10 caracteres")
-    @Column(name = "postal_code", length = 10)
+    @Pattern(regexp = "^[0-9]{5}$", message = "El código postal debe tener 5 dígitos")
+    @Column(name = "postal_code", length = 5)
     private String postalCode;
 
     @NotBlank(message = "La provincia es obligatoria")

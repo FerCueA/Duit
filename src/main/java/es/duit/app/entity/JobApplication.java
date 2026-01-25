@@ -12,7 +12,12 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "job_application")
+@Table(name = "job_application", indexes = {
+        @Index(name = "idx_application_request", columnList = "id_request"),
+        @Index(name = "idx_application_professional", columnList = "id_professional"),
+        @Index(name = "idx_application_status", columnList = "status"),
+        @Index(name = "idx_application_applied_at", columnList = "applied_at")
+})
 public class JobApplication extends BaseEntity {
 
     public enum Status {
@@ -56,6 +61,11 @@ public class JobApplication extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status = Status.PENDING;
+
+    @OneToOne(mappedBy = "application", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private ServiceJob job;
 
     @PrePersist
     protected void onCreate() {

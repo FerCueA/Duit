@@ -12,9 +12,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "rating", indexes = {
-    @Index(name = "idx_rating_job", columnList = "id_job"),
-    @Index(name = "idx_rating_sender", columnList = "id_sender"),
-    @Index(name = "idx_rating_receiver", columnList = "id_receiver")
+        @Index(name = "idx_rating_job", columnList = "id_job"),
+        @Index(name = "idx_rating_type", columnList = "type")
 })
 public class Rating extends BaseEntity {
 
@@ -39,22 +38,8 @@ public class Rating extends BaseEntity {
     private ServiceJob job;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_sender", nullable = false)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private AppUser sender;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_receiver", nullable = false)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private AppUser receiver;
-
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", length = 30, nullable = false)
     private Type type;
 
     @NotNull
@@ -85,5 +70,18 @@ public class Rating extends BaseEntity {
     public boolean isPositive() {
         return score >= 4;
     }
-}
 
+    public AppUser getSender() {
+        if (job == null)
+            return null;
+        return type == Type.CLIENT_TO_PROFESSIONAL ? job.getRequest().getClient()
+                : job.getApplication().getProfessional().getUser();
+    }
+
+    public AppUser getReceiver() {
+        if (job == null)
+            return null;
+        return type == Type.CLIENT_TO_PROFESSIONAL ? job.getApplication().getProfessional().getUser()
+                : job.getRequest().getClient();
+    }
+}

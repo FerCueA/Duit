@@ -13,7 +13,14 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "service_job")
+@Table(name = "service_job", indexes = {
+        @Index(name = "idx_job_status", columnList = "status"),
+        @Index(name = "idx_job_request", columnList = "id_request"),
+        @Index(name = "idx_job_application", columnList = "id_application"),
+        @Index(name = "idx_job_dates", columnList = "start_date, end_date"),
+        @Index(name = "idx_job_active", columnList = "status, start_date"),
+        @Index(name = "idx_job_price", columnList = "agreed_price")
+})
 public class ServiceJob extends BaseEntity {
 
     public enum Status {
@@ -73,5 +80,29 @@ public class ServiceJob extends BaseEntity {
 
     public boolean isActive() {
         return status == Status.CREATED || status == Status.IN_PROGRESS;
+    }
+
+    public boolean isCompleted() {
+        return status == Status.COMPLETED;
+    }
+
+    public boolean canBeRated() {
+        return isCompleted() && endDate != null;
+    }
+
+    public Long getDurationInDays() {
+        if (startDate == null)
+            return null;
+        LocalDateTime end = endDate != null ? endDate : LocalDateTime.now();
+        return java.time.temporal.ChronoUnit.DAYS.between(startDate, end);
+    }
+
+    public AppUser getClient() {
+        return request != null ? request.getClient() : null;
+    }
+
+    public AppUser getProfessional() {
+        return application != null && application.getProfessional() != null ? 
+            application.getProfessional().getUser() : null;
     }
 }

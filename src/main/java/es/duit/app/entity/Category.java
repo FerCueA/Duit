@@ -8,14 +8,16 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "category", indexes = {
-    @Index(name = "idx_category_name", columnList = "name"),
-    @Index(name = "idx_category_active", columnList = "active")
+        @Index(name = "idx_category_name", columnList = "name"),
+        @Index(name = "idx_category_active", columnList = "active")
 })
 public class Category extends BaseEntity {
 
@@ -43,18 +45,27 @@ public class Category extends BaseEntity {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<ProfessionalCategory> professionalCategories = new ArrayList<>();
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
+    private Set<ProfessionalProfile> professionals = new HashSet<>();
 
     public boolean isActive() {
         return Boolean.TRUE.equals(active);
     }
 
     public long getActiveRequestsCount() {
-        return requests != null ? 
-            requests.stream()
-                .filter(request -> request.getStatus() == ServiceRequest.Status.PUBLISHED || 
-                                request.getStatus() == ServiceRequest.Status.IN_PROGRESS)
+        return requests != null ? requests.stream()
+                .filter(request -> request.getStatus() == ServiceRequest.Status.PUBLISHED ||
+                        request.getStatus() == ServiceRequest.Status.IN_PROGRESS)
+                .count() : 0;
+    }
+
+    public int getProfessionalsCount() {
+        return professionals != null ? professionals.size() : 0;
+    }
+
+    public int getActiveProfessionalsCount() {
+        return professionals != null ? (int) professionals.stream()
+                .filter(prof -> Boolean.TRUE.equals(prof.getUser().getActive()))
                 .count() : 0;
     }
 }
