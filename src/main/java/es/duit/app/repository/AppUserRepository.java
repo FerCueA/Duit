@@ -15,4 +15,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 				    WHERE u.username = :username
 			""")
 	Optional<AppUser> findByUsername(@Param("username") String username);
+	
+	Optional<AppUser> findByDni(String dni);
 }

@@ -27,11 +27,6 @@ public class PublicController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping({ "/", "/index" })
-    public String index() {
-        return "public/index";
-    }
-
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
@@ -92,6 +87,19 @@ public class PublicController {
                 return "public/registro";
             }
 
+            // Validar DNI duplicado
+            if (dni != null && !dni.trim().isEmpty()
+                    && appUserRepository.findByDni(dni.trim().toUpperCase()).isPresent()) {
+                model.addAttribute("error", "Este DNI ya está registrado");
+                model.addAttribute("firstName", firstName);
+                model.addAttribute("lastName", lastName);
+                model.addAttribute("dni", dni);
+                model.addAttribute("email", email);
+                model.addAttribute("phone", phone);
+                model.addAttribute("userType", userType);
+                return "public/registro";
+            }
+
             // Validar tipo de usuario
             if (!"USER".equals(userType) && !"PROFESSIONAL".equals(userType)) {
                 model.addAttribute("error", "Debes seleccionar un tipo de usuario válido");
@@ -104,7 +112,8 @@ public class PublicController {
                 return "public/registro";
             }
 
-            UserRole selectedRole = roleRepository.findByName("USER".equals(userType) ? UserRole.RoleName.USER : UserRole.RoleName.PROFESSIONAL)
+            UserRole selectedRole = roleRepository
+                    .findByName("USER".equals(userType) ? UserRole.RoleName.USER : UserRole.RoleName.PROFESSIONAL)
                     .orElseThrow(() -> new RuntimeException("Rol " + userType + " no encontrado"));
 
             // Crear y guardar usuario
@@ -130,7 +139,20 @@ public class PublicController {
             return "public/login";
 
         } catch (Exception e) {
-            model.addAttribute("error", "Error en el registro: " + e.getMessage());
+            String errorMessage;
+            if (e.getMessage() != null) {
+                if (e.getMessage().contains("duplicate key") && e.getMessage().contains("dni")) {
+                    errorMessage = "Este DNI ya está registrado";
+                } else if (e.getMessage().contains("duplicate key") && e.getMessage().contains("username")) {
+                    errorMessage = "Este correo electrónico ya está registrado";
+                } else {
+                    errorMessage = "Error en el registro. Por favor, verifica los datos e inténtalo de nuevo";
+                }
+            } else {
+                errorMessage = "Error en el registro. Por favor, verifica los datos e inténtalo de nuevo";
+            }
+
+            model.addAttribute("error", errorMessage);
             model.addAttribute("firstName", firstName);
             model.addAttribute("lastName", lastName);
             model.addAttribute("dni", dni);
