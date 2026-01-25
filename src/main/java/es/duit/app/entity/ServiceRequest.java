@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "service_request", indexes = {
-    @Index(name = "idx_request_category", columnList = "id_category"),
-    @Index(name = "idx_request_client", columnList = "id_client"),
-    @Index(name = "idx_request_status", columnList = "status"),
-    @Index(name = "idx_request_service_address", columnList = "id_service_address")
+        @Index(name = "idx_request_category", columnList = "id_category"),
+        @Index(name = "idx_request_client", columnList = "id_client"),
+        @Index(name = "idx_request_status", columnList = "status"),
+        @Index(name = "idx_request_service_address", columnList = "id_service_address")
 })
 public class ServiceRequest extends BaseEntity {
 
@@ -43,9 +44,17 @@ public class ServiceRequest extends BaseEntity {
     @Column(name = "requested_at")
     private LocalDateTime requestedAt;
 
+    @Column(name = "deadline")
+    private LocalDateTime deadline;
+
+    @DecimalMin(value = "0.00", message = "El presupuesto estimado debe ser positivo")
+    @DecimalMax(value = "99999.99", message = "El presupuesto estimado no puede exceder los 99,999€")
+    @Column(name = "estimated_budget", precision = 8, scale = 2)
+    private BigDecimal estimatedBudget;
+
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status", length = 20, nullable = false)
     private Status status = Status.DRAFT;
 
     @NotNull

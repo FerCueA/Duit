@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - Duit</title>
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
@@ -16,24 +16,62 @@
     <div th:replace="~{fragments/headerPublico :: headerPublico}"></div>
     <main class="flex-fill">
         <div class="container mt-5">
-            <div class="card shadow mx-auto" style="max-width: 400px;">
+            <div class="card shadow mx-auto" style="max-width: 500px;">
                 <div class="card-body">
                     <h1 class="card-title text-center mb-3">Regístrate</h1>
                     <form th:action="@{/register}" method="post">
                         <div class="mb-3">
-                            <label for="username" class="form-label">Usuario:</label>
-                            <input type="text" id="username" name="username" class="form-control" required>
+                            <label for="firstName" class="form-label">Nombre:</label>
+                            <input type="text" id="firstName" name="firstName" class="form-control"
+                                th:value="${firstName}" required>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Apellidos:</label>
+                            <input type="text" id="lastName" name="lastName" class="form-control" 
+                                th:value="${lastName}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="dni" class="form-label">DNI:</label>
+                            <input type="text" id="dni" name="dni" class="form-control" th:value="${dni}"
+                                placeholder="12345678A" pattern="[0-9]{8}[A-Za-z]">
+                        </div>
+
                         <div class="mb-3">
                             <label for="email" class="form-label">Correo electrónico:</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
+                            <input type="email" id="email" name="email" class="form-control" 
+                                th:value="${email}" required>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Teléfono:</label>
+                            <input type="tel" id="phone" name="phone" class="form-control" 
+                                th:value="${phone}" placeholder="600000000" pattern="[0-9]{9}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="userType" class="form-label">Tipo de usuario:</label>
+                            <select id="userType" name="userType" class="form-select" required>
+                                <option value="">Selecciona el tipo de usuario</option>
+                                <option value="USER" th:selected="${userType == 'USER'}">Usuario estándar</option>
+                                <option value="PROFESSIONAL" th:selected="${userType == 'PROFESSIONAL'}">Profesional</option>
+                            </select>
+                            <div class="form-text">
+                                <strong>Usuario estándar:</strong> Puedes solicitar servicios a profesionales.<br>
+                                <strong>Profesional:</strong> Puedes ofrecer tus servicios y recibir solicitudes de trabajo.
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <label for="password" class="form-label">Contraseña:</label>
-                            <input type="password" id="password" name="password" class="form-control" required>
+                            <input type="password" id="password" name="password" class="form-control" 
+                                minlength="4" required>
                         </div>
+
                         <button type="submit" class="btn btn-primary w-100">Registrarse</button>
                     </form>
+                    <div th:if="${error}" class="alert alert-danger mt-3">[[${error}]]</div>
                     <div class="text-center mt-3">
                         <a th:href="@{/login}">¿Ya tienes cuenta? Inicia sesión</a>
                     </div>

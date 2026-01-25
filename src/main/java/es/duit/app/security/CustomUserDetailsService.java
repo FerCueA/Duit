@@ -22,31 +22,29 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (username == null || username.trim().isEmpty()) {
-            throw new UsernameNotFoundException("El nombre de usuario no puede estar vacío");
+            throw new UsernameNotFoundException("El correo electrónico no puede estar vacío");
         }
 
         AppUser user = appUserRepository.findByUsername(username.trim())
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 
-        // Verificar que el usuario esté activo
+        // VERIFICACIONES ADICIONALES
         if (!Boolean.TRUE.equals(user.getActive())) {
             throw new UsernameNotFoundException("Usuario inactivo: " + username);
         }
 
-        // Verificar que tenga rol asignado
         if (user.getRole() == null) {
             throw new UsernameNotFoundException("Usuario sin rol asignado: " + username);
         }
 
-        // Verificar que el rol esté activo
         if (!Boolean.TRUE.equals(user.getRole().getActive())) {
             throw new UsernameNotFoundException("Rol inactivo: " + username);
         }
 
-        String roleName = user.getRole().getName();
+        String roleName = user.getRole().getName().name();
 
         return User.builder()
-                .username(user.getUsername())
+                .username(user.getUsername()) // LOGGIN CON EMAIL
                 .password(user.getPassword())
                 .roles(roleName)
                 .accountExpired(false)
