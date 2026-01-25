@@ -17,7 +17,7 @@
     <div class="bg-overlay"></div>
     <div class="content-on-bg">
         <!-- Sección: Encabezado público -->
-        <div th:replace="~{fragments/headerPublico :: headerPublico}"></div>
+        <div th:replace="~{components/headerPublico :: headerPublico}"></div>
         <!-- Sección principal de bienvenida y registro -->
         <main class="container my-5">
             <!-- Sección de presentación principal -->
@@ -38,17 +38,17 @@
                     <div class="row g-4 text-center">
                         <div class="col-md-4">
                             <div
-                                th:replace="~{fragments/cardPublico :: cardPublico('bi-pencil-square','primary','1. Publica','Describe el trabajo que necesitas realizar en tu hogar.')}">
+                                th:replace="~{components/cardPublico :: cardPublico('bi-pencil-square','primary','1. Publica','Describe el trabajo que necesitas realizar en tu hogar.')}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div
-                                th:replace="~{fragments/cardPublico :: cardPublico('bi-envelope-open','primary','2. Recibe','Los profesionales te enviarán sus solicitudes. Elige la que más te convenga.')}">
+                                th:replace="~{components/cardPublico :: cardPublico('bi-envelope-open','primary','2. Recibe','Los profesionales te enviarán sus solicitudes. Elige la que más te convenga.')}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div
-                                th:replace="~{fragments/cardPublico :: cardPublico('bi-check-circle','primary','3. Valora','Puntúa el trabajo realizado y ayuda a otros usuarios a elegir.')}">
+                                th:replace="~{components/cardPublico :: cardPublico('bi-check-circle','primary','3. Valora','Puntúa el trabajo realizado y ayuda a otros usuarios a elegir.')}">
                             </div>
                         </div>
                     </div>
@@ -62,32 +62,32 @@
                     <div class="row g-4 text-center">
                         <div class="col-md-4">
                             <div
-                                th:replace="~{fragments/cardPublico :: cardPublico('bi-droplet-fill','info','Fontanería','Soluciones para tuberías, grifos y desagües.')}">
+                                th:replace="~{components/cardPublico :: cardPublico('bi-droplet-fill','info','Fontanería','Soluciones para tuberías, grifos y desagües.')}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div
-                                th:replace="~{fragments/cardPublico :: cardPublico('bi-lightning-fill','warning','Electricidad','Instalaciones y reparaciones eléctricas seguras.')}">
+                                th:replace="~{components/cardPublico :: cardPublico('bi-lightning-fill','warning','Electricidad','Instalaciones y reparaciones eléctricas seguras.')}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div
-                                th:replace="~{fragments/cardPublico :: cardPublico('bi-hammer','secondary','Bricolaje','Montaje, arreglos y mejoras en el hogar.')}">
+                                th:replace="~{components/cardPublico :: cardPublico('bi-hammer','secondary','Bricolaje','Montaje, arreglos y mejoras en el hogar.')}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div
-                                th:replace="~{fragments/cardPublico :: cardPublico('bi-brush-fill','danger','Pintura','Decoración y renovación de espacios.')}">
+                                th:replace="~{components/cardPublico :: cardPublico('bi-brush-fill','danger','Pintura','Decoración y renovación de espacios.')}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div
-                                th:replace="~{fragments/cardPublico :: cardPublico('bi-tools','success','Reparaciones','Soluciones rápidas para averías domésticas.')}">
+                                th:replace="~{components/cardPublico :: cardPublico('bi-tools','success','Reparaciones','Soluciones rápidas para averías domésticas.')}">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div
-                                th:replace="~{fragments/cardPublico :: cardPublico('bi-three-dots','dark','Otros servicios','Encuentra más soluciones para tu hogar.')}">
+                                th:replace="~{components/cardPublico :: cardPublico('bi-three-dots','dark','Otros servicios','Encuentra más soluciones para tu hogar.')}">
                             </div>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
         </main>
 
         <!-- Sección del footer -->
-        <div th:replace="~{fragments/footerPublico :: footerPublico}"></div>
+        <div th:replace="~{components/footerPublico :: footerPublico}"></div>
         <!-- Scripts de Bootstrap -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+3iGkn7tBT4EVo3k1Y6YkOn754zjz"
