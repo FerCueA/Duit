@@ -14,9 +14,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "app_user", indexes = {
-    @Index(name = "idx_user_email", columnList = "email"),
-    @Index(name = "idx_user_username", columnList = "username"),
-    @Index(name = "idx_user_dni", columnList = "dni")
+        @Index(name = "idx_user_username", columnList = "username"),
+        @Index(name = "idx_user_dni", columnList = "dni"),
+        @Index(name = "idx_user_active", columnList = "active"),
+        @Index(name = "idx_user_role", columnList = "id_role")
 })
 public class AppUser extends BaseEntity {
 
@@ -34,21 +35,15 @@ public class AppUser extends BaseEntity {
     @Column(name = "last_name", length = 150)
     private String lastName;
 
-    @NotBlank(message = "El DNI es obligatorio")
-    @Pattern(regexp = "^[0-9]{8}[A-Z]$", message = "El DNI debe tener el formato correcto")
-    @Column(name = "dni", length = 9, nullable = false, unique = true)
+    @Pattern(regexp = "^[0-9]{8}[A-Z]$", message = "El DNI debe tener el formato correcto (8 dígitos + letra)")
+    @Column(name = "dni", length = 9, unique = true)
     private String dni;
 
-    @NotBlank(message = "El nombre de usuario es obligatorio")
-    @Size(min = 3, max = 50, message = "El nombre de usuario debe tener entre 3 y 50 caracteres")
-    @Column(name = "username", length = 50, nullable = false, unique = true)
+    @NotBlank(message = "El correo electrónico es obligatorio")
+    @Email(message = "El correo electrónico debe tener un formato válido")
+    @Size(max = 100, message = "El correo electrónico no puede exceder los 100 caracteres")
+    @Column(name = "username", length = 100, nullable = false, unique = true)
     private String username;
-
-    @NotBlank(message = "El email es obligatorio")
-    @Email(message = "El email debe tener un formato válido")
-    @Size(max = 100, message = "El email no puede exceder los 100 caracteres")
-    @Column(name = "email", length = 100, nullable = false, unique = true)
-    private String email;
 
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 60, max = 255, message = "La contraseña encriptada debe tener la longitud correcta")
@@ -57,7 +52,7 @@ public class AppUser extends BaseEntity {
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
-    @Pattern(regexp = "^[+]?[0-9]{9,20}$", message = "El teléfono debe tener un formato válido")
+    @Pattern(regexp = "^[+]?[0-9]{9,15}$", message = "El teléfono debe tener entre 9 y 15 dígitos, puede empezar con +")
     @Column(name = "phone", length = 20)
     private String phone;
 
@@ -98,16 +93,6 @@ public class AppUser extends BaseEntity {
     @EqualsAndHashCode.Exclude
     private List<AccessLog> accessLogs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<Rating> ratingsSent = new ArrayList<>();
-
-    @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<Rating> ratingsReceived = new ArrayList<>();
-
     @PrePersist
     protected void onCreate() {
         if (registeredAt == null) {
@@ -126,4 +111,17 @@ public class AppUser extends BaseEntity {
     public boolean isProfessional() {
         return professionalProfile != null;
     }
+
+    public String getEmail() {
+        return username;
+    }
+
+    public String getDisplayName() {
+        return (firstName != null && !firstName.trim().isEmpty()) ? getFullName() : username;
+    }
+
+    public boolean isAdmin() {
+        return role != null && role.isAdmin();
+    }
+
 }

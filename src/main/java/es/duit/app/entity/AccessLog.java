@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "access_log", indexes = {
-    @Index(name = "idx_access_log_user", columnList = "id_user"),
-    @Index(name = "idx_access_log_accessed_at", columnList = "accessed_at")
+        @Index(name = "idx_access_log_user", columnList = "id_user"),
+        @Index(name = "idx_access_log_accessed_at", columnList = "accessed_at")
 })
 public class AccessLog {
 

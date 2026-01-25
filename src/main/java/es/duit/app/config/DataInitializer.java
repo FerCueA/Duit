@@ -34,28 +34,26 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         logger.info("Iniciando inicialización de datos...");
-        
-        // Crear roles por defecto si no existen
+
         createDefaultRoles();
-        
-        // Crear usuario administrador por defecto si no existe
+
         createDefaultAdminUser();
-        
+
         logger.info("Inicialización de datos completada.");
     }
 
     private void createDefaultRoles() {
         logger.info("Verificando roles por defecto...");
-        
-        createRoleIfNotExists("ADMIN", "Administrador del sistema", true);
-        createRoleIfNotExists("USER", "Usuario regular", true);
-        createRoleIfNotExists("PROFESSIONAL", "Profesional prestador de servicios", true);
-        createRoleIfNotExists("MODERATOR", "Moderador de contenido", true);
-        
+
+        createRoleIfNotExists(UserRole.RoleName.ADMIN, "Administrador del sistema", true);
+        createRoleIfNotExists(UserRole.RoleName.USER, "Usuario regular", true);
+        createRoleIfNotExists(UserRole.RoleName.PROFESSIONAL, "Profesional prestador de servicios", true);
+        createRoleIfNotExists(UserRole.RoleName.MODERATOR, "Moderador de contenido", true);
+
         logger.info("Roles verificados correctamente.");
     }
 
-    private void createRoleIfNotExists(String roleName, String description, boolean active) {
+    private void createRoleIfNotExists(UserRole.RoleName roleName, String description, boolean active) {
         if (!roleRepository.findByName(roleName).isPresent()) {
             UserRole role = new UserRole();
             role.setName(roleName);
@@ -65,7 +63,7 @@ public class DataInitializer implements CommandLineRunner {
             role.setCreatedAt(LocalDateTime.now());
             role.setUpdatedBy("system");
             role.setUpdatedAt(LocalDateTime.now());
-            
+
             roleRepository.save(role);
             logger.info("Rol creado: {}", roleName);
         } else {
@@ -75,21 +73,19 @@ public class DataInitializer implements CommandLineRunner {
 
     private void createDefaultAdminUser() {
         logger.info("Verificando usuario administrador por defecto...");
-        
-        String adminUsername = "admin";
-        
-        if (!appUserRepository.findByUsername(adminUsername).isPresent()) {
-            // Buscar el rol ADMIN
-            UserRole adminRole = roleRepository.findByName("ADMIN")
+
+        String adminEmail = "admin@duit.es";
+
+        if (!appUserRepository.findByUsername(adminEmail).isPresent()) {
+
+            UserRole adminRole = roleRepository.findByName(UserRole.RoleName.ADMIN)
                     .orElseThrow(() -> new RuntimeException("No se encontró el rol ADMIN"));
-            
-            // Crear usuario administrador
+
             AppUser adminUser = new AppUser();
             adminUser.setFirstName("Administrador");
             adminUser.setLastName("Sistema");
             adminUser.setDni("12345678A");
-            adminUser.setUsername(adminUsername);
-            adminUser.setEmail("admin@duit.es");
+            adminUser.setUsername(adminEmail); // username = email (nuestra estrategia)
             adminUser.setPassword(passwordEncoder.encode("1234"));
             adminUser.setPhone("600000000");
             adminUser.setRole(adminRole);
@@ -99,17 +95,16 @@ public class DataInitializer implements CommandLineRunner {
             adminUser.setCreatedAt(LocalDateTime.now());
             adminUser.setUpdatedBy("system");
             adminUser.setUpdatedAt(LocalDateTime.now());
-            
+
             appUserRepository.save(adminUser);
-            
+
             logger.info("Usuario administrador creado:");
-            logger.info("  - Username: {}", adminUsername);
+            logger.info("  - Username/Email: admin@duit.es");
             logger.info("  - Password: 1234");
-            logger.info("  - Email: admin@duit.es");
             logger.info("  - Rol: ADMIN");
-            
+
         } else {
-            logger.info("Usuario administrador ya existe: {}", adminUsername);
+            logger.info("Usuario administrador ya existe: {}", adminEmail);
         }
     }
 }
