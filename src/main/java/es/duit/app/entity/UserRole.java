@@ -1,7 +1,7 @@
 package es.duit.app.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +13,10 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "user_role")
+@Table(name = "user_role", indexes = {
+        @Index(name = "idx_role_name", columnList = "name"),
+        @Index(name = "idx_role_active", columnList = "active")
+})
 public class UserRole extends BaseEntity {
 
     public enum RoleName {
@@ -25,10 +28,10 @@ public class UserRole extends BaseEntity {
     @Column(name = "id_role")
     private Long id;
 
-    @NotBlank(message = "El nombre del rol es obligatorio")
-    @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres")
-    @Column(name = "name", length = 50, nullable = false, unique = true)
-    private String name;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "name", length = 20, nullable = false, unique = true)
+    private RoleName name;
 
     @Size(max = 100, message = "La descripción no puede exceder los 100 caracteres")
     @Column(name = "description", length = 100)
@@ -47,11 +50,11 @@ public class UserRole extends BaseEntity {
     }
 
     public boolean isAdmin() {
-        return RoleName.ADMIN.name().equalsIgnoreCase(name);
+        return RoleName.ADMIN.equals(name);
     }
 
     public boolean isProfessional() {
-        return RoleName.PROFESSIONAL.name().equalsIgnoreCase(name);
+        return RoleName.PROFESSIONAL.equals(name);
     }
 
     public int getUsersCount() {

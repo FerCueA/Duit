@@ -9,12 +9,17 @@ import lombok.ToString;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "professional_profile")
+@Table(name = "professional_profile", indexes = {
+        @Index(name = "idx_professional_nif", columnList = "nif"),
+        @Index(name = "idx_professional_hourly_rate", columnList = "hourly_rate")
+})
 public class ProfessionalProfile extends BaseEntity {
 
     @Id
@@ -29,17 +34,20 @@ public class ProfessionalProfile extends BaseEntity {
     @EqualsAndHashCode.Exclude
     private AppUser user;
 
+    @NotBlank(message = "La descripción profesional es obligatoria")
     @Size(min = 50, max = 2000, message = "La descripción debe tener entre 50 y 2000 caracteres")
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
+    @NotNull(message = "La tarifa por hora es obligatoria")
     @DecimalMin(value = "5.00", message = "La tarifa por hora mínima es 5€")
     @DecimalMax(value = "500.00", message = "La tarifa por hora máxima es 500€")
-    @Column(name = "hourly_rate", precision = 8, scale = 2)
+    @Column(name = "hourly_rate", precision = 8, scale = 2, nullable = false)
     private BigDecimal hourlyRate;
 
+    @NotBlank(message = "El NIF es obligatorio para profesionales")
     @Pattern(regexp = "^[0-9]{8}[A-Z]$", message = "El NIF debe tener el formato correcto (8 dígitos + letra)")
-    @Column(name = "nif", length = 9, unique = true)
+    @Column(name = "nif", length = 9, unique = true, nullable = false)
     private String nif;
 
     @Column(name = "registered_at")
@@ -50,10 +58,11 @@ public class ProfessionalProfile extends BaseEntity {
     @OneToMany(mappedBy = "professional", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JobApplication> applications = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "professional_category", joinColumns = @JoinColumn(name = "id_professional"), inverseJoinColumns = @JoinColumn(name = "id_category"))
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "professional", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProfessionalCategory> categories = new ArrayList<>();
+    private Set<Category> categories = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {
@@ -64,9 +73,9 @@ public class ProfessionalProfile extends BaseEntity {
 
     public boolean isProfileComplete() {
         return description != null && !description.trim().isEmpty() &&
-               hourlyRate != null &&
-               nif != null && !nif.trim().isEmpty() &&
-               categories != null && !categories.isEmpty();
+                hourlyRate != null &&
+                nif != null && !nif.trim().isEmpty() &&
+                categories != null && !categories.isEmpty();
     }
 
     public int getCategoriesCount() {
@@ -74,11 +83,15 @@ public class ProfessionalProfile extends BaseEntity {
     }
 
     public double getAverageRating() {
-        if (user == null || user.getRatingsReceived() == null) {
+        if (applications == null) {
             return 0.0;
         }
-        return user.getRatingsReceived().stream()
+
+        return applications.stream()
+                .filter(app -> app.getJob() != null)
+                .flatMap(app -> app.getJob().getRatings().stream())
                 .filter(rating -> rating.getStatus() == Rating.Status.PUBLISHED)
+                .filter(rating -> rating.getType() == Rating.Type.CLIENT_TO_PROFESSIONAL)
                 .mapToInt(Rating::getScore)
                 .average()
                 .orElse(0.0);
