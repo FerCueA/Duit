@@ -27,6 +27,16 @@ public class PublicController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @GetMapping("/")
+    public String root() {
+        return "public/index";
+    }
+
+    @GetMapping("/index")
+    public String index() {
+        return "public/index";
+    }
+
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
