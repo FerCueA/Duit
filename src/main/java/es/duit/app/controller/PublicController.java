@@ -87,7 +87,6 @@ public class PublicController {
 
             if (email != null && appUserRepository.findByUsername(email.trim()).isPresent()) {
                 model.addAttribute("error", "Este correo electrónico ya está registrado");
-
                 model.addAttribute("firstName", firstName);
                 model.addAttribute("lastName", lastName);
                 model.addAttribute("dni", dni);
@@ -149,20 +148,10 @@ public class PublicController {
             return "public/login";
 
         } catch (Exception e) {
-            String errorMessage;
-            if (e.getMessage() != null) {
-                if (e.getMessage().contains("duplicate key") && e.getMessage().contains("dni")) {
-                    errorMessage = "Este DNI ya está registrado";
-                } else if (e.getMessage().contains("duplicate key") && e.getMessage().contains("username")) {
-                    errorMessage = "Este correo electrónico ya está registrado";
-                } else {
-                    errorMessage = "Error en el registro. Por favor, verifica los datos e inténtalo de nuevo";
-                }
-            } else {
-                errorMessage = "Error en el registro. Por favor, verifica los datos e inténtalo de nuevo";
-            }
+            // Log del error para debugging
+            e.printStackTrace();
 
-            model.addAttribute("error", errorMessage);
+            model.addAttribute("error", "Error en el registro. Por favor, verifica los datos e inténtalo de nuevo");
             model.addAttribute("firstName", firstName);
             model.addAttribute("lastName", lastName);
             model.addAttribute("dni", dni);
