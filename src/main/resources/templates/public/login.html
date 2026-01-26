@@ -13,65 +13,106 @@
 
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 bg-light">
     <div th:replace="~{components/headerPublico :: headerPublico}"></div>
-    <main class="flex-fill">
-        <div class="container mt-5">
-            <div class="card shadow mx-auto" style="max-width: 400px;">
-                <div class="card-body">
-                    <h1 class="card-title text-center mb-4">Iniciar sesión</h1>
+    <main class="flex-fill py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-5 col-lg-4">
+                    <div class="card shadow-lg border-0 rounded-4">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                    style="width: 60px; height: 60px;">
+                                    <i class="bi bi-person-circle text-white fs-3"></i>
+                                </div>
+                                <h1 class="card-title h3 fw-bold text-primary">Iniciar sesión</h1>
+                                <p class="text-muted mb-0">Accede a tu cuenta de Duit</p>
+                            </div>
 
-                    <!-- Mensajes de error y éxito -->
-                    <div th:if="${error}" class="alert alert-danger" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill"></i>
-                        <span th:text="${error}">Error de login</span>
+                            <!-- Mensajes de error y éxito -->
+                            <div th:if="${error}" class="alert alert-danger alert-dismissible rounded-3 mb-4"
+                                role="alert">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                <span th:text="${error}">Error de login</span>
+                            </div>
+                            <div th:if="${success}" class="alert alert-success alert-dismissible rounded-3 mb-4"
+                                role="alert">
+                                <i class="bi bi-check-circle me-2"></i>
+                                <span th:text="${success}">Mensaje de éxito</span>
+                            </div>
+
+                            <form th:action="@{/login}" method="post" id="loginForm">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label fw-semibold">
+                                        <i class="bi bi-envelope text-primary me-1"></i>Correo electrónico
+                                    </label>
+                                    <input type="email" id="username" name="username"
+                                        class="form-control form-control-lg rounded-3"
+                                        placeholder="tu-email@ejemplo.com"
+                                        th:value="${param.username != null ? param.username[0] : ''}" required
+                                        autocomplete="username">
+                                    <div class="invalid-feedback">
+                                        <i class="bi bi-exclamation-circle me-1"></i>Por favor, ingresa un correo
+                                        electrónico válido.
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label fw-semibold">
+                                        <i class="bi bi-lock text-primary me-1"></i>Contraseña
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" id="password" name="password"
+                                            class="form-control form-control-lg rounded-start-3"
+                                            placeholder="Tu contraseña" minlength="4" required
+                                            autocomplete="current-password">
+                                        <button type="button" class="btn btn-outline-secondary rounded-end-3"
+                                            id="togglePassword">
+                                            <i class="bi bi-eye" id="toggleIcon"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <i class="bi bi-exclamation-circle me-1"></i>La contraseña debe tener al menos 4
+                                        caracteres.
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="rememberMe"
+                                            name="remember-me">
+                                        <label class="form-check-label text-muted" for="rememberMe">
+                                            <i class="bi bi-clock-history me-1"></i>Recordar mis datos
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid mb-3">
+                                    <button class="btn btn-primary btn-lg rounded-3 fw-semibold" type="submit">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar sesión
+                                    </button>
+                                </div>
+                            </form>
+
+                            <hr class="my-4">
+
+                            <div class="text-center">
+                                <p class="text-muted mb-2">¿No tienes cuenta aún?</p>
+                                <a th:href="@{/registro}" class="btn btn-outline-primary rounded-3">
+                                    <i class="bi bi-person-plus me-2"></i>Crear cuenta
+                                </a>
+                            </div>
+
+                            <div class="text-center mt-3">
+                                <small class="text-muted">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="bi bi-question-circle me-1"></i>¿Olvidaste tu contraseña?
+                                    </a>
+                                </small>
+                            </div>
+                        </div>
                     </div>
-                    <div th:if="${success}" class="alert alert-success" role="alert">
-                        <i class="bi bi-check-circle-fill"></i>
-                        <span th:text="${success}">Mensaje de éxito</span>
-                    </div>
-
-                    <form th:action="@{/login}" method="post" id="loginForm">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">
-                                <i class="bi bi-envelope"></i> Correo electrónico:
-                            </label>
-                            <input type="email" id="username" name="username" class="form-control"
-                                placeholder="ejemplo@correo.com"
-                                th:value="${param.username != null ? param.username[0] : ''}" required
-                                autocomplete="username">
-                            <div class="invalid-feedback">
-                                Por favor, ingresa un correo electrónico válido.
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="password" class="form-label">
-                                <i class="bi bi-lock"></i> Contraseña:
-                            </label>
-                            <div class="input-group">
-                                <input type="password" id="password" name="password" class="form-control"
-                                    placeholder="Tu contraseña" minlength="4" required autocomplete="current-password">
-                                <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                                    <i class="bi bi-eye" id="toggleIcon"></i>
-                                </button>
-                            </div>
-                            <div class="invalid-feedback">
-                                La contraseña debe tener al menos 4 caracteres.
-                            </div>
-                        </div>
-
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="rememberMe" name="remember-me">
-                            <label class="form-check-label" for="rememberMe">
-                                Recordarme
-                            </label>
-                        </div>
-
-                        <button class="btn btn-primary w-100 mb-3" type="submit">
-                            <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
-                        </button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -94,33 +135,7 @@
             }
         });
 
-        // Form validation feedback
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
-            const form = this;
-            const inputs = form.querySelectorAll('input[required]');
-            let isValid = true;
 
-            inputs.forEach(input => {
-                if (!input.checkValidity()) {
-                    input.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    input.classList.remove('is-invalid');
-                }
-            });
-
-            if (!isValid) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        });
-
-        // Remove invalid class on input
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', function () {
-                this.classList.remove('is-invalid');
-            });
-        });
     </script>
 </body>
 
