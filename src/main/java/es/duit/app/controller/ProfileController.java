@@ -10,11 +10,11 @@ public class ProfileController {
 
     @GetMapping("/editar")
     public String editar() {
-        return "profile/editar";
+        return "profile/editarPerfil";
     }
 
     @GetMapping("/profesional")
     public String profesional() {
-        return "profile/profesional";
+        return "profile/editarProfesional";
     }
 }

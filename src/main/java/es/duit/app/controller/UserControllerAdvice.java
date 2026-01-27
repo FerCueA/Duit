@@ -20,14 +20,9 @@ public class UserControllerAdvice {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
                 String username = auth.getName();
-                AppUser usuario = appUserRepository.findByUsername(username).orElse(null);
-
-                if (usuario != null && usuario.getRole() != null && usuario.getRole().getName() != null) {
-                    return usuario;
-                }
+                return appUserRepository.findByUsername(username).orElse(null);
             }
         } catch (Exception e) {
-
             System.err.println("Error al obtener usuario: " + e.getMessage());
         }
         return null;

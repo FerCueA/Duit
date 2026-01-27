@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDateTime;
-
 @Controller
 public class PublicController {
 
@@ -84,7 +82,7 @@ public class PublicController {
             Model model) {
 
         try {
-
+            // Validar email duplicado
             if (email != null && appUserRepository.findByUsername(email.trim()).isPresent()) {
                 model.addAttribute("error", "Este correo electrónico ya está registrado");
                 model.addAttribute("firstName", firstName);
@@ -124,9 +122,8 @@ public class PublicController {
             UserRole selectedRole = roleRepository
                     .findByName("USER".equals(userType) ? UserRole.RoleName.USER : UserRole.RoleName.PROFESSIONAL)
                     .orElseThrow(() -> new RuntimeException("Rol " + userType + " no encontrado"));
-
-            // Crear y guardar usuario
-            AppUser newUser = new AppUser();
+            // Crear usuario
+            AppUser newUser = new AppUser(); // Configurar usuario
             newUser.setFirstName(firstName != null ? firstName.trim() : null);
             newUser.setLastName(lastName != null ? lastName.trim() : null);
             newUser.setDni(dni != null ? dni.trim().toUpperCase() : null);
@@ -135,13 +132,8 @@ public class PublicController {
             newUser.setPhone(phone != null ? phone.trim() : null);
             newUser.setRole(selectedRole);
             newUser.setActive(true);
-            newUser.setRegisteredAt(LocalDateTime.now());
-            newUser.setCreatedBy("system");
-            newUser.setCreatedAt(LocalDateTime.now());
-            newUser.setUpdatedBy("system");
-            newUser.setUpdatedAt(LocalDateTime.now());
 
-            // Guardar directamente
+            // Guardar (BaseEntity maneja auditoría automáticamente)
             appUserRepository.save(newUser);
 
             model.addAttribute("success", "Registro exitoso. Ya puedes iniciar sesión con tu email.");
