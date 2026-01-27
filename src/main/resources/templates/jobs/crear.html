@@ -24,34 +24,8 @@
                 <div class="col-lg-8">
 
                     <!-- Consejos -->
-                    <div class="card mb-4 border-info">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="mb-0">
-                                <i class="bi bi-lightbulb"></i>
-                                Consejos para una buena solicitud
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="mb-0">
-                                <li>
-                                    <strong>Sé específico:</strong>
-                                    "Cambiar grifo de cocina" es mejor que "Problema con agua"
-                                </li>
-                                <li>
-                                    <strong>Incluye detalles:</strong>
-                                    Marca, modelo, tipo de problema, etc.
-                                </li>
-                                <li>
-                                    <strong>Menciona urgencia:</strong>
-                                    ¿Es una emergencia o puede esperar?
-                                </li>
-                                <li>
-                                    <strong>Especifica ubicación:</strong>
-                                    Piso, acceso, horarios disponibles
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    <div th:replace="~{components/consejosCrearSolicitud::consejosCrearSolicitud}"></div>
+
                     <!-- Formulario -->
                     <div class="card shadow">
                         <!-- Titulo  Editar o Crear -->
@@ -164,6 +138,96 @@
                                     </div>
                                 </div>
 
+                                <!-- Dirección del servicio -->
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="bi bi-geo-alt text-primary"></i> Dirección donde realizar el servicio
+                                        *
+                                    </label>
+
+                                    <!-- Opciones de dirección -->
+                                    <div class="card border-light mb-3">
+                                        <div class="card-body">
+                                            <!-- Dirección habitual -->
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="addressOption"
+                                                    id="habitualAddress" value="habitual"
+                                                    th:checked="${serviceRequest == null or !serviceRequest.hasSpecificServiceAddress()}"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#specificAddressFields.show">
+                                                <label class="form-check-label fw-bold" for="habitualAddress">
+                                                    <i class="bi bi-house-door"></i> Usar mi dirección habitual
+                                                </label>
+                                                <div th:if="${user?.address != null}" class="form-text ms-4">
+                                                    <i class="bi bi-info-circle text-muted"></i>
+                                                    <span th:text="${user.address.fullAddress}">Dirección actual del
+                                                        usuario</span>
+                                                </div>
+                                                <div th:unless="${user?.address != null}"
+                                                    class="form-text ms-4 text-warning">
+                                                    <i class="bi bi-exclamation-triangle"></i>
+                                                    No tienes dirección configurada. <a href="/profile/editar"
+                                                        class="link-warning">Añádela en tu perfil</a>
+                                                </div>
+                                            </div>
+
+                                            <!-- Dirección específica -->
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="addressOption"
+                                                    id="specificAddress" value="specific"
+                                                    th:checked="${serviceRequest != null and serviceRequest.hasSpecificServiceAddress()}"
+                                                    data-bs-toggle="collapse" data-bs-target="#specificAddressFields">
+                                                <label class="form-check-label fw-bold" for="specificAddress">
+                                                    <i class="bi bi-pin-map"></i> Especificar otra dirección
+                                                </label>
+                                                <div class="form-text ms-4">
+                                                    <i class="bi bi-info-circle text-muted"></i>
+                                                    Si el servicio se realizará en una dirección diferente a la tuya
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Campos de dirección específica -->
+                                    <div id="specificAddressFields" class="collapse"
+                                        th:classappend="${serviceRequest != null and serviceRequest.hasSpecificServiceAddress()} ? 'show' : ''">
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <label for="address" class="form-label">Calle y número *</label>
+                                                <input type="text" name="serviceAddress.address"
+                                                    th:value="${serviceRequest?.serviceAddress?.address}"
+                                                    class="form-control" id="address"
+                                                    placeholder="Ej: Calle Mayor, 123">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="city" class="form-label">Ciudad *</label>
+                                                <input type="text" name="serviceAddress.city"
+                                                    th:value="${serviceRequest?.serviceAddress?.city}"
+                                                    class="form-control" id="city" placeholder="Ej: Madrid">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="postalCode" class="form-label">Código postal *</label>
+                                                <input type="text" name="serviceAddress.postalCode"
+                                                    th:value="${serviceRequest?.serviceAddress?.postalCode}"
+                                                    class="form-control" id="postalCode" placeholder="Ej: 28001"
+                                                    pattern="[0-9]{5}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="province" class="form-label">Provincia *</label>
+                                                <input type="text" name="serviceAddress.province"
+                                                    th:value="${serviceRequest?.serviceAddress?.province}"
+                                                    class="form-control" id="province" placeholder="Ej: Madrid">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="country" class="form-label">País *</label>
+                                                <input type="text" name="serviceAddress.country"
+                                                    th:value="${serviceRequest?.serviceAddress?.country ?: 'España'}"
+                                                    class="form-control" id="country" placeholder="España" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- Info -->
                                 <div class="alert alert-info mb-4" th:unless="${isEditing != null and isEditing}">
                                     <h6><i class="bi bi-lightbulb"></i> ¿Qué pasa después?</h6>
@@ -219,6 +283,7 @@
 
     <!-- JavaScript Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 
