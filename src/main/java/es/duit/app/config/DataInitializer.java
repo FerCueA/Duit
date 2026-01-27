@@ -14,111 +14,121 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-/**
- * Inicialización de datos por defecto para la aplicación.
- * Se ejecuta automáticamente después de que el contexto esté completamente inicializado.
- */
+// Esta clase crea datos básicos cuando arranca la aplicación
 @Component
 public class DataInitializer implements ApplicationRunner {
 
+    // Para escribir logs en consola
     private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
 
+    // Repositorios que necesito
     @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
     private AppUserRepository appUserRepository;
 
+    // Para encriptar contraseñas
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // Este método se ejecuta cuando arranca la app
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
-        logger.info("Iniciando inicialización de datos...");
+        logger.info("Empezando a crear datos iniciales...");
 
-        // Pequeña espera para asegurar que las tablas están creadas
+        // Espero un poquito para que se creen las tablas
         Thread.sleep(2000);
 
-        try {
-            createDefaultRoles();
-            createDefaultAdminUser();
-            logger.info("Inicialización de datos completada.");
-        } catch (Exception e) {
-            logger.error("Error durante la inicialización de datos: {}", e.getMessage());
-            logger.info("Reintentando inicialización en 3 segundos...");
-            Thread.sleep(3000);
-            createDefaultRoles();
-            createDefaultAdminUser();
-            logger.info("Inicialización de datos completada en segundo intento.");
-        }
+        // Creo los roles y el admin
+        crearRoles();
+        crearUsuarioAdmin();
+
+        logger.info("Datos iniciales creados correctamente.");
     }
 
-    private void createDefaultRoles() {
-        logger.info("Verificando roles por defecto...");
+    // Creo todos los roles que necesita la app
+    private void crearRoles() {
+        logger.info("Verificando que existen los roles...");
 
-        createRoleIfNotExists(UserRole.RoleName.ADMIN, "Administrador del sistema", true);
-        createRoleIfNotExists(UserRole.RoleName.USER, "Usuario regular", true);
-        createRoleIfNotExists(UserRole.RoleName.PROFESSIONAL, "Profesional prestador de servicios", true);
-        createRoleIfNotExists(UserRole.RoleName.MODERATOR, "Moderador de contenido", true);
+        crearRolSiNoExiste(UserRole.RoleName.ADMIN, "Administrador del sistema", true);
+        crearRolSiNoExiste(UserRole.RoleName.USER, "Usuario regular", true);
+        crearRolSiNoExiste(UserRole.RoleName.PROFESSIONAL, "Profesional prestador de servicios", true);
+        crearRolSiNoExiste(UserRole.RoleName.MODERATOR, "Moderador de contenido", true);
 
-        logger.info("Roles verificados correctamente.");
+        logger.info("Todos los roles están listos.");
     }
 
-    private void createRoleIfNotExists(UserRole.RoleName roleName, String description, boolean active) {
-        try {
-            if (!roleRepository.findByName(roleName).isPresent()) {
-                UserRole role = new UserRole();
-                role.setName(roleName);
-                role.setDescription(description);
-                role.setActive(active);
-                role.setCreatedBy("system");
-                role.setCreatedAt(LocalDateTime.now());
-                role.setUpdatedBy("system");
-                role.setUpdatedAt(LocalDateTime.now());
+    // Creo un rol si no existe ya
+    private void crearRolSiNoExiste(UserRole.RoleName nombreRol, String descripcion, boolean activo) {
+        // Busco si el rol ya existe
+        List<UserRole> rolesEncontrados = roleRepository.findByName(nombreRol);
 
-                roleRepository.save(role);
-                logger.info("Rol creado: {}", roleName);
-            } else {
-                logger.debug("Rol ya existe: {}", roleName);
-            }
-        } catch (Exception e) {
-            logger.warn("Error al crear rol {}: {}", roleName, e.getMessage());
-            throw e;
+        // Si ya existe, no hago nada
+        if (!rolesEncontrados.isEmpty()) {
+            logger.debug("El rol ya existe: {}", nombreRol);
+            return;
         }
+
+        // Si no existe, lo creo
+        logger.info("Creando nuevo rol: {}", nombreRol);
+
+        UserRole nuevoRol = new UserRole();
+        nuevoRol.setName(nombreRol);
+        nuevoRol.setDescription(descripcion);
+        nuevoRol.setActive(activo);
+        nuevoRol.setCreatedBy("system");
+        nuevoRol.setCreatedAt(LocalDateTime.now());
+        nuevoRol.setUpdatedBy("system");
+        nuevoRol.setUpdatedAt(LocalDateTime.now());
+
+        roleRepository.save(nuevoRol);
+        logger.info("Rol creado correctamente: {}", nombreRol);
     }
 
-    private void createDefaultAdminUser() {
-        logger.info("Verificando usuario administrador por defecto...");
+    // Creo el usuario administrador por defecto
+    private void crearUsuarioAdmin() {
+        logger.info("Verificando si existe el usuario admin...");
 
-        String adminEmail = "admin@duit.es";
+        String emailAdmin = "admin@duit.es";
 
-        if (!appUserRepository.findByUsername(adminEmail).isPresent()) {
-
-            UserRole adminRole = roleRepository.findByName(UserRole.RoleName.ADMIN)
-                    .orElseThrow(() -> new RuntimeException("No se encontró el rol ADMIN"));
-
-            AppUser adminUser = new AppUser();
-            adminUser.setFirstName("Administrador");
-            adminUser.setLastName("Sistema");
-            adminUser.setDni("12345678A");
-            adminUser.setUsername(adminEmail); // username = email 
-            adminUser.setPassword(passwordEncoder.encode("1234"));
-            adminUser.setPhone("600000000");
-            adminUser.setRole(adminRole);
-            adminUser.setActive(true);
-            // BaseEntity maneja automáticamente auditoría y timestamps
-
-            appUserRepository.save(adminUser);
-
-            logger.info("Usuario administrador creado:");
-            logger.info("  - Username/Email: admin@duit.es");
-            logger.info("  - Password: 1234");
-            logger.info("  - Rol: ADMIN");
-
-        } else {
-            logger.info("Usuario administrador ya existe: {}", adminEmail);
+        // Busco si el usuario admin ya existe
+        List<AppUser> usuariosExistentes = appUserRepository.findByUsername(emailAdmin);
+        if (!usuariosExistentes.isEmpty()) {
+            logger.info("El usuario admin ya existe, no hago nada.");
+            return;
         }
+
+        // Busco el rol ADMIN
+        logger.info("Buscando el rol ADMIN...");
+        List<UserRole> rolesAdmin = roleRepository.findByName(UserRole.RoleName.ADMIN);
+        if (rolesAdmin.isEmpty()) {
+            throw new RuntimeException("No encontré el rol ADMIN en la base de datos");
+        }
+        UserRole rolAdmin = rolesAdmin.get(0);
+
+        // Creo el usuario admin
+        logger.info("Creando el usuario admin...");
+        AppUser usuarioAdmin = new AppUser();
+        usuarioAdmin.setFirstName("Administrador");
+        usuarioAdmin.setLastName("Sistema");
+        usuarioAdmin.setDni("12345678A");
+        usuarioAdmin.setUsername(emailAdmin);
+        usuarioAdmin.setPassword(passwordEncoder.encode("1234"));
+        usuarioAdmin.setPhone("600000000");
+        usuarioAdmin.setRole(rolAdmin);
+        usuarioAdmin.setActive(true);
+
+        // Lo guardo en la BD
+        appUserRepository.save(usuarioAdmin);
+
+        // Imprimo la información del admin creado
+        logger.info("Usuario administrador creado correctamente:");
+        logger.info("  Email: {}", emailAdmin);
+        logger.info("  Password: 1234");
+        logger.info("  Rol: ADMIN");
     }
 }
