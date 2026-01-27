@@ -9,7 +9,7 @@ Aplicación web para la gestión de servicios y ofertas de trabajo. Permite a lo
 ## 🚀 Demo en producción
 
 - **Aplicacion:** desplegado en Koyeb
-	[https://overall-kippie-8fercuea8-dbe9588c.koyeb.app/](https://overall-kippie-8fercuea8-dbe9588c.koyeb.app/)
+	[[[https://overall-kippie-8fercuea8-dbe9588c.koyeb.app/](https://duitapp.koyeb.app/)]
 
 - **Base de datos:** PostgreSQL en Neon
 	[https://neon.tech/](https://neon.tech/)
