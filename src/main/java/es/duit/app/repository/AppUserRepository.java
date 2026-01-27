@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
+	// Buscar usuario por nombre de usuario con rol cargado
 	@Query("""
 				    SELECT u
 				    FROM AppUser u
@@ -15,6 +16,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 				    WHERE u.username = :username
 			""")
 	Optional<AppUser> findByUsername(@Param("username") String username);
-	
+
+	// Buscar usuario por DNI 
 	Optional<AppUser> findByDni(String dni);
 }

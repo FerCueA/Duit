@@ -108,11 +108,7 @@ public class DataInitializer implements ApplicationRunner {
             adminUser.setPhone("600000000");
             adminUser.setRole(adminRole);
             adminUser.setActive(true);
-            adminUser.setRegisteredAt(LocalDateTime.now());
-            adminUser.setCreatedBy("system");
-            adminUser.setCreatedAt(LocalDateTime.now());
-            adminUser.setUpdatedBy("system");
-            adminUser.setUpdatedAt(LocalDateTime.now());
+            // BaseEntity maneja automáticamente auditoría y timestamps
 
             appUserRepository.save(adminUser);
 
