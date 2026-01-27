@@ -86,23 +86,12 @@ public class ServiceJob extends BaseEntity {
         return status == Status.COMPLETED;
     }
 
-    public boolean canBeRated() {
-        return isCompleted() && endDate != null;
-    }
-
-    public Long getDurationInDays() {
-        if (startDate == null)
-            return null;
-        LocalDateTime end = endDate != null ? endDate : LocalDateTime.now();
-        return java.time.temporal.ChronoUnit.DAYS.between(startDate, end);
-    }
-
     public AppUser getClient() {
         return request != null ? request.getClient() : null;
     }
 
     public AppUser getProfessional() {
-        return application != null && application.getProfessional() != null ? 
-            application.getProfessional().getUser() : null;
+        return application != null && application.getProfessional() != null ? application.getProfessional().getUser()
+                : null;
     }
 }

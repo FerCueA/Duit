@@ -1,0 +1,57 @@
+<!-- Estados y reglas component -->
+<div th:fragment="estadosReglas" class="card mb-4 border-warning">
+    <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">
+            <i class="bi bi-info-circle"></i>
+            Estados de las solicitudes y sus reglas
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h6 class="text-primary">
+                    <i class="bi bi-pencil"></i>
+                    <span class="badge bg-secondary">Borrador</span>
+                </h6>
+                <ul class="small mb-3">
+                    <li>Puedes editarla libremente</li>
+                    <li>Puedes eliminarla completamente</li>
+                    <li>Puedes publicarla cuando esté lista</li>
+                    <li><strong>No es visible</strong> para profesionales</li>
+                </ul>
+
+                <h6 class="text-success">
+                    <i class="bi bi-eye"></i>
+                    <span class="badge bg-success">Publicada</span>
+                </h6>
+                <ul class="small mb-3">
+                    <li><strong>Solo puedes editarla</strong> si no tiene postulaciones</li>
+                    <li>Puedes cancelarla o despublicarla</li>
+                    <li>Es visible para todos los profesionales</li>
+                    <li>Los profesionales pueden postularse</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h6 class="text-info">
+                    <i class="bi bi-gear"></i>
+                    <span class="badge bg-info">En progreso</span>
+                </h6>
+                <ul class="small mb-3">
+                    <li><strong>No se puede editar</strong> ni eliminar</li>
+                    <li>Un profesional está trabajando en ella</li>
+                    <li>Solo puedes comunicarte con el profesional</li>
+                </ul>
+
+                <h6 class="text-primary">
+                    <span class="badge bg-primary">Completada</span> /
+                    <span class="badge bg-danger">Cancelada</span>
+                </h6>
+                <ul class="small mb-0">
+                    <li><strong>Solo de consulta</strong>, no se pueden modificar</li>
+                    <li>Puedes ver el historial y detalles</li>
+                    <li>Sirven para tu historial de trabajos</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

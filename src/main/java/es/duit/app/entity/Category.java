@@ -52,20 +52,4 @@ public class Category extends BaseEntity {
         return Boolean.TRUE.equals(active);
     }
 
-    public long getActiveRequestsCount() {
-        return requests != null ? requests.stream()
-                .filter(request -> request.getStatus() == ServiceRequest.Status.PUBLISHED ||
-                        request.getStatus() == ServiceRequest.Status.IN_PROGRESS)
-                .count() : 0;
-    }
-
-    public int getProfessionalsCount() {
-        return professionals != null ? professionals.size() : 0;
-    }
-
-    public int getActiveProfessionalsCount() {
-        return professionals != null ? (int) professionals.stream()
-                .filter(prof -> Boolean.TRUE.equals(prof.getUser().getActive()))
-                .count() : 0;
-    }
 }

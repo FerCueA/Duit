@@ -8,28 +8,51 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+// Esta clase pone el usuario actual en todas las vistas automáticamente
 @ControllerAdvice
 public class UserControllerAdvice {
 
+    // Para loguear si algo falla
+    private static final Logger logger = LoggerFactory.getLogger(UserControllerAdvice.class);
+
+    // Repositorio para buscar usuarios
     @Autowired
     private AppUserRepository appUserRepository;
 
+    // Este método se ejecuta en cada página y pone el usuario en el modelo
     @ModelAttribute("usuario")
-    public AppUser addUserToModel() {
+    public AppUser agregarUsuarioAlModelo() {
         try {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
-                String username = auth.getName();
-                AppUser usuario = appUserRepository.findByUsername(username).orElse(null);
-
-                if (usuario != null && usuario.getRole() != null && usuario.getRole().getName() != null) {
-                    return usuario;
-                }
+            // Obtengo el usuario que está logueado en Spring Security
+            Authentication autenticacion = SecurityContextHolder.getContext().getAuthentication();
+            
+            // Verifico que esté autenticado y no sea anónimo
+            if (autenticacion == null || !autenticacion.isAuthenticated()) {
+                return null;
             }
-        } catch (Exception e) {
+            
+            String nombreUsuario = autenticacion.getName();
+            if ("anonymousUser".equals(nombreUsuario)) {
+                return null;
+            }
 
-            System.err.println("Error al obtener usuario: " + e.getMessage());
+            // Busco el usuario en la base de datos
+            List<AppUser> usuariosEncontrados = appUserRepository.findByUsername(nombreUsuario);
+            if (usuariosEncontrados.isEmpty()) {
+                logger.warn("Usuario autenticado pero no encontrado en BD: {}", nombreUsuario);
+                return null;
+            }
+
+            // Devuelvo el usuario encontrado
+            return usuariosEncontrados.get(0);
+            
+        } catch (Exception error) {
+            logger.error("Error al obtener el usuario autenticado: {}", error.getMessage());
+            return null;
         }
-        return null;
     }
 }
