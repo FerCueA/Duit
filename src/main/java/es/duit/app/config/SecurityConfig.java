@@ -11,45 +11,46 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SecurityConfig {
 
-    private final CustomUserDetailsService customUserDetailsService;
+        private final CustomUserDetailsService customUserDetailsService;
 
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
-        this.customUserDetailsService = customUserDetailsService;
-    }
+        public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+                this.customUserDetailsService = customUserDetailsService;
+        }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index", "/public/**", "/login", "/registro", "/register",
-                                "/css/**", "/js/**", "/img/**", "/static/**",
-                                "/privacidad", "/terminos", "/ayuda")
-                        .permitAll()
-                        .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .usernameParameter("username")
-                        .passwordParameter("password")
-                        .defaultSuccessUrl("/home", true)
-                        .failureUrl("/login?error=true")
-                        .permitAll())
-                .rememberMe(remember -> remember
-                        .key("duit-remember-me")
-                        .tokenValiditySeconds(86400)
-                        .userDetailsService(customUserDetailsService))
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout=true")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                        .permitAll());
-        return http.build();
-    }
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http
+                                .csrf(csrf -> csrf.disable())
+                                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers("/", "/index", "/public/**", "/login", "/registro",
+                                                                "/register",
+                                                                "/css/**", "/js/**", "/img/**", "/static/**",
+                                                                "/privacidad", "/terminos", "/ayuda")
+                                                .permitAll()
+                                                .anyRequest().authenticated())
+                                .formLogin(form -> form
+                                                .loginPage("/login")
+                                                .loginProcessingUrl("/login")
+                                                .usernameParameter("username")
+                                                .passwordParameter("password")
+                                                .defaultSuccessUrl("/home", true)
+                                                .failureUrl("/login?error=true")
+                                                .permitAll())
+                                .rememberMe(remember -> remember
+                                                .key("duit-remember-me")
+                                                .tokenValiditySeconds(86400)
+                                                .userDetailsService(customUserDetailsService))
+                                .logout(logout -> logout
+                                                .logoutSuccessUrl("/login?logout=true")
+                                                .invalidateHttpSession(true)
+                                                .deleteCookies("JSESSIONID")
+                                                .permitAll());
+                return http.build();
+        }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
 }

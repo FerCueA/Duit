@@ -2,19 +2,14 @@ package es.duit.app.repository;
 
 import es.duit.app.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
-	@Query("""
-				    SELECT u
-				    FROM AppUser u
-				    JOIN FETCH u.role
-				    WHERE u.username = :username
-			""")
-	Optional<AppUser> findByUsername(@Param("username") String username);
-	
-	Optional<AppUser> findByDni(String dni);
+
+	// Buscar usuario por nombre de usuario
+	List<AppUser> findByUsername(String username);
+
+	// Buscar usuario por DNI
+	List<AppUser> findByDni(String dni);
 }

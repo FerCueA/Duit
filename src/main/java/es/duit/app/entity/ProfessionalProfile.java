@@ -71,29 +71,4 @@ public class ProfessionalProfile extends BaseEntity {
         }
     }
 
-    public boolean isProfileComplete() {
-        return description != null && !description.trim().isEmpty() &&
-                hourlyRate != null &&
-                nif != null && !nif.trim().isEmpty() &&
-                categories != null && !categories.isEmpty();
-    }
-
-    public int getCategoriesCount() {
-        return categories != null ? categories.size() : 0;
-    }
-
-    public double getAverageRating() {
-        if (applications == null) {
-            return 0.0;
-        }
-
-        return applications.stream()
-                .filter(app -> app.getJob() != null)
-                .flatMap(app -> app.getJob().getRatings().stream())
-                .filter(rating -> rating.getStatus() == Rating.Status.PUBLISHED)
-                .filter(rating -> rating.getType() == Rating.Type.CLIENT_TO_PROFESSIONAL)
-                .mapToInt(Rating::getScore)
-                .average()
-                .orElse(0.0);
-    }
 }
