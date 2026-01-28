@@ -3,6 +3,7 @@ package es.duit.app.controller;
 
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.ServiceRequest;
+import es.duit.app.entity.ProfessionalProfile;
 import es.duit.app.repository.AppUserRepository;
 import es.duit.app.repository.ServiceRequestRepository;
 import org.springframework.security.core.Authentication;
@@ -85,9 +86,13 @@ public class ProfessionalController {
             }
 
             // Verificar si ya se ha postulado
-            List<JobApplication> existentes = jobApplicationRepository.findByRequestAndProfessional(oferta,
-                    usuario.getProfessionalProfile());
-            if (!existentes.isEmpty()) {
+            List<JobApplication> todasLasPostulaciones = jobApplicationRepository.findByRequest(oferta);
+            boolean yaSePostulo = todasLasPostulaciones.stream()
+                    .anyMatch(app -> app.getProfessional() != null &&
+                            app.getProfessional().getUser() != null &&
+                            app.getProfessional().getUser().getId().equals(usuario.getId()));
+
+            if (yaSePostulo) {
                 redirectAttributes.addFlashAttribute("error", "Ya te has postulado a esta oferta.");
                 return "redirect:/professional/buscar";
             }
