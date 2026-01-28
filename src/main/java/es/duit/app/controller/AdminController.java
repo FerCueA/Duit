@@ -18,8 +18,5 @@ public class AdminController {
         return "admin/estadisticas";
     }
 
-    @GetMapping("/categorias")
-    public String categorias() {
-        return "admin/categorias";
-    }
+   
 }
