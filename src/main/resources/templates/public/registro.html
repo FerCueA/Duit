@@ -8,9 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-
 </head>
-
 
 <body class="d-flex flex-column min-vh-100 bg-light">
     <div th:replace="~{components/headerPublico :: headerPublico}"></div>
@@ -44,7 +42,10 @@
                                             </label>
                                             <input type="text" id="firstName" name="firstName"
                                                 class="form-control form-control-lg rounded-3" th:value="${firstName}"
-                                                placeholder="Ej: Juan" required>
+                                                placeholder="Ej: Juan" 
+                                                required minlength="2" maxlength="50"
+                                                pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+"
+                                                title="Solo se permiten letras y espacios">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -54,7 +55,10 @@
                                             </label>
                                             <input type="text" id="lastName" name="lastName"
                                                 class="form-control form-control-lg rounded-3" th:value="${lastName}"
-                                                placeholder="Ej: García López">
+                                                placeholder="Ej: García López"
+                                                minlength="2" maxlength="100"
+                                                pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+"
+                                                title="Solo se permiten letras y espacios">
                                         </div>
                                     </div>
                                 </div>
@@ -78,8 +82,10 @@
                                             </label>
                                             <input type="tel" id="phone" name="phone"
                                                 class="form-control form-control-lg rounded-3" th:value="${phone}"
-                                                placeholder="600123456" pattern="[+]?[0-9]{9,15}"
-                                                title="El teléfono debe tener entre 9 y 15 dígitos, puede empezar con +">
+                                                placeholder="Ej: 612345678"
+                                                pattern="[0-9]{9}"
+                                                maxlength="9"
+                                                title="El teléfono debe tener 9 dígitos">>
                                         </div>
                                     </div>
                                 </div>

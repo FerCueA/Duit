@@ -48,13 +48,10 @@
                                         th:text="${oferta.effectiveServiceAddress?.postalCode}">00000</span></li>
                             </ul>
                             <div class="mt-auto text-end">
-                                <form th:action="@{'/professional/postular/' + ${oferta.id}}" method="post" class="d-inline">
-                                    <input type="hidden" name="precio" value="0" />
-                                    <input type="hidden" name="mensaje" value="" />
-                                    <button class="btn btn-outline-primary rounded-pill px-4 py-2 shadow-sm" type="submit">
-                                        <i class="bi bi-send"></i> Postularse
-                                    </button>
-                                </form>
+                                <button class="btn btn-outline-primary rounded-pill px-4 py-2 shadow-sm" type="button"
+                                    data-bs-toggle="modal" th:data-bs-target="'#modalPostular_' + ${oferta.id}">
+                                    <i class="bi bi-send"></i> Postularse
+                                </button>
                             </div>
                         </div>
                         <div class="position-absolute top-0 end-0 m-2">
@@ -64,32 +61,57 @@
                     <!-- Modal Bootstrap para postularse -->
                     <div class="modal fade" th:id="'modalPostular_' + ${oferta.id}" tabindex="-1"
                         aria-labelledby="modalPostularLabel" aria-hidden="true">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <form th:action="@{'/professional/postular/' + ${oferta.id}}" method="post">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="modalPostularLabel">Postularse a la oferta</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    <div class="modal-header bg-primary text-white">
+                                        <h5 class="modal-title" id="modalPostularLabel">
+                                            <i class="bi bi-send"></i> Postularse a la oferta
+                                        </h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                             aria-label="Cerrar"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label for="mensaje" class="form-label">Mensaje para el cliente <span
-                                                    class="text-muted small">(opcional)</span></label>
-                                            <textarea class="form-control" id="mensaje" name="mensaje" rows="3"
-                                                maxlength="1000"
-                                                placeholder="Cuéntale por qué eres el profesional ideal..."></textarea>
+                                        <!-- Información de la oferta -->
+                                        <div class="bg-light p-3 rounded mb-4">
+                                            <h6 class="fw-bold text-primary" th:text="${oferta.title}">Título</h6>
+                                            <p class="mb-2" th:text="${oferta.description}">Descripción</p>
+                                            <small class="text-muted">
+                                                <i class="bi bi-geo-alt"></i>
+                                                <span
+                                                    th:text="${oferta.effectiveServiceAddress?.city + ', ' + oferta.effectiveServiceAddress?.postalCode}">Ubicación</span>
+                                            </small>
                                         </div>
+
+                                        <!-- Formulario de postulación -->
                                         <div class="mb-3">
-                                            <label for="precio" class="form-label">Precio propuesto (€)</label>
+                                            <label for="precio" class="form-label fw-semibold">
+                                                <i class="bi bi-currency-euro"></i> Precio propuesto *
+                                            </label>
                                             <input type="number" class="form-control" id="precio" name="precio" min="0"
-                                                step="0.01" required placeholder="Ej: 100.00">
+                                                step="0.01" required
+                                                placeholder="Introduce tu precio en euros (ej: 150.00)">
+                                            <small class="text-muted">Precio por el servicio completo</small>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="mensaje" class="form-label fw-semibold">
+                                                <i class="bi bi-chat-text"></i> Mensaje para el cliente
+                                            </label>
+                                            <textarea class="form-control" id="mensaje" name="mensaje" rows="4"
+                                                maxlength="1000"
+                                                placeholder="Presenta tu propuesta y experiencia. ¿Por qué deberían elegirte? Describe cómo resolverás su necesidad..."></textarea>
+                                            <small class="text-muted">Máximo 1000 caracteres (opcional pero
+                                                recomendado)</small>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-primary">Enviar postulación</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            <i class="bi bi-x-circle"></i> Cancelar
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-send-fill"></i> Enviar postulación
+                                        </button>
                                     </div>
                                 </form>
                             </div>

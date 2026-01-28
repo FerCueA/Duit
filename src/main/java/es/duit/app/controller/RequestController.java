@@ -39,9 +39,23 @@ public class RequestController {
 
     // Mostrar formulario
     @GetMapping("/crear")
-    public String mostrarFormularioCrear(Authentication auth, Model model) {
+    public String mostrarFormularioCrear(Authentication auth, Model model,
+            @RequestParam(required = false) Long edit,
+            RedirectAttributes redirectAttributes) {
         AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
         model.addAttribute("habitualAddress", usuarioLogueado.getAddress());
+
+        // Si viene con parámetro edit, cargar datos de la solicitud
+        if (edit != null) {
+            List<ServiceRequest> solicitudes = serviceRequestRepository.findByIdAndClient(edit, usuarioLogueado);
+            if (solicitudes.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Solicitud no encontrada o sin permisos");
+                return "redirect:/requests/mis-solicitudes";
+            }
+            model.addAttribute("solicitud", solicitudes.get(0));
+            model.addAttribute("modoEdicion", true);
+        }
+
         // Añadir categorías activas al modelo
         List<Category> categorias = categoryRepository.findByActiveTrue();
         model.addAttribute("categorias", categorias);
@@ -57,7 +71,7 @@ public class RequestController {
         return "jobs/mis-solicitudes";
     }
 
-    // Crear nueva solicitud
+    // Crear nueva solicitud o editar existente
     @PostMapping("/crear")
     public String crearSolicitud(
             @RequestParam String title,
@@ -70,18 +84,31 @@ public class RequestController {
             @RequestParam(required = false) String postalCode,
             @RequestParam(required = false) String province,
             @RequestParam(required = false) String country,
+            @RequestParam(required = false) Long editId,
             Authentication auth,
             RedirectAttributes redirectAttributes) {
 
         AppUser usuario = authService.obtenerUsuarioAutenticado(auth);
-        ServiceRequest solicitud = new ServiceRequest();
+        ServiceRequest solicitud;
+
+        // Si editId está presente, buscar la solicitud existente
+        if (editId != null) {
+            List<ServiceRequest> solicitudes = serviceRequestRepository.findByIdAndClient(editId, usuario);
+            if (solicitudes.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Solicitud no encontrada o sin permisos");
+                return "redirect:/requests/mis-solicitudes";
+            }
+            solicitud = solicitudes.get(0);
+        } else {
+            solicitud = new ServiceRequest();
+            solicitud.setClient(usuario);
+            solicitud.setStatus(ServiceRequest.Status.DRAFT);
+            solicitud.setRequestedAt(java.time.LocalDateTime.now());
+        }
 
         solicitud.setTitle(title);
         solicitud.setDescription(description);
         solicitud.setDeadline(parseFechaHora(deadline));
-        solicitud.setClient(usuario);
-        solicitud.setStatus(ServiceRequest.Status.DRAFT);
-        solicitud.setRequestedAt(java.time.LocalDateTime.now());
 
         // Asignar categoría
         Category categoria = categoryRepository.findById(categoryId).orElse(null);
@@ -95,7 +122,53 @@ public class RequestController {
         }
 
         serviceRequestRepository.save(solicitud);
-        redirectAttributes.addFlashAttribute("success", "Solicitud creada correctamente.");
+        String mensaje = (editId != null) ? "Solicitud actualizada correctamente." : "Solicitud creada correctamente.";
+        redirectAttributes.addFlashAttribute("success", mensaje);
+        return "redirect:/requests/mis-solicitudes";
+    }
+
+    // Mostrar formulario de edición
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioEditar(@PathVariable Long id, Authentication auth, Model model,
+            RedirectAttributes redirectAttributes) {
+        AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
+        List<ServiceRequest> solicitudes = serviceRequestRepository.findByIdAndClient(id, usuarioLogueado);
+        if (solicitudes.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Solicitud no encontrada o sin permisos");
+            return "redirect:/requests/mis-solicitudes";
+        }
+
+        ServiceRequest solicitud = solicitudes.get(0);
+        if (solicitud.getStatus() != ServiceRequest.Status.DRAFT) {
+            redirectAttributes.addFlashAttribute("error", "Solo se pueden editar solicitudes en borrador");
+            return "redirect:/requests/mis-solicitudes";
+        }
+
+        model.addAttribute("solicitud", solicitud);
+        List<Category> categorias = categoryRepository.findByActiveTrue();
+        model.addAttribute("categorias", categorias);
+        return "jobs/editar";
+    }
+
+    // Cancelar una solicitud publicada
+    @PostMapping("/cancelar/{id}")
+    public String cancelarSolicitud(@PathVariable Long id, Authentication auth, RedirectAttributes redirectAttributes) {
+        AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
+        List<ServiceRequest> solicitudes = serviceRequestRepository.findByIdAndClient(id, usuarioLogueado);
+        if (solicitudes.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Solicitud no encontrada o sin permisos");
+            return "redirect:/requests/mis-solicitudes";
+        }
+
+        ServiceRequest solicitud = solicitudes.get(0);
+        if (solicitud.getStatus() != ServiceRequest.Status.PUBLISHED) {
+            redirectAttributes.addFlashAttribute("error", "Solo se pueden cancelar solicitudes publicadas");
+            return "redirect:/requests/mis-solicitudes";
+        }
+
+        solicitud.setStatus(ServiceRequest.Status.CANCELLED);
+        serviceRequestRepository.save(solicitud);
+        redirectAttributes.addFlashAttribute("success", "Solicitud cancelada correctamente.");
         return "redirect:/requests/mis-solicitudes";
     }
 
@@ -107,7 +180,7 @@ public class RequestController {
         List<ServiceRequest> solicitudes = serviceRequestRepository.findByIdAndClient(id, usuarioLogueado);
         if (solicitudes.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Solicitud no encontrada o sin permisos");
-            return "redirect:/jobs/mis-solicitudes";
+            return "redirect:/requests/mis-solicitudes";
         }
         ServiceRequest solicitud = solicitudes.get(0);
         if (solicitud.getStatus() == ServiceRequest.Status.DRAFT) {
@@ -122,7 +195,7 @@ public class RequestController {
             redirectAttributes.addFlashAttribute("error",
                     "Solo se pueden publicar/despublicar solicitudes en estado borrador o publicadas.");
         }
-        return "redirect:/jobs/mis-solicitudes";
+        return "redirect:/requests/mis-solicitudes";
     }
 
     // Eliminar una solicitud (
@@ -132,11 +205,35 @@ public class RequestController {
         List<ServiceRequest> solicitudes = serviceRequestRepository.findByIdAndClient(id, usuarioLogueado);
         if (solicitudes.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Solicitud no encontrada o sin permisos");
-            return "redirect:/jobs/mis-solicitudes";
+            return "redirect:/requests/mis-solicitudes";
         }
         serviceRequestRepository.deleteById(id);
         redirectAttributes.addFlashAttribute("success", "Solicitud eliminada correctamente.");
-        return "redirect:/jobs/mis-solicitudes";
+        return "redirect:/requests/mis-solicitudes";
+    }
+
+    // Reactivar una solicitud cancelada
+    @PostMapping("/reactivar/{id}")
+    public String reactivarSolicitud(@PathVariable Long id, Authentication auth,
+            RedirectAttributes redirectAttributes) {
+        AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
+        List<ServiceRequest> solicitudes = serviceRequestRepository.findByIdAndClient(id, usuarioLogueado);
+        if (solicitudes.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Solicitud no encontrada o sin permisos");
+            return "redirect:/requests/mis-solicitudes";
+        }
+
+        ServiceRequest solicitud = solicitudes.get(0);
+        if (solicitud.getStatus() != ServiceRequest.Status.CANCELLED) {
+            redirectAttributes.addFlashAttribute("error", "Solo se pueden reactivar solicitudes canceladas");
+            return "redirect:/requests/mis-solicitudes";
+        }
+
+        solicitud.setStatus(ServiceRequest.Status.DRAFT);
+        serviceRequestRepository.save(solicitud);
+        redirectAttributes.addFlashAttribute("success",
+                "Solicitud reactivada correctamente. Ahora está en estado borrador.");
+        return "redirect:/requests/mis-solicitudes";
     }
 
     // Editar una solicitud
@@ -144,20 +241,30 @@ public class RequestController {
     public String editarSolicitud(@PathVariable Long id,
             @RequestParam String title,
             @RequestParam String description,
+            @RequestParam Long categoryId,
             Authentication auth,
             RedirectAttributes redirectAttributes) {
         AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
         List<ServiceRequest> solicitudes = serviceRequestRepository.findByIdAndClient(id, usuarioLogueado);
         if (solicitudes.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Solicitud no encontrada o sin permisos");
-            return "redirect:/jobs/mis-solicitudes";
+            return "redirect:/requests/mis-solicitudes";
         }
         ServiceRequest solicitud = solicitudes.get(0);
+
+        // Buscar la categoría
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        if (category == null) {
+            redirectAttributes.addFlashAttribute("error", "Categoría no válida");
+            return "redirect:/requests/mis-solicitudes";
+        }
+
         solicitud.setTitle(title);
         solicitud.setDescription(description);
+        solicitud.setCategory(category);
         serviceRequestRepository.save(solicitud);
         redirectAttributes.addFlashAttribute("success", "Solicitud editada correctamente.");
-        return "redirect:/jobs/mis-solicitudes";
+        return "redirect:/requests/mis-solicitudes";
     }
 
     // Métodos auxiliares para parsear fechas y crear direcciones
