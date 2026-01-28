@@ -13,18 +13,97 @@
     <div th:replace="~{components/headerUsuario::headerUsuario}"></div>
     <main class="flex-grow-1 bg-light">
         <div class="container py-5">
-            <div class="row">
+            <div class="row mb-4">
                 <div class="col-12">
-                    <h1 class="mb-4"><i class="bi bi-search"></i> Buscar Solicitudes</h1>
-                    <div class="card shadow">
-                        <div class="card-body">
-                            <p class="text-muted">Explora todas las solicitudes disponibles en la plataforma.</p>
-                            <!-- Contenido de búsqueda de solicitudes irá aquí -->
-                            <div class="text-center py-5">
-                                <i class="bi bi-search fs-1 text-muted"></i>
-                                <p class="mt-3 text-muted">Funcionalidad en desarrollo</p>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle"
+                            style="width:56px;height:56px;">
+                            <i class="bi bi-search text-primary fs-2"></i>
+                        </div>
+                        <h1 class="mb-0 fw-bold text-primary-emphasis" style="letter-spacing:1px;">Ofertas publicadas
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <div class="col" th:each="oferta,iter : ${ofertas}">
+                    <div class="card h-100 border-0 shadow-lg card-hover position-relative"
+                        style="transition:transform .15s,box-shadow .15s;">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="me-2"><i class="bi bi-briefcase-fill text-primary fs-4"></i></div>
+                                <h5 class="card-title mb-0 fw-semibold" th:text="${oferta.title}">Título de la oferta
+                                </h5>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-secondary-emphasis" th:text="${oferta.category?.name}">
+                                Categoría</h6>
+                            <p class="card-text mb-2 text-body-secondary" th:text="${oferta.description}">Descripción de
+                                la oferta...</p>
+                            <ul class="list-unstyled small mb-3">
+                                <li class="mb-1"><i class="bi bi-calendar-event text-primary"></i> <span
+                                        th:text="${#temporals.format(oferta.requestedAt, 'dd/MM/yyyy')}">Fecha</span>
+                                </li>
+                                <li><i class="bi bi-geo-alt text-danger"></i> <span class="fw-semibold">Código
+                                        postal:</span> <span
+                                        th:text="${oferta.effectiveServiceAddress?.postalCode}">00000</span></li>
+                            </ul>
+                            <div class="mt-auto text-end">
+                                <form th:action="@{'/professional/postular/' + ${oferta.id}}" method="post" class="d-inline">
+                                    <input type="hidden" name="precio" value="0" />
+                                    <input type="hidden" name="mensaje" value="" />
+                                    <button class="btn btn-outline-primary rounded-pill px-4 py-2 shadow-sm" type="submit">
+                                        <i class="bi bi-send"></i> Postularse
+                                    </button>
+                                </form>
                             </div>
                         </div>
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-primary bg-opacity-75 text-white shadow-sm">Oferta</span>
+                        </div>
+                    </div>
+                    <!-- Modal Bootstrap para postularse -->
+                    <div class="modal fade" th:id="'modalPostular_' + ${oferta.id}" tabindex="-1"
+                        aria-labelledby="modalPostularLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form th:action="@{'/professional/postular/' + ${oferta.id}}" method="post">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalPostularLabel">Postularse a la oferta</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Cerrar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="mensaje" class="form-label">Mensaje para el cliente <span
+                                                    class="text-muted small">(opcional)</span></label>
+                                            <textarea class="form-control" id="mensaje" name="mensaje" rows="3"
+                                                maxlength="1000"
+                                                placeholder="Cuéntale por qué eres el profesional ideal..."></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="precio" class="form-label">Precio propuesto (€)</label>
+                                            <input type="number" class="form-control" id="precio" name="precio" min="0"
+                                                step="0.01" required placeholder="Ej: 100.00">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-primary">Enviar postulación</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Mensaje si no hay ofertas -->
+                <div class="col" th:if="${ofertas == null or #lists.isEmpty(ofertas)}">
+                    <div class="card h-100 border-0 shadow text-center p-5 bg-light-subtle">
+                        <div class="my-4">
+                            <i class="bi bi-emoji-frown text-secondary fs-1"></i>
+                        </div>
+                        <h5 class="text-secondary">No hay ofertas disponibles por el momento.</h5>
+                        <p class="text-muted">Vuelve más tarde para ver nuevas oportunidades.</p>
                     </div>
                 </div>
             </div>
