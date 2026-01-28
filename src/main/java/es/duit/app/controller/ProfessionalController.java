@@ -3,7 +3,6 @@ package es.duit.app.controller;
 
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.ServiceRequest;
-import es.duit.app.entity.ProfessionalProfile;
 import es.duit.app.repository.AppUserRepository;
 import es.duit.app.repository.ServiceRequestRepository;
 import org.springframework.security.core.Authentication;
