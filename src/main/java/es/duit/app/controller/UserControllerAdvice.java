@@ -29,12 +29,12 @@ public class UserControllerAdvice {
         try {
             // Obtengo el usuario que está logueado en Spring Security
             Authentication autenticacion = SecurityContextHolder.getContext().getAuthentication();
-            
+
             // Verifico que esté autenticado y no sea anónimo
             if (autenticacion == null || !autenticacion.isAuthenticated()) {
                 return null;
             }
-            
+
             String nombreUsuario = autenticacion.getName();
             if ("anonymousUser".equals(nombreUsuario)) {
                 return null;
@@ -49,7 +49,7 @@ public class UserControllerAdvice {
 
             // Devuelvo el usuario encontrado
             return usuariosEncontrados.get(0);
-            
+
         } catch (Exception error) {
             logger.error("Error al obtener el usuario autenticado: {}", error.getMessage());
             return null;
