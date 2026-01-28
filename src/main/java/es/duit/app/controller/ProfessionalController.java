@@ -67,23 +67,47 @@ public class ProfessionalController {
             @RequestParam(name = "precio") BigDecimal precio,
             Authentication auth,
             RedirectAttributes redirectAttributes) {
-        // Buscar la oferta
-        Optional<ServiceRequest> optOferta = serviceRequestRepository.findById(ofertaId);
-        if (optOferta.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "La oferta no existe.");
+
+        try {
+            // Buscar la oferta
+            Optional<ServiceRequest> optOferta = serviceRequestRepository.findById(ofertaId);
+            if (optOferta.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "La oferta no existe.");
+                return "redirect:/professional/buscar";
+            }
+            ServiceRequest oferta = optOferta.get();
+
+            // Obtener el usuario autenticado y su perfil profesional
+            AppUser usuario = authService.obtenerUsuarioAutenticado(auth);
+            if (usuario.getProfessionalProfile() == null) {
+                redirectAttributes.addFlashAttribute("error", "No tienes un perfil profesional configurado.");
+                return "redirect:/professional/buscar";
+            }
+
+            // Verificar si ya se ha postulado
+            List<JobApplication> existentes = jobApplicationRepository.findByRequestAndProfessional(oferta,
+                    usuario.getProfessionalProfile());
+            if (!existentes.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Ya te has postulado a esta oferta.");
+                return "redirect:/professional/buscar";
+            }
+
+            // Crear y guardar la postulación
+            JobApplication postulacion = new JobApplication();
+            postulacion.setRequest(oferta);
+            postulacion.setProfessional(usuario.getProfessionalProfile());
+            postulacion.setMessage(mensaje);
+            postulacion.setProposedPrice(precio);
+            postulacion.setStatus(JobApplication.Status.PENDING);
+            jobApplicationRepository.save(postulacion);
+
+            redirectAttributes.addFlashAttribute("success", "¡Postulación enviada correctamente!");
+            return "redirect:/professional/buscar";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al enviar la postulación. Intenta de nuevo.");
             return "redirect:/professional/buscar";
         }
-        ServiceRequest oferta = optOferta.get();
-        // Crear y guardar la postulación
-        JobApplication postulacion = new JobApplication();
-        postulacion.setRequest(oferta);
-        postulacion.setProfessional(null); 
-        postulacion.setMessage(mensaje);
-        postulacion.setProposedPrice(precio);
-        postulacion.setStatus(JobApplication.Status.PENDING);
-        jobApplicationRepository.save(postulacion);
-        redirectAttributes.addFlashAttribute("success", "¡Postulación enviada correctamente!");
-        return "redirect:/professional/buscar";
     }
 
 }

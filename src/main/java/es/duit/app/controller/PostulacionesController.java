@@ -39,18 +39,27 @@ public class PostulacionesController {
     // Ver las postulaciones de una solicitud
     @GetMapping("/{id}")
     public String verPostulaciones(@PathVariable Long id, Authentication auth, Model model) {
-        AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
-        List<ServiceRequest> solicitudes = serviceRequestRepository.findByIdAndClient(id, usuarioLogueado);
-        if (solicitudes.isEmpty()) {
-            model.addAttribute("postulaciones", List.of());
-            model.addAttribute("solicitud", null);
-            return "jobs/postulaciones";
+        try {
+            AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
+            List<ServiceRequest> solicitudes = serviceRequestRepository.findByIdAndClient(id, usuarioLogueado);
+
+            if (solicitudes.isEmpty()) {
+                model.addAttribute("postulaciones", null);
+                model.addAttribute("solicitud", null);
+                return "jobs/ver-postulaciones";
+            }
+
+            ServiceRequest solicitud = solicitudes.get(0);
+            List<JobApplication> postulaciones = jobApplicationRepository.findByRequest(solicitud);
+
+            model.addAttribute("postulaciones", postulaciones);
+            model.addAttribute("solicitud", solicitud);
+            return "jobs/ver-postulaciones";
+
+        } catch (Exception e) {
+            // En caso de error, redirigir a mis solicitudes
+            return "redirect:/jobs/mis-solicitudes";
         }
-        ServiceRequest solicitud = solicitudes.get(0);
-        List<JobApplication> postulaciones = jobApplicationRepository.findByRequest(solicitud);
-        model.addAttribute("postulaciones", postulaciones);
-        model.addAttribute("solicitud", solicitud);
-        return "jobs/postulaciones";
     }
 
     // Acepta una postulación pendiente y rechaza las demás

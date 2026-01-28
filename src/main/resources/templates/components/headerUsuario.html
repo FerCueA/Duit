@@ -7,15 +7,15 @@
 				<img th:src="@{/img/avatarPlaceholder.png}" class="rounded-circle border border-3 shadow-sm" width="64"
 					height="64" alt="Avatar" />
 				<div class="d-flex flex-column justify-content-center gap-2">
-					<div class="fw-bold d-flex align-items-center gap-2 fs-4 text-dark">
+					<div class="fw-bold d-flex align-items-center gap-2 fs-4 text-white">
 						<span th:text="${usuario.username}">Usuario Ejemplo</span>
 					</div>
 					<div class="d-flex align-items-center gap-2">
-						<i class="bi bi-envelope text-dark fs-6"></i>
-						<span class="text-dark small opacity-75" th:text="${usuario.email}">usuario@email.com</span>
+						<i class="bi bi-envelope text-white fs-6"></i>
+						<span class="text-white small opacity-75" th:text="${usuario.email}">usuario@email.com</span>
 					</div>
 					<div class="d-flex align-items-center gap-2">
-						<i class="bi bi-person-badge text-dark fs-6"></i>
+						<i class="bi bi-person-badge text-white fs-6"></i>
 						<span class="badge bg-light text-dark px-3 py-1 rounded-pill text-uppercase"
 							th:text="${usuario.role.name}">ROL</span>
 					</div>
@@ -43,44 +43,69 @@
 			</button>
 			<div class="collapse navbar-collapse" id="mainNavbar">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					<li class="nav-item"><a class="nav-link" th:href="@{/profile/editar}"><i class="bi bi-pencil"></i>
-							Editar
-							perfil</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/profile/profesional}"><i
-								class="bi bi-person-workspace"></i>
-							Perfil profesional</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/professional/buscar}"><i
-								class="bi bi-search"></i>
-							Buscar
-							solicitudes</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/requests/mis-solicitudes}"><i
-								class="bi bi-briefcase"></i>
-							Mis
-							solicitudes</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/requests/crear}"><i
-								class="bi bi-plus-circle"></i>
-							Crear
-							solicitud</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/professional/postulaciones}"><i
-								class="bi bi-send"></i>
-							Mis postulaciones</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/shared/historial}"><i
-								class="bi bi-clock-history"></i>
-							Historial</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/shared/valoraciones}"><i
-								class="bi bi-star"></i>
-							Valoraciones</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/shared/ayuda}"><i
-								class="bi bi-question-circle"></i>
-							Ayuda</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/admin/usuarios}"><i class="bi bi-people"></i>
-							Usuarios</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/admin/estadisticas}"><i
-								class="bi bi-bar-chart-line"></i>
-							Estadísticas</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/admin/categorias}"><i class="bi bi-tags"></i>
-							Tipos de
-							trabajo</a></li>
+					<!-- Enlaces directos-->
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/profile/editar}">
+							<i class="bi bi-person-circle"></i> Editar Perfil
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/profile/profesional}">
+							<i class="bi bi-person-workspace"></i> Perfil Profesional
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/professional/buscar}">
+							<i class="bi bi-search"></i> Buscar Trabajos
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/requests/mis-solicitudes}">
+							<i class="bi bi-list-ul"></i> Mis Solicitudes
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/requests/crear}">
+							<i class="bi bi-plus-circle"></i> Crear Solicitud
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/professional/postulaciones}">
+							<i class="bi bi-send"></i> Mis Postulaciones
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/shared/historial}">
+							<i class="bi bi-clock-history"></i> Historial
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/shared/valoraciones}">
+							<i class="bi bi-star"></i> Valoraciones
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/shared/ayuda}">
+							<i class="bi bi-question-circle"></i> Ayuda
+						</a>
+					</li>
+
+					<!-- Enlaces de administración (solo para admins) -->
+					<li class="nav-item">
+						<a class="nav-link text-danger" th:href="@{/admin/usuarios}">
+							<i class="bi bi-people"></i> Usuarios
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-danger" th:href="@{/admin/estadisticas}">
+							<i class="bi bi-bar-chart-line"></i> Estadísticas
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-danger" th:href="@{/admin/categorias}">
+							<i class="bi bi-tags"></i> Categorías
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>
