@@ -66,10 +66,14 @@
                                                 class="btn btn-sm btn-danger"
                                                 onclick="return confirm('¿Eliminar esta categoría?')"><i
                                                     class="bi bi-trash"></i></a>
-                                            <a th:if="${cat.active}" th:href="@{'/admin/categorias/toggle/' + ${cat.id}}"
-                                                class="btn btn-sm btn-secondary ms-1" title="Desactivar"><i class="bi bi-eye-slash"></i></a>
-                                            <a th:if="${!cat.active}" th:href="@{'/admin/categorias/toggle/' + ${cat.id}}"
-                                                class="btn btn-sm btn-success ms-1" title="Activar"><i class="bi bi-eye"></i></a>
+                                            <a th:if="${cat.active}"
+                                                th:href="@{'/admin/categorias/toggle/' + ${cat.id}}"
+                                                class="btn btn-sm btn-secondary ms-1" title="Desactivar"><i
+                                                    class="bi bi-eye-slash"></i></a>
+                                            <a th:if="${!cat.active}"
+                                                th:href="@{'/admin/categorias/toggle/' + ${cat.id}}"
+                                                class="btn btn-sm btn-success ms-1" title="Activar"><i
+                                                    class="bi bi-eye"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>
