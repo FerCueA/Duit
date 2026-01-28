@@ -51,10 +51,8 @@ public class PostulacionesController {
 
             ServiceRequest solicitud = solicitudes.get(0);
             List<JobApplication> postulaciones = jobApplicationRepository.findByRequest(solicitud);
-            
-            // Cargar explícitamente las relaciones lazy para evitar LazyInitializationException
+
             for (JobApplication postulacion : postulaciones) {
-                // Forzar la carga del profesional y su usuario
                 postulacion.getProfessional().getUser().getFullName();
                 postulacion.getProfessional().getUser().getEmail();
                 postulacion.getProfessional().getUser().getPhone();
@@ -65,8 +63,8 @@ public class PostulacionesController {
             return "jobs/ver-postulaciones";
 
         } catch (Exception e) {
-            // En caso de error, redirigir a mis solicitudes
-            e.printStackTrace(); // Para ver el error en los logs
+
+            e.printStackTrace();
             return "redirect:/jobs/mis-solicitudes";
         }
     }
