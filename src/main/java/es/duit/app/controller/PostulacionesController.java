@@ -3,6 +3,7 @@ package es.duit.app.controller;
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.JobApplication;
 import es.duit.app.entity.ServiceRequest;
+import es.duit.app.entity.ServiceJob;
 import es.duit.app.repository.AppUserRepository;
 import es.duit.app.repository.JobApplicationRepository;
 import es.duit.app.repository.ServiceJobRepository;
@@ -23,6 +24,7 @@ public class PostulacionesController {
 
     private final ServiceRequestRepository serviceRequestRepository;
     private final JobApplicationRepository jobApplicationRepository;
+    private final ServiceJobRepository serviceJobRepository;
     private final AuthService authService;
 
     public PostulacionesController(
@@ -33,6 +35,7 @@ public class PostulacionesController {
             AuthService authService) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.jobApplicationRepository = jobApplicationRepository;
+        this.serviceJobRepository = serviceJobRepository;
         this.authService = authService;
     }
 
@@ -81,6 +84,7 @@ public class PostulacionesController {
         if (!solicitud.getClient().getId().equals(usuarioLogueado.getId())) {
             return "redirect:/jobs/mis-solicitudes";
         }
+
         // Rechazar todas las demás postulaciones
         List<JobApplication> otras = jobApplicationRepository.findByRequest(solicitud);
         for (JobApplication otra : otras) {
@@ -90,10 +94,25 @@ public class PostulacionesController {
                 jobApplicationRepository.save(otra);
             }
         }
+
         // Aceptar la postulación seleccionada
         postulacion.setStatus(JobApplication.Status.ACCEPTED);
         postulacion.setRespondedAt(LocalDateTime.now());
         jobApplicationRepository.save(postulacion);
+
+        // Crear el trabajo (ServiceJob)
+        ServiceJob nuevoTrabajo = new ServiceJob();
+        nuevoTrabajo.setRequest(solicitud);
+        nuevoTrabajo.setApplication(postulacion);
+        nuevoTrabajo.setAgreedPrice(postulacion.getProposedPrice());
+        nuevoTrabajo.setStatus(ServiceJob.Status.CREATED);
+        nuevoTrabajo.setStartDate(LocalDateTime.now());
+        serviceJobRepository.save(nuevoTrabajo);
+
+        // Cambiar el estado de la solicitud a IN_PROGRESS
+        solicitud.setStatus(ServiceRequest.Status.IN_PROGRESS);
+        serviceRequestRepository.save(solicitud);
+
         return "redirect:/jobs/postulaciones/" + solicitud.getId();
     }
 
