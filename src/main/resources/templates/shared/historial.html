@@ -19,8 +19,48 @@
                     <div class="card shadow">
                         <div class="card-body">
                             <p class="text-muted">Revisa el historial de tus ofertas y trabajos realizados.</p>
-                            <!-- Contenido de valoraciones irá aquí -->
-                            <div class="text-center py-5">
+
+                            <div th:if="${historial != null and !historial.isEmpty()}">
+                                <!-- Filtros -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtrar por estado:</h5>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <input type="radio" class="btn-check" name="filterHistorial" id="filterHistorialAll"
+                                            checked autocomplete="off" onclick="filterHistorial('all')">
+                                        <label class="btn btn-outline-secondary" for="filterHistorialAll">Todos</label>
+
+                                        <input type="radio" class="btn-check" name="filterHistorial" id="filterHistorialCompleted"
+                                            autocomplete="off" onclick="filterHistorial('COMPLETED')">
+                                        <label class="btn btn-outline-primary" for="filterHistorialCompleted">Completados</label>
+
+                                        <input type="radio" class="btn-check" name="filterHistorial" id="filterHistorialCancelled"
+                                            autocomplete="off" onclick="filterHistorial('CANCELLED')">
+                                        <label class="btn btn-outline-danger" for="filterHistorialCancelled">Cancelados</label>
+                                    </div>
+                                </div>
+
+                                <div class="list-group">
+                                    <div th:each="item : ${historial}"
+                                        class="list-group-item mb-3 shadow-sm rounded historial-item"
+                                        th:attr="data-status=${item.status}">
+                                        <div class="d-flex w-100 justify-content-between align-items-center">
+                                            <div>
+                                                <h5 class="mb-1">
+                                                    <i class="bi bi-briefcase"></i>
+                                                    <span th:text="${item.title}">Título</span>
+                                                </h5>
+                                                <small class="text-muted">
+                                                    <span th:text="${item.date}">Fecha</span>
+                                                </small>
+                                            </div>
+                                            <span class="badge bg-secondary" th:text="${item.status}">Estado</span>
+                                        </div>
+                                        <p class="mb-1" th:text="${item.description}">Descripción</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div th:if="${historial == null or historial.isEmpty()}" class="text-center py-5">
                                 <i class="bi bi-star fs-1 text-muted"></i>
                                 <p class="mt-3 text-muted">Funcionalidad en desarrollo</p>
                             </div>
@@ -33,6 +73,13 @@
     </main>
     <div th:replace="~{components/footerPublico::footerPublico}"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/filters.js}"></script>
+
+    <script>
+        function filterHistorial(status) {
+            filterByStatus('historial-item', status);
+        }
+    </script>
 </body>
 
 </html>
