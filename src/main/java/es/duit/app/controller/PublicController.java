@@ -76,7 +76,7 @@ public class PublicController {
     // Formulario de registro
     @GetMapping("/registro")
     public String mostrarRegistro(Model model) {
-        model.addAttribute("registro", new RegistroDTO(null, null, null, null, null, null, null));
+        model.addAttribute("registroDTO", new RegistroDTO(null, null, null, null, null, null, null));
         return "public/registro";
     }
 
@@ -89,6 +89,7 @@ public class PublicController {
 
         // Validar errores de Bean Validation
         if (bindingResult.hasErrors()) {
+            model.addAttribute("registroDTO", registro);
             return "public/registro";
         }
 
@@ -100,6 +101,12 @@ public class PublicController {
         } catch (IllegalArgumentException e) {
             logger.warn("Error en registro: {}", e.getMessage());
             model.addAttribute("error", e.getMessage());
+            model.addAttribute("firstName", registro.firstName());
+            model.addAttribute("lastName", registro.lastName());
+            model.addAttribute("dni", registro.dni());
+            model.addAttribute("email", registro.email());
+            model.addAttribute("phone", registro.phone());
+            model.addAttribute("userType", registro.userType());
             return "public/registro";
         } catch (Exception e) {
             logger.error("Error inesperado en registro: {}", e.getMessage());

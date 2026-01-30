@@ -18,8 +18,8 @@ public class RegistroService {
     private final PasswordEncoder passwordEncoder;
 
     public RegistroService(AppUserRepository appUserRepository,
-                          RoleRepository roleRepository,
-                          PasswordEncoder passwordEncoder) {
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder) {
         this.appUserRepository = appUserRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -39,11 +39,11 @@ public class RegistroService {
 
         // Obtener el rol según el tipo de usuario
         UserRole.RoleName nombreRol = "USER".equals(registro.userType())
-            ? UserRole.RoleName.USER
-            : UserRole.RoleName.PROFESSIONAL;
+                ? UserRole.RoleName.USER
+                : UserRole.RoleName.PROFESSIONAL;
 
         UserRole rol = roleRepository.findByName(nombreRol)
-            .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado en la base de datos"));
+                .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado en la base de datos"));
 
         // Crear el nuevo usuario
         AppUser usuarioNuevo = new AppUser();
