@@ -3,8 +3,10 @@ package es.duit.app.controller;
 
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.ServiceRequest;
+import es.duit.app.entity.ServiceJob;
 import es.duit.app.repository.AppUserRepository;
 import es.duit.app.repository.ServiceRequestRepository;
+import es.duit.app.repository.ServiceJobRepository;
 import org.springframework.security.core.Authentication;
 import es.duit.app.service.AuthService;
 import org.springframework.stereotype.Controller;
@@ -26,15 +28,18 @@ public class ProfessionalController {
 
     private final ServiceRequestRepository serviceRequestRepository;
     private final JobApplicationRepository jobApplicationRepository;
+    private final ServiceJobRepository serviceJobRepository;
     private final AuthService authService;
 
     public ProfessionalController(AppUserRepository appUserRepository,
             ServiceRequestRepository serviceRequestRepository,
             JobApplicationRepository jobApplicationRepository,
+            ServiceJobRepository serviceJobRepository,
             ProfessionalProfileRepository professionalProfileRepository,
             AuthService authService) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.jobApplicationRepository = jobApplicationRepository;
+        this.serviceJobRepository = serviceJobRepository;
         this.authService = authService;
     }
 
@@ -51,11 +56,15 @@ public class ProfessionalController {
     @GetMapping("/postulaciones")
     public String verPostulaciones(Authentication auth, Model model) {
         AppUser usuario = authService.obtenerUsuarioAutenticado(auth);
-        List<JobApplication> postulaciones = jobApplicationRepository.findAll()
-                .stream()
-                .filter(p -> p.getProfessional() != null && p.getProfessional().getId().equals(usuario.getId()))
-                .toList();
+        
+        // Obtener todas las postulaciones del profesional
+        List<JobApplication> postulaciones = jobApplicationRepository.findByProfessional(usuario.getProfessionalProfile());
+        
+        // Obtener trabajos en progreso del profesional
+        List<ServiceJob> trabajosEnProgreso = serviceJobRepository.findByProfesional(usuario);
+        
         model.addAttribute("postulaciones", postulaciones);
+        model.addAttribute("trabajosEnProgreso", trabajosEnProgreso);
         return "jobs/postular";
     }
 
