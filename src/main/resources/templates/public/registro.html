@@ -26,14 +26,15 @@
                                 <h1 class="card-title h3 fw-bold text-primary">Únete a Duit</h1>
                                 <p class="text-muted">Crea tu cuenta y comienza a conectar</p>
                             </div>
-                            
+
                             <!-- Mensajes de error -->
                             <div th:if="${error}" class="alert alert-danger alert-dismissible rounded-3 mb-4"
                                 role="alert">
                                 <i class="bi bi-exclamation-triangle me-2"></i>[[${error}]]
                             </div>
-                            
-                            <form th:action="@{/register}" method="post">
+
+                            <form th:action="@{/register}" method="post" th:object="${registroDTO}">
+
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -42,12 +43,17 @@
                                             </label>
                                             <input type="text" id="firstName" name="firstName"
                                                 class="form-control form-control-lg rounded-3" th:value="${firstName}"
-                                                placeholder="Ej: Juan" 
-                                                required minlength="2" maxlength="50"
+                                                th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''"
+                                                placeholder="Ej: Juan" required minlength="2" maxlength="50"
                                                 pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+"
                                                 title="Solo se permiten letras y espacios">
+                                            <div th:if="${#fields.hasErrors('firstName')}" class="invalid-feedback">
+                                                <i class="bi bi-exclamation-circle me-1"></i>
+                                                <span th:errors="*{firstName}"></span>
+                                            </div>
                                         </div>
                                     </div>
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="lastName" class="form-label fw-semibold">
@@ -55,10 +61,14 @@
                                             </label>
                                             <input type="text" id="lastName" name="lastName"
                                                 class="form-control form-control-lg rounded-3" th:value="${lastName}"
-                                                placeholder="Ej: García López"
-                                                minlength="2" maxlength="100"
+                                                th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''"
+                                                placeholder="Ej: García López" minlength="2" maxlength="100"
                                                 pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+"
                                                 title="Solo se permiten letras y espacios">
+                                            <div th:if="${#fields.hasErrors('lastName')}" class="invalid-feedback">
+                                                <i class="bi bi-exclamation-circle me-1"></i>
+                                                <span th:errors="*{lastName}"></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -71,10 +81,16 @@
                                             </label>
                                             <input type="text" id="dni" name="dni"
                                                 class="form-control form-control-lg rounded-3" th:value="${dni}"
+                                                th:classappend="${#fields.hasErrors('dni')} ? 'is-invalid' : ''"
                                                 placeholder="12345678A" pattern="[0-9]{8}[A-Z]"
                                                 title="El DNI debe tener 8 dígitos seguidos de una letra mayúscula">
+                                            <div th:if="${#fields.hasErrors('dni')}" class="invalid-feedback">
+                                                <i class="bi bi-exclamation-circle me-1"></i>
+                                                <span th:errors="*{dni}"></span>
+                                            </div>
                                         </div>
                                     </div>
+
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="phone" class="form-label fw-semibold">
@@ -82,10 +98,13 @@
                                             </label>
                                             <input type="tel" id="phone" name="phone"
                                                 class="form-control form-control-lg rounded-3" th:value="${phone}"
-                                                placeholder="Ej: 612345678"
-                                                pattern="[0-9]{9}"
-                                                maxlength="9"
-                                                title="El teléfono debe tener 9 dígitos">>
+                                                th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''"
+                                                placeholder="Ej: 612345678" pattern="[+]?[0-9]{9,15}"
+                                                title="El teléfono debe tener entre 9 y 15 dígitos">
+                                            <div th:if="${#fields.hasErrors('phone')}" class="invalid-feedback">
+                                                <i class="bi bi-exclamation-circle me-1"></i>
+                                                <span th:errors="*{phone}"></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -96,7 +115,12 @@
                                     </label>
                                     <input type="email" id="email" name="email"
                                         class="form-control form-control-lg rounded-3" th:value="${email}"
+                                        th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
                                         placeholder="tu-email@ejemplo.com" required>
+                                    <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                                        <i class="bi bi-exclamation-circle me-1"></i>
+                                        <span th:errors="*{email}"></span>
+                                    </div>
                                 </div>
 
                                 <div class="mb-4">
@@ -104,7 +128,7 @@
                                         <i class="bi bi-people text-primary me-1"></i>Tipo de usuario *
                                     </label>
                                     <select id="userType" name="userType" class="form-select form-select-lg rounded-3"
-                                        required>
+                                        th:classappend="${#fields.hasErrors('userType')} ? 'is-invalid' : ''" required>
                                         <option value="" disabled selected>¿Cómo quieres usar Duit?</option>
                                         <option value="USER" th:selected="${userType == 'USER'}">
                                             <i class="bi bi-search"></i> Usuario estándar - Busco servicios
@@ -113,6 +137,10 @@
                                             <i class="bi bi-briefcase"></i> Profesional - Ofrezco servicios
                                         </option>
                                     </select>
+                                    <div th:if="${#fields.hasErrors('userType')}" class="invalid-feedback">
+                                        <i class="bi bi-exclamation-circle me-1"></i>
+                                        <span th:errors="*{userType}"></span>
+                                    </div>
                                     <div class="form-text px-2">
                                         <small class="text-muted">
                                             <i class="bi bi-info-circle me-1"></i>
@@ -129,12 +157,18 @@
                                     </label>
                                     <div class="input-group">
                                         <input type="password" id="password" name="password"
-                                            class="form-control form-control-lg rounded-start-3" minlength="6" maxlength="100"
-                                            placeholder="Mínimo 6 caracteres" required
+                                            class="form-control form-control-lg rounded-start-3"
+                                            th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                                            minlength="6" maxlength="100" placeholder="Mínimo 6 caracteres" required
                                             title="La contraseña debe tener al menos 6 caracteres">
-                                        <button type="button" class="btn btn-outline-secondary rounded-end-3" id="togglePasswordRegister">
+                                        <button type="button" class="btn btn-outline-secondary rounded-end-3"
+                                            id="togglePasswordRegister">
                                             <i class="bi bi-eye" id="toggleIconRegister"></i>
                                         </button>
+                                    </div>
+                                    <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback d-block">
+                                        <i class="bi bi-exclamation-circle me-1"></i>
+                                        <span th:errors="*{password}"></span>
                                     </div>
                                     <div class="form-text px-2">
                                         <small class="text-muted">
@@ -150,7 +184,7 @@
                                     </button>
                                 </div>
                             </form>
-                            
+
                             <hr class="my-4">
 
                             <div class="text-center">
@@ -166,7 +200,7 @@
         </div>
     </main>
     <div th:replace="~{components/footerPublico :: footerPublico}"></div>
-    
+
     <!-- JavaScript para funcionalidades del registro -->
     <script>
         // Toggle password visibility
