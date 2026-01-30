@@ -4,6 +4,7 @@ package es.duit.app.controller;
 import es.duit.app.dto.RegistroDTO;
 import es.duit.app.service.RegistroService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,7 +43,12 @@ public class PublicController {
     public String mostrarLogin(
             @RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
+            Authentication auth,
             Model model) {
+
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+            return "redirect:/home";
+        }
 
         if (error != null) {
             model.addAttribute("error", "Usuario o contraseña incorrectos. Por favor, verifica tus credenciales.");
