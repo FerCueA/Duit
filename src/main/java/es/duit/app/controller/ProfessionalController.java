@@ -2,29 +2,28 @@ package es.duit.app.controller;
 
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.Category;
-import es.duit.app.entity.ServiceRequest;
+import es.duit.app.entity.JobApplication;
 import es.duit.app.entity.ServiceJob;
-import es.duit.app.repository.AppUserRepository;
+import es.duit.app.entity.ServiceRequest;
 import es.duit.app.repository.CategoryRepository;
-import es.duit.app.repository.ServiceRequestRepository;
+import es.duit.app.repository.JobApplicationRepository;
 import es.duit.app.repository.ServiceJobRepository;
-import org.springframework.security.core.Authentication;
+import es.duit.app.repository.ServiceRequestRepository;
 import es.duit.app.service.AuthService;
+import es.duit.app.service.JobApplicationService;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import es.duit.app.entity.JobApplication;
-
-import es.duit.app.repository.JobApplicationRepository;
-import es.duit.app.repository.ProfessionalProfileRepository;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.math.BigDecimal;
-import java.util.Optional;
-
+// Controlador para profesionales
 @Controller
 @RequestMapping("/professional")
 public class ProfessionalController {
@@ -34,33 +33,35 @@ public class ProfessionalController {
     private final JobApplicationRepository jobApplicationRepository;
     private final ServiceJobRepository serviceJobRepository;
     private final AuthService authService;
+    private final JobApplicationService jobApplicationService;
 
-    public ProfessionalController(AppUserRepository appUserRepository,
+    public ProfessionalController(
             ServiceRequestRepository serviceRequestRepository,
             CategoryRepository categoryRepository,
             JobApplicationRepository jobApplicationRepository,
             ServiceJobRepository serviceJobRepository,
-            ProfessionalProfileRepository professionalProfileRepository,
-            AuthService authService) {
+            AuthService authService,
+            JobApplicationService jobApplicationService) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.categoryRepository = categoryRepository;
         this.jobApplicationRepository = jobApplicationRepository;
         this.serviceJobRepository = serviceJobRepository;
         this.authService = authService;
+        this.jobApplicationService = jobApplicationService;
     }
 
-    // Mostrar página para buscar trabajos
+    // Buscar trabajos
     @GetMapping("/buscar")
     public String buscarTrabajos(Authentication auth, Model model) {
         authService.obtenerUsuarioAutenticado(auth);
         
-        // Obtener solo solicitudes PUBLISHED
+        // Obtener solo solicitudes publicadas
         List<ServiceRequest> ofertas = serviceRequestRepository.findByStatus(ServiceRequest.Status.PUBLISHED);
         
-        // Obtener categorías únicas de las ofertas
+        // Obtener categorías activas
         List<Category> categorias = categoryRepository.findByActiveTrue();
         
-        // Obtener códigos postales únicos
+        // Obtener códigos postales únicos de las ofertas
         Set<String> codigosPostales = ofertas.stream()
             .map(o -> o.getEffectiveServiceAddress() != null ? o.getEffectiveServiceAddress().getPostalCode() : null)
             .filter(cp -> cp != null && !cp.isEmpty())
@@ -72,15 +73,15 @@ public class ProfessionalController {
         return "jobs/buscar";
     }
 
-    // Mostrar postulaciones del profesional
+    // Ver mis postulaciones
     @GetMapping("/postulaciones")
     public String verPostulaciones(Authentication auth, Model model) {
         AppUser usuario = authService.obtenerUsuarioAutenticado(auth);
         
-        // Obtener todas las postulaciones del profesional
+        // Postulaciones del profesional
         List<JobApplication> postulaciones = jobApplicationRepository.findByProfessional(usuario.getProfessionalProfile());
         
-        // Obtener trabajos en progreso del profesional
+        // Obtener trabajos en progreso
         List<ServiceJob> trabajosEnProgreso = serviceJobRepository.findByProfesional(usuario);
         
         model.addAttribute("postulaciones", postulaciones);
@@ -88,7 +89,7 @@ public class ProfessionalController {
         return "jobs/postular";
     }
 
-    // Procesar postulación a una oferta
+    // Postularse a una oferta
     @PostMapping("/postular/{ofertaId}")
     public String postularse(
             @PathVariable Long ofertaId,
@@ -98,49 +99,13 @@ public class ProfessionalController {
             RedirectAttributes redirectAttributes) {
 
         try {
-            // Buscar la oferta
-            Optional<ServiceRequest> optOferta = serviceRequestRepository.findById(ofertaId);
-            if (optOferta.isEmpty()) {
-                redirectAttributes.addFlashAttribute("error", "La oferta no existe.");
-                return "redirect:/professional/buscar";
-            }
-            ServiceRequest oferta = optOferta.get();
-
-            // Obtener el usuario autenticado y su perfil profesional
             AppUser usuario = authService.obtenerUsuarioAutenticado(auth);
-            if (usuario.getProfessionalProfile() == null) {
-                redirectAttributes.addFlashAttribute("error", "No tienes un perfil profesional configurado.");
-                return "redirect:/professional/buscar";
-            }
-
-            // Verificar si ya se ha postulado
-            List<JobApplication> todasLasPostulaciones = jobApplicationRepository.findByRequest(oferta);
-            boolean yaSePostulo = todasLasPostulaciones.stream()
-                    .anyMatch(app -> app.getProfessional() != null &&
-                            app.getProfessional().getUser() != null &&
-                            app.getProfessional().getUser().getId().equals(usuario.getId()));
-
-            if (yaSePostulo) {
-                redirectAttributes.addFlashAttribute("error", "Ya te has postulado a esta oferta.");
-                return "redirect:/professional/buscar";
-            }
-
-            // Crear y guardar la postulación
-            JobApplication postulacion = new JobApplication();
-            postulacion.setRequest(oferta);
-            postulacion.setProfessional(usuario.getProfessionalProfile());
-            postulacion.setMessage(mensaje);
-            postulacion.setProposedPrice(precio);
-            postulacion.setStatus(JobApplication.Status.PENDING);
-            jobApplicationRepository.save(postulacion);
-
+            jobApplicationService.postularseAOferta(ofertaId, precio, mensaje, usuario);
             redirectAttributes.addFlashAttribute("success", "¡Postulación enviada correctamente!");
             return "redirect:/professional/buscar";
-
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al enviar la postulación. Intenta de nuevo.");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/professional/buscar";
         }
     }
-
 }

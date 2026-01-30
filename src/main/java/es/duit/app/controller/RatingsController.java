@@ -1,70 +1,43 @@
 package es.duit.app.controller;
 
 import es.duit.app.entity.AppUser;
-import es.duit.app.entity.Rating;
-import es.duit.app.entity.ServiceJob;
-import es.duit.app.repository.RatingRepository;
-import es.duit.app.repository.ServiceJobRepository;
 import es.duit.app.service.AuthService;
+import es.duit.app.service.RatingService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/ratings")
 public class RatingsController {
 
-    private final RatingRepository ratingRepository;
-    private final ServiceJobRepository serviceJobRepository;
+    private final RatingService ratingService;
     private final AuthService authService;
 
-    public RatingsController(
-            RatingRepository ratingRepository,
-            ServiceJobRepository serviceJobRepository,
-            AuthService authService) {
-        this.ratingRepository = ratingRepository;
-        this.serviceJobRepository = serviceJobRepository;
+    public RatingsController(RatingService ratingService, AuthService authService) {
+        this.ratingService = ratingService;
         this.authService = authService;
     }
 
+    // Crear valoración
     @PostMapping("/crear")
     public String crearValoracion(
             @RequestParam Long jobId,
             @RequestParam Integer score,
             @RequestParam(required = false) String comment,
-            Authentication auth) {
+            Authentication auth,
+            RedirectAttributes redirectAttributes) {
         
-        AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
-        ServiceJob trabajo = serviceJobRepository.findById(jobId).orElse(null);
-
-        if (trabajo == null) {
+        try {
+            AppUser usuario = authService.obtenerUsuarioAutenticado(auth);
+            ratingService.crearValoracion(jobId, score, comment, usuario);
+            redirectAttributes.addFlashAttribute("success", "Valoración registrada correctamente.");
+            return "redirect:/shared/valoraciones";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/shared/valoraciones";
         }
-
-        // Determinar el tipo de valoración según quien sea el usuario
-        Rating.Type type;
-
-        if (trabajo.getClient().getId().equals(usuarioLogueado.getId())) {
-            // Cliente valorando al profesional
-            type = Rating.Type.CLIENT_TO_PROFESSIONAL;
-        } else if (trabajo.getProfessional().getId().equals(usuarioLogueado.getId())) {
-            // Profesional valorando al cliente
-            type = Rating.Type.PROFESSIONAL_TO_CLIENT;
-        } else {
-            // El usuario no está autorizado para valorar este trabajo
-            return "redirect:/shared/valoraciones";
-        }
-
-        // Crear la valoración
-        Rating nuevaValoracion = new Rating();
-        nuevaValoracion.setJob(trabajo);
-        nuevaValoracion.setType(type);
-        nuevaValoracion.setScore(score);
-        nuevaValoracion.setComment(comment != null && !comment.trim().isEmpty() ? comment : null);
-        nuevaValoracion.setStatus(Rating.Status.PUBLISHED);
-        ratingRepository.save(nuevaValoracion);
-
-        return "redirect:/shared/valoraciones";
     }
 }
