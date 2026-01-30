@@ -76,7 +76,7 @@ public class PublicController {
     // Formulario de registro
     @GetMapping("/registro")
     public String mostrarRegistro(Model model) {
-        model.addAttribute("registro", new RegistroDTO(null, null, null, null, null, null, null));
+        model.addAttribute("registroDTO", new RegistroDTO(null, null, null, null, null, null, null));
         return "public/registro";
     }
 
@@ -89,22 +89,45 @@ public class PublicController {
 
         // Validar errores de Bean Validation
         if (bindingResult.hasErrors()) {
+            // Agregar el objeto al modelo para que funcionen los th:errors
+            model.addAttribute("registroDTO", registro);
             return "public/registro";
         }
 
         try {
             registroService.registrarUsuario(registro);
             logger.info("Nuevo usuario registrado: {}", registro.email());
-            model.addAttribute("success", "Registro exitoso. Ya puedes iniciar sesión con tu email.");
+            model.addAttribute("success", "¡Registro exitoso! Revisa tu correo electrónico para activar tu cuenta.");
             return "public/login";
         } catch (IllegalArgumentException e) {
             logger.warn("Error en registro: {}", e.getMessage());
             model.addAttribute("error", e.getMessage());
+            // Preservar los datos del formulario
+            model.addAttribute("firstName", registro.firstName());
+            model.addAttribute("lastName", registro.lastName());
+            model.addAttribute("dni", registro.dni());
+            model.addAttribute("email", registro.email());
+            model.addAttribute("phone", registro.phone());
+            model.addAttribute("userType", registro.userType());
             return "public/registro";
         } catch (Exception e) {
             logger.error("Error inesperado en registro: {}", e.getMessage());
             model.addAttribute("error", "Error en el registro. Por favor, inténtalo de nuevo.");
             return "public/registro";
         }
+    }
+
+    // Activar cuenta
+    @GetMapping("/activate")
+    public String activarCuenta(@RequestParam("token") String token, Model model) {
+        boolean activado = registroService.activarCuenta(token);
+
+        if (activado) {
+            model.addAttribute("success", "¡Cuenta activada correctamente! Ya puedes iniciar sesión.");
+        } else {
+            model.addAttribute("error", "El enlace de activación no es válido o ha expirado.");
+        }
+
+        return "public/login";
     }
 }

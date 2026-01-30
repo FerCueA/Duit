@@ -12,4 +12,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
 	// Buscar usuario por DNI
 	Optional<AppUser> findByDni(String dni);
+
+	// Buscar usuario por token de activación
+	Optional<AppUser> findByActivationToken(String activationToken);
 }

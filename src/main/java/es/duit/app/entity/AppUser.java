@@ -57,7 +57,13 @@ public class AppUser extends BaseEntity {
     private String phone;
 
     @Column(name = "active", nullable = false)
-    private Boolean active = true;
+    private Boolean active = false; // Inactivo hasta activación por email
+
+    @Column(name = "activation_token", length = 36) // Para UUID
+    private String activationToken;
+
+    @Column(name = "activation_token_expires")
+    private LocalDateTime activationTokenExpires;
 
     @Column(name = "registered_at")
     private LocalDateTime registeredAt;
