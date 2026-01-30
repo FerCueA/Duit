@@ -1,10 +1,11 @@
-
 package es.duit.app.controller;
 
 import es.duit.app.entity.AppUser;
+import es.duit.app.entity.Category;
 import es.duit.app.entity.ServiceRequest;
 import es.duit.app.entity.ServiceJob;
 import es.duit.app.repository.AppUserRepository;
+import es.duit.app.repository.CategoryRepository;
 import es.duit.app.repository.ServiceRequestRepository;
 import es.duit.app.repository.ServiceJobRepository;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import es.duit.app.entity.JobApplication;
 
@@ -27,17 +30,20 @@ import java.util.Optional;
 public class ProfessionalController {
 
     private final ServiceRequestRepository serviceRequestRepository;
+    private final CategoryRepository categoryRepository;
     private final JobApplicationRepository jobApplicationRepository;
     private final ServiceJobRepository serviceJobRepository;
     private final AuthService authService;
 
     public ProfessionalController(AppUserRepository appUserRepository,
             ServiceRequestRepository serviceRequestRepository,
+            CategoryRepository categoryRepository,
             JobApplicationRepository jobApplicationRepository,
             ServiceJobRepository serviceJobRepository,
             ProfessionalProfileRepository professionalProfileRepository,
             AuthService authService) {
         this.serviceRequestRepository = serviceRequestRepository;
+        this.categoryRepository = categoryRepository;
         this.jobApplicationRepository = jobApplicationRepository;
         this.serviceJobRepository = serviceJobRepository;
         this.authService = authService;
@@ -47,8 +53,22 @@ public class ProfessionalController {
     @GetMapping("/buscar")
     public String buscarTrabajos(Authentication auth, Model model) {
         authService.obtenerUsuarioAutenticado(auth);
-        List<ServiceRequest> ofertas = serviceRequestRepository.findAll();
+        
+        // Obtener solo solicitudes PUBLISHED
+        List<ServiceRequest> ofertas = serviceRequestRepository.findByStatus(ServiceRequest.Status.PUBLISHED);
+        
+        // Obtener categorías únicas de las ofertas
+        List<Category> categorias = categoryRepository.findByActiveTrue();
+        
+        // Obtener códigos postales únicos
+        Set<String> codigosPostales = ofertas.stream()
+            .map(o -> o.getEffectiveServiceAddress() != null ? o.getEffectiveServiceAddress().getPostalCode() : null)
+            .filter(cp -> cp != null && !cp.isEmpty())
+            .collect(Collectors.toSet());
+        
         model.addAttribute("ofertas", ofertas);
+        model.addAttribute("categorias", categorias);
+        model.addAttribute("codigosPostales", codigosPostales);
         return "jobs/buscar";
     }
 

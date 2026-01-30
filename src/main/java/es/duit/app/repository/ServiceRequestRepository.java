@@ -13,4 +13,7 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, 
 
     // Buscar solicitud por ID y cliente
     List<ServiceRequest> findByIdAndClient(Long id, AppUser client);
+    
+    // Buscar solicitudes por estado
+    List<ServiceRequest> findByStatus(ServiceRequest.Status status);
 }

@@ -320,7 +320,7 @@ public class RequestController {
         trabajo.setEndDate(java.time.LocalDateTime.now());
         serviceJobRepository.save(trabajo);
         
-        return "redirect:/requests/mis-solicitudes";
+        return "redirect:/shared/valoraciones?jobId=" + jobId;
     }
 
     // Pausar un trabajo (para cliente)
