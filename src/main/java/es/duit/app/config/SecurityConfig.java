@@ -12,40 +12,48 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig {
 
         private final CustomUserDetailsService customUserDetailsService;
+        private final LoginSuccessHandler loginSuccessHandler;
+        private final LoginFailureHandler loginFailureHandler;
 
-        public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+        public SecurityConfig(CustomUserDetailsService customUserDetailsService,
+                        LoginSuccessHandler loginSuccessHandler,
+                        LoginFailureHandler loginFailureHandler) {
                 this.customUserDetailsService = customUserDetailsService;
+                this.loginSuccessHandler = loginSuccessHandler;
+                this.loginFailureHandler = loginFailureHandler;
         }
 
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http
-                        .csrf(csrf -> csrf.disable())
-                        .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(
-                                        "/", "/index", "/public/**", "/login", "/registro", "/register",
-                                        "/css/**", "/js/**", "/img/**", "/static/**",
-                                        "/privacidad", "/terminos", "/ayuda",
-                                        "/swagger-ui/**", "/v3/api-docs/**"
-                                ).permitAll()
-                                .anyRequest().authenticated())
-                        .formLogin(form -> form
-                                .loginPage("/login")
-                                .loginProcessingUrl("/login")
-                                .usernameParameter("username")
-                                .passwordParameter("password")
-                                .defaultSuccessUrl("/home", true)
-                                .failureUrl("/login?error=true")
-                                .permitAll())
-                        .rememberMe(remember -> remember
-                                .key("duit-remember-me")
-                                .tokenValiditySeconds(86400)
-                                .userDetailsService(customUserDetailsService))
-                        .logout(logout -> logout
-                                .logoutSuccessUrl("/login?logout=true")
-                                .invalidateHttpSession(true)
-                                .deleteCookies("JSESSIONID")
-                                .permitAll());
+                                .csrf(csrf -> csrf.disable())
+                                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers(
+                                                                "/", "/index", "/public/**", "/login", "/registro",
+                                                                "/register",
+                                                                "/css/**", "/js/**", "/img/**", "/static/**",
+                                                                "/privacidad", "/terminos", "/ayuda",
+                                                                "/swagger-ui/**", "/v3/api-docs/**")
+                                                .permitAll()
+                                                .anyRequest().authenticated())
+                                .formLogin(form -> form
+                                                .loginPage("/login")
+                                                .loginProcessingUrl("/login")
+                                                .usernameParameter("username")
+                                                .passwordParameter("password")
+                                                .successHandler(loginSuccessHandler)
+                                                .failureHandler(loginFailureHandler)
+                                                .permitAll())
+                                .rememberMe(remember -> remember
+                                                .key("duit-remember-me")
+                                                .rememberMeParameter("remember-me")
+                                                .tokenValiditySeconds(86400)
+                                                .userDetailsService(customUserDetailsService))
+                                .logout(logout -> logout
+                                                .logoutSuccessUrl("/login?logout=true")
+                                                .invalidateHttpSession(true)
+                                                .deleteCookies("JSESSIONID", "remember-me")
+                                                .permitAll());
                 return http.build();
         }
 
