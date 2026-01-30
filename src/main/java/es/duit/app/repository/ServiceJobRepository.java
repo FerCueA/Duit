@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface ServiceJobRepository extends JpaRepository<ServiceJob, Long> {
    
-    // Obtener trabajos del cliente (por la solicitud)
+    // Trabajos del cliente
     @Query("SELECT j FROM ServiceJob j WHERE j.request.client = :cliente")
     List<ServiceJob> findByCliente(@Param("cliente") AppUser cliente);
     
-    // Obtener trabajos del profesional (por la aplicación)
+    // Trabajos del profesional
     @Query("SELECT j FROM ServiceJob j WHERE j.application.professional.user = :profesional")
     List<ServiceJob> findByProfesional(@Param("profesional") AppUser profesional);
     

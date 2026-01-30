@@ -40,7 +40,7 @@ public class SharedController {
     public String valoraciones(Authentication auth, Model model, @RequestParam(required = false) Long jobId) {
         AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
         
-        // Obtener los trabajos del usuario que están en estado COMPLETED
+        // Trabajos completados del usuario
         List<ServiceJob> trabajosCompletados = serviceJobRepository.findByCliente(usuarioLogueado);
         trabajosCompletados.addAll(serviceJobRepository.findByProfesional(usuarioLogueado));
         trabajosCompletados.removeIf(trabajo -> trabajo.getStatus() != ServiceJob.Status.COMPLETED);
@@ -64,7 +64,7 @@ public class SharedController {
         model.addAttribute("trabajosPendientes", trabajosPendientes);
         model.addAttribute("trabajosFinalizadas", trabajosFinalizadas);
         
-        // Si viene con jobId, cargar ese trabajo específicamente
+        // Cargar trabajo específico
         if (jobId != null) {
             ServiceJob trabajoEspecifico = serviceJobRepository.findById(jobId).orElse(null);
             if (trabajoEspecifico != null) {

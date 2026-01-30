@@ -3,7 +3,6 @@ package es.duit.app.controller;
 
 import es.duit.app.entity.Category;
 import es.duit.app.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin/categorias")
 public class CategoryController {
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+
+    public CategoryController(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     @GetMapping
     public String list(Model model) {

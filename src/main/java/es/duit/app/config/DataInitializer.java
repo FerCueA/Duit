@@ -13,10 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-// Esta clase crea datos básicos cuando arranca la aplicación
-// @Component  // DESACTIVADO: Usar script SQL personalizado en su lugar
+// Crea datos básicos al arrancar
+// @Component  // DESACTIVADO
 public class DataInitializer implements ApplicationRunner {
 
     // Para escribir logs en consola
@@ -64,10 +63,10 @@ public class DataInitializer implements ApplicationRunner {
     // Creo un rol si no existe ya
     private void crearRolSiNoExiste(UserRole.RoleName nombreRol, String descripcion, boolean activo) {
         // Busco si el rol ya existe
-        List<UserRole> rolesEncontrados = roleRepository.findByName(nombreRol);
+        var rolExistente = roleRepository.findByName(nombreRol);
 
         // Si ya existe, no hago nada
-        if (!rolesEncontrados.isEmpty()) {
+        if (rolExistente.isPresent()) {
             logger.debug("El rol ya existe: {}", nombreRol);
             return;
         }
@@ -95,19 +94,16 @@ public class DataInitializer implements ApplicationRunner {
         String emailAdmin = "admin@duit.es";
 
         // Busco si el usuario admin ya existe
-        List<AppUser> usuariosExistentes = appUserRepository.findByUsername(emailAdmin);
-        if (!usuariosExistentes.isEmpty()) {
+        var usuarioExistente = appUserRepository.findByUsername(emailAdmin);
+        if (usuarioExistente.isPresent()) {
             logger.info("El usuario admin ya existe, no hago nada.");
             return;
         }
 
         // Busco el rol ADMIN
         logger.info("Buscando el rol ADMIN...");
-        List<UserRole> rolesAdmin = roleRepository.findByName(UserRole.RoleName.ADMIN);
-        if (rolesAdmin.isEmpty()) {
-            throw new RuntimeException("No encontré el rol ADMIN en la base de datos");
-        }
-        UserRole rolAdmin = rolesAdmin.get(0);
+        UserRole rolAdmin = roleRepository.findByName(UserRole.RoleName.ADMIN)
+            .orElseThrow(() -> new RuntimeException("No encontré el rol ADMIN en la base de datos"));
 
         // Creo el usuario admin
         logger.info("Creando el usuario admin...");
