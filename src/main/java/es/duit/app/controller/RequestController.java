@@ -5,10 +5,12 @@ import es.duit.app.entity.Address;
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.Category;
 import es.duit.app.entity.ServiceRequest;
+import es.duit.app.entity.ServiceJob;
 import es.duit.app.repository.AppUserRepository;
 import es.duit.app.repository.CategoryRepository;
 import es.duit.app.repository.JobApplicationRepository;
 import es.duit.app.repository.ServiceRequestRepository;
+import es.duit.app.repository.ServiceJobRepository;
 import es.duit.app.service.AuthService;
 
 import org.springframework.security.core.Authentication;
@@ -25,16 +27,19 @@ public class RequestController {
     private final ServiceRequestRepository serviceRequestRepository;
     private final CategoryRepository categoryRepository;
     private final AuthService authService;
+    private final ServiceJobRepository serviceJobRepository;
 
     public RequestController(
             ServiceRequestRepository serviceRequestRepository,
             CategoryRepository categoryRepository,
             AppUserRepository appUserRepository,
             JobApplicationRepository jobApplicationRepository,
+            ServiceJobRepository serviceJobRepository,
             AuthService authService) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.categoryRepository = categoryRepository;
         this.authService = authService;
+        this.serviceJobRepository = serviceJobRepository;
     }
 
     // Mostrar formulario
@@ -67,7 +72,9 @@ public class RequestController {
     public String mostrarMisSolicitudes(Authentication auth, Model model) {
         AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
         List<ServiceRequest> todasLasSolicitudes = serviceRequestRepository.findByClient(usuarioLogueado);
+        List<ServiceJob> trabajosDelCliente = serviceJobRepository.findByCliente(usuarioLogueado);
         model.addAttribute("solicitudesExistentes", todasLasSolicitudes);
+        model.addAttribute("trabajosDelCliente", trabajosDelCliente);
         return "jobs/mis-solicitudes";
     }
 
@@ -290,6 +297,76 @@ public class RequestController {
         dir.setProvince(province);
         dir.setCountry(country);
         return dir;
+    }
+
+    // Finalizar un trabajo (para cliente)
+    @PostMapping("/finalizar/{jobId}")
+    public String finalizarTrabajo(@PathVariable Long jobId, Authentication auth) {
+        AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
+        ServiceJob trabajo = serviceJobRepository.findById(jobId).orElse(null);
+        
+        if (trabajo == null) {
+            return "redirect:/requests/mis-solicitudes";
+        }
+        
+        // Verificar que sea el cliente de la solicitud
+        AppUser cliente = trabajo.getClient();
+        if (!cliente.getId().equals(usuarioLogueado.getId())) {
+            return "redirect:/requests/mis-solicitudes";
+        }
+        
+        // Cambiar estado a COMPLETED
+        trabajo.setStatus(ServiceJob.Status.COMPLETED);
+        trabajo.setEndDate(java.time.LocalDateTime.now());
+        serviceJobRepository.save(trabajo);
+        
+        return "redirect:/requests/mis-solicitudes";
+    }
+
+    // Pausar un trabajo (para cliente)
+    @PostMapping("/pausar/{jobId}")
+    public String pausarTrabajo(@PathVariable Long jobId, Authentication auth) {
+        AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
+        ServiceJob trabajo = serviceJobRepository.findById(jobId).orElse(null);
+        
+        if (trabajo == null) {
+            return "redirect:/requests/mis-solicitudes";
+        }
+        
+        // Verificar que sea el cliente de la solicitud
+        AppUser cliente = trabajo.getClient();
+        if (!cliente.getId().equals(usuarioLogueado.getId())) {
+            return "redirect:/requests/mis-solicitudes";
+        }
+        
+        // Cambiar estado a PAUSED
+        trabajo.setStatus(ServiceJob.Status.PAUSED);
+        serviceJobRepository.save(trabajo);
+        
+        return "redirect:/requests/mis-solicitudes";
+    }
+
+    // Cancelar un trabajo (para cliente)
+    @PostMapping("/cancelar/{jobId}")
+    public String cancelarTrabajo(@PathVariable Long jobId, Authentication auth) {
+        AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
+        ServiceJob trabajo = serviceJobRepository.findById(jobId).orElse(null);
+        
+        if (trabajo == null) {
+            return "redirect:/requests/mis-solicitudes";
+        }
+        
+        // Verificar que sea el cliente de la solicitud
+        AppUser cliente = trabajo.getClient();
+        if (!cliente.getId().equals(usuarioLogueado.getId())) {
+            return "redirect:/requests/mis-solicitudes";
+        }
+        
+        // Cambiar estado a CANCELLED
+        trabajo.setStatus(ServiceJob.Status.CANCELLED);
+        serviceJobRepository.save(trabajo);
+        
+        return "redirect:/requests/mis-solicitudes";
     }
 
 }

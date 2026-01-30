@@ -17,4 +17,7 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     
     // Buscar postulación específica de un profesional a una solicitud
     List<JobApplication> findByRequestAndProfessional(ServiceRequest request, ProfessionalProfile professional);
+    
+    // Buscar todas las postulaciones de un profesional
+    List<JobApplication> findByProfessional(ProfessionalProfile professional);
 }

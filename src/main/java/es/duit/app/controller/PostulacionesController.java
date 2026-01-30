@@ -134,4 +134,74 @@ public class PostulacionesController {
         return "redirect:/jobs/postulaciones/" + solicitud.getId();
     }
 
+    // Finalizar un trabajo (para profesional)
+    @PostMapping("/finalizar/{jobId}")
+    public String finalizarTrabajo(@PathVariable Long jobId, Authentication auth) {
+        AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
+        ServiceJob trabajo = serviceJobRepository.findById(jobId).orElse(null);
+        
+        if (trabajo == null) {
+            return "redirect:/jobs/postular";
+        }
+        
+        // Verificar que sea el profesional del trabajo
+        AppUser profesional = trabajo.getProfessional();
+        if (!profesional.getId().equals(usuarioLogueado.getId())) {
+            return "redirect:/jobs/postular";
+        }
+        
+        // Cambiar estado a COMPLETED
+        trabajo.setStatus(ServiceJob.Status.COMPLETED);
+        trabajo.setEndDate(LocalDateTime.now());
+        serviceJobRepository.save(trabajo);
+        
+        return "redirect:/jobs/postular";
+    }
+
+    // Pausar un trabajo (para profesional)
+    @PostMapping("/pausar/{jobId}")
+    public String pausarTrabajo(@PathVariable Long jobId, Authentication auth) {
+        AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
+        ServiceJob trabajo = serviceJobRepository.findById(jobId).orElse(null);
+        
+        if (trabajo == null) {
+            return "redirect:/jobs/postular";
+        }
+        
+        // Verificar que sea el profesional del trabajo
+        AppUser profesional = trabajo.getProfessional();
+        if (!profesional.getId().equals(usuarioLogueado.getId())) {
+            return "redirect:/jobs/postular";
+        }
+        
+        // Cambiar estado a PAUSED
+        trabajo.setStatus(ServiceJob.Status.PAUSED);
+        serviceJobRepository.save(trabajo);
+        
+        return "redirect:/jobs/postular";
+    }
+
+    // Cancelar un trabajo (para profesional)
+    @PostMapping("/cancelar/{jobId}")
+    public String cancelarTrabajo(@PathVariable Long jobId, Authentication auth) {
+        AppUser usuarioLogueado = authService.obtenerUsuarioAutenticado(auth);
+        ServiceJob trabajo = serviceJobRepository.findById(jobId).orElse(null);
+        
+        if (trabajo == null) {
+            return "redirect:/jobs/postular";
+        }
+        
+        // Verificar que sea el profesional del trabajo
+        AppUser profesional = trabajo.getProfessional();
+        if (!profesional.getId().equals(usuarioLogueado.getId())) {
+            return "redirect:/jobs/postular";
+        }
+        
+        // Cambiar estado a CANCELLED
+        trabajo.setStatus(ServiceJob.Status.CANCELLED);
+        serviceJobRepository.save(trabajo);
+        
+        return "redirect:/jobs/postular";
+    }
+
 }
