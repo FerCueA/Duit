@@ -47,9 +47,8 @@
                                     <input type="email" id="username" name="username"
                                         class="form-control form-control-lg rounded-3"
                                         placeholder="tu-email@ejemplo.com"
-                                        th:value="${param.username != null ? param.username[0] : ''}" 
-                                        required maxlength="100"
-                                        autocomplete="username">
+                                        th:value="${param.username != null ? param.username[0] : ''}" required
+                                        maxlength="100" autocomplete="username">
                                     <div class="invalid-feedback">
                                         <i class="bi bi-exclamation-circle me-1"></i>Por favor, ingresa un correo
                                         electrónico válido.
@@ -63,8 +62,7 @@
                                     <div class="input-group">
                                         <input type="password" id="password" name="password"
                                             class="form-control form-control-lg rounded-start-3"
-                                            placeholder="Tu contraseña" 
-                                            minlength="4" maxlength="50" required
+                                            placeholder="Tu contraseña" minlength="4" maxlength="50" required
                                             autocomplete="current-password">
                                         <button type="button" class="btn btn-outline-secondary rounded-end-3"
                                             id="togglePassword">
@@ -99,9 +97,9 @@
                                 <h6 class="text-muted mb-2"><i class="bi bi-info-circle me-1"></i>Cuentas de prueba:
                                 </h6>
                                 <div class="small">
-                                    <p class="mb-1"><strong>Cliente:</strong> maria.garcia@email.com</p>
+                                    <p class="mb-1"><strong>Cliente:</strong> ana.gonzalez@example.com</p>
 
-                                    <p class="mb-1"><strong>Profesional:</strong> raul.albanil@email.com</p>
+                                    <p class="mb-1"><strong>Profesional:</strong> laura.jimenez@professional.com</p>
 
                                 </div>
                             </div>
