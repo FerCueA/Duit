@@ -155,7 +155,7 @@ public class PostulacionesController {
         trabajo.setEndDate(LocalDateTime.now());
         serviceJobRepository.save(trabajo);
         
-        return "redirect:/jobs/postular";
+        return "redirect:/shared/valoraciones?jobId=" + jobId;
     }
 
     // Pausar un trabajo (para profesional)
