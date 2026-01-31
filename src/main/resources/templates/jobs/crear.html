@@ -63,13 +63,16 @@
                                 <div class="mb-3">
                                     <label for="categoryId" class="form-label fw-bold">Categoría *</label>
                                     <select th:field="*{categoryId}" id="categoryId" class="form-select"
-                                        th:classappend="${#fields.hasErrors('categoryId')} ? 'is-invalid' : ''"
-                                        required>
+                                        th:classappend="${#fields.hasErrors('categoryId')} ? 'is-invalid' : ''" required
+                                        aria-describedby="categoryHelp">
                                         <option value="">Selecciona una categoría</option>
                                         <option th:each="cat : ${categorias}" th:value="${cat.id}"
                                             th:text="${cat.name}"></option>
                                     </select>
-                                    <div th:if="${#fields.hasErrors('categoryId')}" class="invalid-feedback">
+                                    <div id="categoryHelp" class="form-text">Elige la categoría que mejor describa tu
+                                        solicitud</div>
+                                    <div th:if="${#fields.hasErrors('categoryId')}" class="invalid-feedback"
+                                        role="alert">
                                         <span th:errors="*{categoryId}"></span>
                                     </div>
                                 </div>
@@ -80,9 +83,9 @@
                                     <input type="text" th:field="*{title}" class="form-control"
                                         th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''" id="title"
                                         placeholder="Ej: Reparación de tubería en cocina" maxlength="150" minlength="5"
-                                        required>
-                                    <div class="form-text">Entre 5 y 150 caracteres</div>
-                                    <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback">
+                                        required aria-describedby="titleHelp">
+                                    <div id="titleHelp" class="form-text">Entre 5 y 150 caracteres</div>
+                                    <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback" role="alert">
                                         <span th:errors="*{title}"></span>
                                     </div>
                                 </div>
@@ -93,9 +96,12 @@
                                     <textarea th:field="*{description}" class="form-control"
                                         th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
                                         id="description" rows="5" maxlength="2000" minlength="20"
-                                        placeholder="Describe qué necesitas..." required></textarea>
-                                    <div class="form-text">Entre 20 y 2000 caracteres. Sé específico</div>
-                                    <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback">
+                                        placeholder="Describe qué necesitas..." required
+                                        aria-describedby="descriptionHelp"></textarea>
+                                    <div id="descriptionHelp" class="form-text">Entre 20 y 2000 caracteres. Sé
+                                        específico</div>
+                                    <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback"
+                                        role="alert">
                                         <span th:errors="*{description}"></span>
                                     </div>
                                 </div>
@@ -106,22 +112,22 @@
                                         (opcional)</label>
                                     <input type="date" th:field="*{deadline}" class="form-control"
                                         th:classappend="${#fields.hasErrors('deadline')} ? 'is-invalid' : ''"
-                                        id="deadline"
+                                        id="deadline" aria-describedby="deadlineHelp"
                                         th:min="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
-                                    <div class="form-text">Si tienes fecha límite específica (no puede ser en el pasado)
-                                    </div>
-                                    <div th:if="${#fields.hasErrors('deadline')}" class="invalid-feedback">
+                                    <div id="deadlineHelp" class="form-text">Si tienes fecha límite específica (no puede
+                                        ser en el pasado)</div>
+                                    <div th:if="${#fields.hasErrors('deadline')}" class="invalid-feedback" role="alert">
                                         <span th:errors="*{deadline}"></span>
                                     </div>
                                 </div>
 
                                 <!-- Dirección del servicio -->
-                                <div class="mb-4">
-                                    <label class="form-label fw-bold">¿Dónde se realizará el servicio? *</label>
+                                <fieldset class="mb-4">
+                                    <legend class="form-label fw-bold">¿Dónde se realizará el servicio? *</legend>
 
                                     <div class="form-check mb-2">
                                         <input class="form-check-input" type="radio" th:field="*{addressOption}"
-                                            id="habitualAddress" value="habitual">
+                                            id="habitualAddress" value="habitual" aria-describedby="addressHelp">
                                         <label class="form-check-label" for="habitualAddress">
                                             <strong>Mi dirección habitual</strong>
                                             <div th:if="${habitualAddress}" class="text-muted small">
@@ -142,54 +148,67 @@
                                         </label>
                                     </div>
 
-                                    <div th:if="${#fields.hasErrors('addressOption')}" class="invalid-feedback d-block">
+                                    <div id="addressHelp" class="form-text">Selecciona dónde necesitas el servicio</div>
+                                    <div th:if="${#fields.hasErrors('addressOption')}" class="invalid-feedback d-block"
+                                        role="alert">
                                         <span th:errors="*{addressOption}"></span>
                                     </div>
 
                                     <!-- Campos de nueva dirección -->
                                     <div id="newAddressFields" class="row g-2 mt-2" style="display:none;">
                                         <div class="col-12">
+                                            <label for="address" class="form-label visually-hidden">Dirección</label>
                                             <input type="text" th:field="*{address}" class="form-control"
                                                 th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''"
-                                                placeholder="Dirección" maxlength="255">
-                                            <div th:if="${#fields.hasErrors('address')}" class="invalid-feedback">
+                                                id="address" placeholder="Dirección" maxlength="255">
+                                            <div th:if="${#fields.hasErrors('address')}" class="invalid-feedback"
+                                                role="alert">
                                                 <span th:errors="*{address}"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
+                                            <label for="city" class="form-label visually-hidden">Ciudad</label>
                                             <input type="text" th:field="*{city}" class="form-control"
                                                 th:classappend="${#fields.hasErrors('city')} ? 'is-invalid' : ''"
-                                                placeholder="Ciudad" maxlength="100">
-                                            <div th:if="${#fields.hasErrors('city')}" class="invalid-feedback">
+                                                id="city" placeholder="Ciudad" maxlength="100">
+                                            <div th:if="${#fields.hasErrors('city')}" class="invalid-feedback"
+                                                role="alert">
                                                 <span th:errors="*{city}"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
+                                            <label for="postalCode" class="form-label visually-hidden">Código
+                                                postal</label>
                                             <input type="text" th:field="*{postalCode}" class="form-control"
                                                 th:classappend="${#fields.hasErrors('postalCode')} ? 'is-invalid' : ''"
-                                                placeholder="Código postal" maxlength="10">
-                                            <div th:if="${#fields.hasErrors('postalCode')}" class="invalid-feedback">
+                                                id="postalCode" placeholder="Código postal" maxlength="10">
+                                            <div th:if="${#fields.hasErrors('postalCode')}" class="invalid-feedback"
+                                                role="alert">
                                                 <span th:errors="*{postalCode}"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
+                                            <label for="province" class="form-label visually-hidden">Provincia</label>
                                             <input type="text" th:field="*{province}" class="form-control"
                                                 th:classappend="${#fields.hasErrors('province')} ? 'is-invalid' : ''"
-                                                placeholder="Provincia" maxlength="100">
-                                            <div th:if="${#fields.hasErrors('province')}" class="invalid-feedback">
+                                                id="province" placeholder="Provincia" maxlength="100">
+                                            <div th:if="${#fields.hasErrors('province')}" class="invalid-feedback"
+                                                role="alert">
                                                 <span th:errors="*{province}"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
+                                            <label for="country" class="form-label visually-hidden">País</label>
                                             <input type="text" th:field="*{country}" class="form-control"
                                                 th:classappend="${#fields.hasErrors('country')} ? 'is-invalid' : ''"
-                                                placeholder="País" value="España" maxlength="100">
-                                            <div th:if="${#fields.hasErrors('country')}" class="invalid-feedback">
+                                                id="country" placeholder="País" value="España" maxlength="100">
+                                            <div th:if="${#fields.hasErrors('country')}" class="invalid-feedback"
+                                                role="alert">
                                                 <span th:errors="*{country}"></span>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </fieldset>
 
                                 <!-- Botones -->
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-between">
