@@ -1,5 +1,6 @@
 package es.duit.app.controller;
 
+import es.duit.app.dto.CrearSolicitudDTO;
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.ServiceJob;
 import es.duit.app.entity.ServiceRequest;
@@ -10,9 +11,11 @@ import es.duit.app.service.ServiceRequestService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -32,6 +35,15 @@ public class RequestController {
         this.authService = authService;
     }
 
+    // Inicializar formulario
+    @ModelAttribute("form")
+    public CrearSolicitudDTO initForm() {
+        CrearSolicitudDTO form = new CrearSolicitudDTO();
+        form.setAddressOption("habitual");
+        form.setCountry("España");
+        return form;
+    }
+
     // Mostrar formulario crear solicitud
     @GetMapping("/crear")
     public String mostrarFormularioCrear(Authentication auth, Model model,
@@ -42,14 +54,43 @@ public class RequestController {
             model.addAttribute("habitualAddress", usuario.getAddress());
             model.addAttribute("categorias", serviceRequestService.obtenerCategoriasActivas());
 
-            // Cargar solicitud si viene edit
+            CrearSolicitudDTO form = new CrearSolicitudDTO();
+
             if (edit != null) {
                 ServiceRequest solicitud = serviceRequestService.obtenerSolicitudDelUsuario(edit, usuario);
-                model.addAttribute("solicitud", solicitud);
+
+                // Rellenar formulario con datos existentes
+                form.setEditId(solicitud.getId());
+                form.setTitle(solicitud.getTitle());
+                form.setDescription(solicitud.getDescription());
+                form.setCategoryId(solicitud.getCategory().getId());
+
+                if (solicitud.getDeadline() != null) {
+                    form.setDeadline(solicitud.getDeadline().toLocalDate());
+                }
+
+                // Determinar tipo de dirección
+                if (solicitud.hasSpecificServiceAddress()) {
+                    form.setAddressOption("new");
+                    form.setAddress(solicitud.getServiceAddress().getAddress());
+                    form.setCity(solicitud.getServiceAddress().getCity());
+                    form.setPostalCode(solicitud.getServiceAddress().getPostalCode());
+                    form.setProvince(solicitud.getServiceAddress().getProvince());
+                    form.setCountry(solicitud.getServiceAddress().getCountry());
+                } else {
+                    form.setAddressOption("habitual");
+                }
+
                 model.addAttribute("modoEdicion", true);
+            } else {
+                // Valores por defecto para nueva solicitud
+                form.setAddressOption("habitual");
+                form.setCountry("España");
             }
 
+            model.addAttribute("form", form);
             return "jobs/crear";
+
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/requests/mis-solicitudes";
@@ -70,36 +111,50 @@ public class RequestController {
 
     // Crear o actualizar solicitud
     @PostMapping("/crear")
-    public String crearSolicitud(
-            @RequestParam String title,
-            @RequestParam String description,
-            @RequestParam Long categoryId,
-            @RequestParam(required = false) String deadline,
-            @RequestParam String addressOption,
-            @RequestParam(required = false) String address,
-            @RequestParam(required = false) String city,
-            @RequestParam(required = false) String postalCode,
-            @RequestParam(required = false) String province,
-            @RequestParam(required = false) String country,
-            @RequestParam(required = false) Long editId,
+    public String crearSolicitud(@Valid @ModelAttribute("form") CrearSolicitudDTO form,
+            BindingResult bindingResult,
             Authentication auth,
+            Model model,
             RedirectAttributes redirectAttributes) {
 
-        try {
-            AppUser usuario = authService.obtenerUsuarioAutenticado(auth);
-            ServiceRequest solicitud = serviceRequestService.crearOActualizarSolicitud(
-                    title, description, categoryId, deadline, addressOption,
-                    address, city, postalCode, province, country, editId, usuario);
+        AppUser usuario = authService.obtenerUsuarioAutenticado(auth);
 
-            String mensaje = (editId != null)
-                    ? "Solicitud actualizada correctamente."
-                    : "Solicitud creada correctamente.";
+        try {
+            // Si hay errores de validación básica, volver al formulario
+            if (bindingResult.hasErrors()) {
+                cargarDatosFormulario(model, usuario, form.isEditing());
+                return "jobs/crear";
+            }
+
+            // Crear o actualizar la solicitud (las validaciones adicionales están en el
+            // servicio)
+            ServiceRequest solicitud = serviceRequestService.crearOActualizarSolicitud(form, usuario);
+
+            String mensaje = form.isEditing()
+                    ? "Solicitud actualizada correctamente"
+                    : "Solicitud creada correctamente";
+
             redirectAttributes.addFlashAttribute("success", mensaje);
             return "redirect:/requests/mis-solicitudes";
+
         } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+
+            bindingResult.reject("error.global", e.getMessage());
+            cargarDatosFormulario(model, usuario, form.isEditing());
+            return "jobs/crear";
+
+        } catch (Exception e) {
+
+            redirectAttributes.addFlashAttribute("error", "Error inesperado. Inténtalo de nuevo.");
             return "redirect:/requests/crear";
         }
+    }
+
+    // Cargar datos comunes para el formulario
+    private void cargarDatosFormulario(Model model, AppUser usuario, boolean esEdicion) {
+        model.addAttribute("habitualAddress", usuario.getAddress());
+        model.addAttribute("categorias", serviceRequestService.obtenerCategoriasActivas());
+        model.addAttribute("modoEdicion", esEdicion);
     }
 
     // Publicar solicitud
