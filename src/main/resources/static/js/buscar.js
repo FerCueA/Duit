@@ -1,8 +1,5 @@
 /**
  * INICIALIZAR FILTROS EN PÁGINA DE BÚSQUEDA DE OFERTAS
- * 
- * Este script genera automáticamente las opciones de los filtros
- * de categoría y código postal basándose en las ofertas disponibles.
  */
 document.addEventListener('DOMContentLoaded', function () {
     // PASO 1: Obtener los selects
