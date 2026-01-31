@@ -15,65 +15,107 @@
         <div class="container py-5">
             <div class="row">
                 <div class="col-12">
-                    <h1 class="mb-4"><i class="bi bi-tags"></i> Gestión de Categorías</h1>
-                    <div class="card shadow">
+                    <h1 class="mb-4">Gestión de Categorías</h1>
+
+                    <!-- Mensajes validaciones-->
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:text="${success}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <div class="card">
                         <div class="card-body">
                             <!-- Formulario añadir/editar -->
-                            <form th:action="@{/admin/categorias}" th:object="${category}" method="post"
-                                class="row g-3 mb-4">
+                            <form th:action="@{/admin/categorias}" th:object="${categoryDTO}" method="post"
+                                class="row g-3 mb-4" role="form" aria-label="Formulario de categorías">
                                 <input type="hidden" th:field="*{id}" />
+
                                 <div class="col-md-4">
-                                    <input type="text" th:field="*{name}" class="form-control" placeholder="Nombre"
-                                        required>
+                                    <label for="categoryName" class="visually-hidden">Nombre de la categoría</label>
+                                    <input type="text" th:field="*{name}" id="categoryName"
+                                        th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                                        class="form-control" placeholder="Nombre" required aria-describedby="nameError">
+                                    <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback" id="nameError"
+                                        role="alert">
+                                        <span th:errors="*{name}"></span>
+                                    </div>
                                 </div>
+
                                 <div class="col-md-5">
-                                    <input type="text" th:field="*{description}" class="form-control"
-                                        placeholder="Descripción">
+                                    <label for="categoryDescription" class="visually-hidden">Descripción de la
+                                        categoría</label>
+                                    <input type="text" th:field="*{description}" id="categoryDescription"
+                                        th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
+                                        class="form-control" placeholder="Descripción"
+                                        aria-describedby="descriptionError">
+                                    <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback"
+                                        id="descriptionError" role="alert">
+                                        <span th:errors="*{description}"></span>
+                                    </div>
                                 </div>
+
                                 <div class="col-md-3 text-end">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-save"></i> <span
-                                            th:text="*{id} != null ? 'Actualizar' : 'Añadir'"></span>
+                                    <button type="submit" class="btn btn-primary"
+                                        th:aria-label="${categoryDTO.id != null ? 'Actualizar categoría' : 'Añadir nueva categoría'}"
+                                        th:text="${categoryDTO.id != null ? 'Actualizar' : 'Añadir'}">
                                     </button>
-                                    <a th:if="*{id} != null" th:href="@{/admin/categorias}"
-                                        class="btn btn-secondary ms-2">Cancelar</a>
+                                    <a th:if="${categoryDTO.id != null}" th:href="@{/admin/categorias}"
+                                        class="btn btn-secondary ms-2" aria-label="Cancelar edición">Cancelar</a>
                                 </div>
                             </form>
+
                             <!-- Tabla de categorías -->
-                            <table class="table table-bordered table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nombre</th>
-                                        <th>Descripción</th>
-                                        <th>Estado</th>
-                                        <th>Acciones</th>
+                            <table class="table" role="table" aria-label="Lista de categorías">
+                                <thead>
+                                    <tr role="row">
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="cat : ${categories}">
+                                    <tr th:each="cat : ${categorias}">
                                         <td th:text="${cat.id}"></td>
                                         <td th:text="${cat.name}"></td>
-                                        <td th:text="${cat.description}"></td>
+                                        <td th:text="${cat.description ?: '-'}"></td>
                                         <td>
-                                            <span th:text="${cat.active} ? 'Activa' : 'Inactiva'"
-                                                th:classappend="${cat.active} ? 'text-success' : 'text-danger'"></span>
+                                            <span th:if="${cat.active}" class="text-success">Activa</span>
+                                            <span th:if="${!cat.active}" class="text-muted">Inactiva</span>
                                         </td>
                                         <td>
                                             <a th:href="@{'/admin/categorias/edit/' + ${cat.id}}"
-                                                class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+                                                class="btn btn-sm btn-outline-primary me-1"
+                                                th:aria-label="'Editar categoría ' + ${cat.name}">
+                                                <i class="bi bi-pencil me-1"></i>Editar</a>
                                             <a th:href="@{'/admin/categorias/delete/' + ${cat.id}}"
-                                                class="btn btn-sm btn-danger"
-                                                onclick="return confirm('¿Eliminar esta categoría?')"><i
-                                                    class="bi bi-trash"></i></a>
+                                                class="btn btn-sm btn-outline-danger me-1"
+                                                th:aria-label="'Eliminar categoría ' + ${cat.name}"
+                                                onclick="return confirm('¿Eliminar esta categoría?')">
+                                                <i class="bi bi-trash me-1"></i>Eliminar</a>
                                             <a th:if="${cat.active}"
                                                 th:href="@{'/admin/categorias/toggle/' + ${cat.id}}"
-                                                class="btn btn-sm btn-secondary ms-1" title="Desactivar"><i
-                                                    class="bi bi-eye-slash"></i></a>
+                                                class="btn btn-sm btn-outline-secondary"
+                                                th:aria-label="'Desactivar categoría ' + ${cat.name}"
+                                                onclick="return confirm('¿Desactivar esta categoría?')">
+                                                <i class="bi bi-eye-slash me-1"></i>Desactivar</a>
                                             <a th:if="${!cat.active}"
                                                 th:href="@{'/admin/categorias/toggle/' + ${cat.id}}"
-                                                class="btn btn-sm btn-success ms-1" title="Activar"><i
-                                                    class="bi bi-eye"></i></a>
+                                                class="btn btn-sm btn-outline-success"
+                                                th:aria-label="'Activar categoría ' + ${cat.name}"
+                                                onclick="return confirm('¿Activar esta categoría?')">
+                                                <i class="bi bi-eye me-1"></i>Activar</a>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${categorias.empty}">
+                                        <td colspan="5" class="text-center text-muted py-4" role="status"
+                                            aria-live="polite">
+                                            No se encontraron categorías
                                         </td>
                                     </tr>
                                 </tbody>
