@@ -155,53 +155,61 @@
                                     </div>
 
                                     <!-- Campos de nueva dirección -->
-                                    <div id="newAddressFields" class="row g-2 mt-2" style="display:none;">
+                                    <div id="newAddressFields" class="row g-2 mt-2" style="display:none;"
+                                        aria-hidden="true">
                                         <div class="col-12">
-                                            <label for="address" class="form-label visually-hidden">Dirección</label>
+                                            <label for="newAddress_address" class="form-label">Dirección *</label>
                                             <input type="text" th:field="*{address}" class="form-control"
                                                 th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''"
-                                                id="address" placeholder="Dirección" maxlength="255">
+                                                id="newAddress_address" placeholder="Ej: Calle Mayor 123, 2º A"
+                                                maxlength="255" aria-describedby="newAddress_address_help">
+                                            <div id="newAddress_address_help" class="form-text">Dirección completa donde
+                                                se realizará el servicio</div>
                                             <div th:if="${#fields.hasErrors('address')}" class="invalid-feedback"
                                                 role="alert">
                                                 <span th:errors="*{address}"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="city" class="form-label visually-hidden">Ciudad</label>
+                                            <label for="newAddress_city" class="form-label">Ciudad *</label>
                                             <input type="text" th:field="*{city}" class="form-control"
                                                 th:classappend="${#fields.hasErrors('city')} ? 'is-invalid' : ''"
-                                                id="city" placeholder="Ciudad" maxlength="100">
+                                                id="newAddress_city" placeholder="Madrid" maxlength="100">
                                             <div th:if="${#fields.hasErrors('city')}" class="invalid-feedback"
                                                 role="alert">
                                                 <span th:errors="*{city}"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="postalCode" class="form-label visually-hidden">Código
-                                                postal</label>
+                                            <label for="newAddress_postalCode" class="form-label">Código postal
+                                                *</label>
                                             <input type="text" th:field="*{postalCode}" class="form-control"
                                                 th:classappend="${#fields.hasErrors('postalCode')} ? 'is-invalid' : ''"
-                                                id="postalCode" placeholder="Código postal" maxlength="10">
+                                                id="newAddress_postalCode" placeholder="28001" maxlength="10"
+                                                pattern="[0-9]{5}" title="Debe ser un código postal de 5 dígitos">
                                             <div th:if="${#fields.hasErrors('postalCode')}" class="invalid-feedback"
                                                 role="alert">
                                                 <span th:errors="*{postalCode}"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="province" class="form-label visually-hidden">Provincia</label>
+                                            <label for="newAddress_province" class="form-label">Provincia *</label>
                                             <input type="text" th:field="*{province}" class="form-control"
                                                 th:classappend="${#fields.hasErrors('province')} ? 'is-invalid' : ''"
-                                                id="province" placeholder="Provincia" maxlength="100">
+                                                id="newAddress_province" placeholder="Madrid" maxlength="100">
                                             <div th:if="${#fields.hasErrors('province')}" class="invalid-feedback"
                                                 role="alert">
                                                 <span th:errors="*{province}"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="country" class="form-label visually-hidden">País</label>
+                                            <label for="newAddress_country" class="form-label">País *</label>
                                             <input type="text" th:field="*{country}" class="form-control"
                                                 th:classappend="${#fields.hasErrors('country')} ? 'is-invalid' : ''"
-                                                id="country" placeholder="País" value="España" maxlength="100">
+                                                id="newAddress_country" placeholder="España" value="España"
+                                                maxlength="100" readonly aria-describedby="newAddress_country_help">
+                                            <div id="newAddress_country_help" class="form-text">Actualmente solo
+                                                disponible en España</div>
                                             <div th:if="${#fields.hasErrors('country')}" class="invalid-feedback"
                                                 role="alert">
                                                 <span th:errors="*{country}"></span>
@@ -255,8 +263,22 @@
             function toggleAddressFields() {
                 if (newAddressRadio.checked) {
                     newAddressFields.style.display = '';
+                    newAddressFields.setAttribute('aria-hidden', 'false');
+                    // Hacer campos requeridos cuando están visibles
+                    const addressInputs = newAddressFields.querySelectorAll('input[type="text"]');
+                    addressInputs.forEach(input => {
+                        if (input.id !== 'newAddress_country') { // El país ya está prellenado
+                            input.setAttribute('required', 'true');
+                        }
+                    });
                 } else {
                     newAddressFields.style.display = 'none';
+                    newAddressFields.setAttribute('aria-hidden', 'true');
+                    // Quitar required cuando están ocultos
+                    const addressInputs = newAddressFields.querySelectorAll('input[type="text"]');
+                    addressInputs.forEach(input => {
+                        input.removeAttribute('required');
+                    });
                 }
             }
 
