@@ -19,10 +19,6 @@ function filterByStatus(itemClassName, status) {
 
 /**
  * FILTRAR ELEMENTOS POR UN ATRIBUTO data-*
- * 
- * Ejemplo:
- *   filterByDataAttribute('oferta-item', 'data-category', 'Limpieza');
- *   filterByDataAttribute('oferta-item', 'data-category', 'all');
  */
 function filterByDataAttribute(itemClassName, dataAttributeName, value) {
     var items = document.querySelectorAll('.' + itemClassName);
