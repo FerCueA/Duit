@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - Duit</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <div th:replace="~{components/headerUser::headerUser}"></div>
+    <main class="flex-grow-1 bg-light">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="mb-4"><i class="bi bi-pencil"></i> Editar Perfil</h1>
+                    <div class="card shadow">
+                        <div class="card-body">
+
+                            <!-- Mensajes de éxito y error -->
+                            <div th:if="${success}" class="alert alert-success alert-dismissible fade show"
+                                role="alert">
+                                <span th:text="${success}"></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            <div th:if="${errors}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <span th:text="${errors}"></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+
+                            <!-- Formulario de edición de perfil -->
+                            <form th:action="@{/profile/edit}" method="post" th:object="${editProfileDTO}" novalidate>
+                                <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger" role="alert">
+                                    <ul class="mb-0">
+                                        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+                                    </ul>
+                                </div>
+
+                                <div class="row g-3">
+                                    <!-- Nombre -->
+                                    <div class="col-md-6">
+                                        <label for="firstName" class="form-label">Nombre *</label>
+                                        <input type="text" class="form-control" id="firstName" th:field="*{firstName}"
+                                            th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''"
+                                            placeholder="Ej: Juan" minlength="2" maxlength="150" required>
+                                        <div class="form-text">Entre 2 y 150 caracteres</div>
+                                        <div th:if="${#fields.hasErrors('firstName')}" class="invalid-feedback"
+                                            role="alert">
+                                            <span th:errors="*{firstName}"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Apellido -->
+                                    <div class="col-md-6">
+                                        <label for="lastName" class="form-label">Apellidos *</label>
+                                        <input type="text" class="form-control" id="lastName" th:field="*{lastName}"
+                                            th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''"
+                                            placeholder="Ej: García López" maxlength="150" required>
+                                        <div class="form-text">Máximo 150 caracteres</div>
+                                        <div th:if="${#fields.hasErrors('lastName')}" class="invalid-feedback"
+                                            role="alert">
+                                            <span th:errors="*{lastName}"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Teléfono -->
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label">Teléfono</label>
+                                        <input type="tel" class="form-control" id="phone" th:field="*{phone}"
+                                            th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''"
+                                            placeholder="+34612345678" pattern="\+34[0-9]{9}">
+                                        <div class="form-text">Formato: +34 seguido de 9 dígitos</div>
+                                        <div th:if="${#fields.hasErrors('phone')}" class="invalid-feedback"
+                                            role="alert">
+                                            <span th:errors="*{phone}"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Ciudad -->
+                                    <div class="col-md-6">
+                                        <label for="city" class="form-label">Ciudad *</label>
+                                        <input type="text" class="form-control" id="city" th:field="*{city}"
+                                            th:classappend="${#fields.hasErrors('city')} ? 'is-invalid' : ''"
+                                            placeholder="Madrid" minlength="2" maxlength="100" required>
+                                        <div class="form-text">Entre 2 y 100 caracteres</div>
+                                        <div th:if="${#fields.hasErrors('city')}" class="invalid-feedback" role="alert">
+                                            <span th:errors="*{city}"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dirección -->
+                                    <div class="col-12">
+                                        <label for="address" class="form-label">Dirección *</label>
+                                        <input type="text" class="form-control" id="address" th:field="*{address}"
+                                            th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''"
+                                            placeholder="Ej: Calle Mayor 123, 2º A" minlength="5" maxlength="200"
+                                            required>
+                                        <div class="form-text">Entre 5 y 200 caracteres</div>
+                                        <div th:if="${#fields.hasErrors('address')}" class="invalid-feedback"
+                                            role="alert">
+                                            <span th:errors="*{address}"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Código Postal -->
+                                    <div class="col-md-4">
+                                        <label for="postalCode" class="form-label">Código Postal</label>
+                                        <input type="text" class="form-control" id="postalCode" th:field="*{postalCode}"
+                                            th:classappend="${#fields.hasErrors('postalCode')} ? 'is-invalid' : ''"
+                                            placeholder="28001" pattern="[0-9]{5}" maxlength="5">
+                                        <div class="form-text">5 dígitos</div>
+                                        <div th:if="${#fields.hasErrors('postalCode')}" class="invalid-feedback"
+                                            role="alert">
+                                            <span th:errors="*{postalCode}"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Provincia -->
+                                    <div class="col-md-4">
+                                        <label for="province" class="form-label">Provincia *</label>
+                                        <input type="text" class="form-control" id="province" th:field="*{province}"
+                                            th:classappend="${#fields.hasErrors('province')} ? 'is-invalid' : ''"
+                                            placeholder="Madrid" minlength="2" maxlength="100" required>
+                                        <div class="form-text">Entre 2 y 100 caracteres</div>
+                                        <div th:if="${#fields.hasErrors('province')}" class="invalid-feedback"
+                                            role="alert">
+                                            <span th:errors="*{province}"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- País -->
+                                    <div class="col-md-4">
+                                        <label for="country" class="form-label">País *</label>
+                                        <input type="text" class="form-control" id="country" th:field="*{country}"
+                                            th:classappend="${#fields.hasErrors('country')} ? 'is-invalid' : ''"
+                                            value="España" readonly>
+                                        <div class="form-text">Actualmente solo disponible en España</div>
+                                        <div th:if="${#fields.hasErrors('country')}" class="invalid-feedback"
+                                            role="alert">
+                                            <span th:errors="*{country}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Botones -->
+                                <div class="d-flex justify-content-end mt-4 gap-2">
+                                    <a th:href="@{/home}" class="btn btn-outline-secondary">
+                                        Descartar cambios
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        Guardar cambios
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+    <div th:replace="~{components/footerPublic::footerPublic}"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

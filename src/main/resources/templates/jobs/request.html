@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Solicitud - Duit</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <!-- Header -->
+    <div th:replace="~{components/headerUser::headerUser}"></div>
+
+    <!-- Contenido -->
+    <main class="flex-grow-1 bg-light">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+
+                    <!-- Consejos para crear solicitud -->
+                    <div th:replace="~{components/requestCreationTips::requestCreationTips}"></div>
+
+                    <!-- Mensajes de éxito -->
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span th:text="${success}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <!-- Mensajes de error generales -->
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <!-- Formulario -->
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h1 class="card-title mb-0">
+                                <i class="bi bi-plus-circle"></i>
+                                <span th:if="${modoEdicion}">Editar Solicitud</span>
+                                <span th:unless="${modoEdicion}">Crear Nueva Solicitud</span>
+                            </h1>
+                        </div>
+                        <div class="card-body">
+
+                            <form th:object="${form}" th:action="@{/requests/request}" method="POST" novalidate>
+                                <!-- Campo oculto para edición -->
+                                <input type="hidden" th:field="*{editId}">
+
+                                <!-- Categoría -->
+                                <div class="mb-3">
+                                    <label for="categoryId" class="form-label fw-bold">Categoría *</label>
+                                    <select th:field="*{categoryId}" id="categoryId" class="form-select"
+                                        th:classappend="${#fields.hasErrors('categoryId')} ? 'is-invalid' : ''" required
+                                        aria-describedby="categoryHelp">
+                                        <option value="">Selecciona una categoría</option>
+                                        <option th:each="cat : ${categorias}" th:value="${cat.id}"
+                                            th:text="${cat.name}"></option>
+                                    </select>
+                                    <div id="categoryHelp" class="form-text">Elige la categoría que mejor describa tu
+                                        solicitud</div>
+                                    <div th:if="${#fields.hasErrors('categoryId')}" class="invalid-feedback"
+                                        role="alert">
+                                        <span th:errors="*{categoryId}"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Título -->
+                                <div class="mb-3">
+                                    <label for="title" class="form-label fw-bold">Título de tu solicitud *</label>
+                                    <input type="text" th:field="*{title}" class="form-control"
+                                        th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''" id="title"
+                                        placeholder="Ej: Reparación de tubería en cocina" maxlength="150" minlength="5"
+                                        required aria-describedby="titleHelp">
+                                    <div id="titleHelp" class="form-text">Entre 5 y 150 caracteres</div>
+                                    <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback" role="alert">
+                                        <span th:errors="*{title}"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Descripción -->
+                                <div class="mb-3">
+                                    <label for="description" class="form-label fw-bold">Descripción detallada *</label>
+                                    <textarea th:field="*{description}" class="form-control"
+                                        th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
+                                        id="description" rows="5" maxlength="2000" minlength="20"
+                                        placeholder="Describe qué necesitas..." required
+                                        aria-describedby="descriptionHelp"></textarea>
+                                    <div id="descriptionHelp" class="form-text">Entre 20 y 2000 caracteres. Sé
+                                        específico</div>
+                                    <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback"
+                                        role="alert">
+                                        <span th:errors="*{description}"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Fecha límite -->
+                                <div class="mb-3">
+                                    <label for="deadline" class="form-label fw-bold">¿Cuándo lo necesitas?
+                                        (opcional)</label>
+                                    <input type="date" th:field="*{deadline}" class="form-control"
+                                        th:classappend="${#fields.hasErrors('deadline')} ? 'is-invalid' : ''"
+                                        id="deadline" aria-describedby="deadlineHelp"
+                                        th:min="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
+                                    <div id="deadlineHelp" class="form-text">Si tienes fecha límite específica </div>
+                                    <div th:if="${#fields.hasErrors('deadline')}" class="invalid-feedback" role="alert">
+                                        <span th:errors="*{deadline}"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Dirección del servicio -->
+                                <fieldset class="mb-4">
+                                    <legend class="form-label fw-bold">¿Dónde se realizará el servicio? *</legend>
+
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" th:field="*{addressOption}"
+                                            id="habitualAddress" value="habitual" aria-describedby="addressHelp">
+                                        <label class="form-check-label" for="habitualAddress">
+                                            <strong>Mi dirección habitual</strong>
+                                            <div th:if="${habitualAddress}" class="text-muted small">
+                                                <span th:text="${habitualAddress.address}"></span>,
+                                                <span th:text="${habitualAddress.city}"></span>
+                                            </div>
+                                            <div th:unless="${habitualAddress}" class="text-danger small">
+                                                No tienes dirección configurada
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" th:field="*{addressOption}"
+                                            id="newAddress" value="new">
+                                        <label class="form-check-label" for="newAddress">
+                                            <strong>Otra dirección</strong>
+                                        </label>
+                                    </div>
+
+                                    <div id="addressHelp" class="form-text">Selecciona dónde necesitas el servicio</div>
+                                    <div th:if="${#fields.hasErrors('addressOption')}" class="invalid-feedback d-block"
+                                        role="alert">
+                                        <span th:errors="*{addressOption}"></span>
+                                    </div>
+
+                                    <!-- Campos de nueva dirección -->
+                                    <div id="newAddressFields" class="row g-2 mt-2" style="display:none;"
+                                        aria-hidden="true">
+                                        <div class="col-12">
+                                            <label for="newAddress_address" class="form-label">Dirección *</label>
+                                            <input type="text" th:field="*{address}" class="form-control"
+                                                th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''"
+                                                id="newAddress_address" placeholder="Ej: Calle Mayor 123, 2º A"
+                                                maxlength="255" aria-describedby="newAddress_address_help">
+                                            <div id="newAddress_address_help" class="form-text">Dirección completa donde
+                                                se realizará el servicio</div>
+                                            <div th:if="${#fields.hasErrors('address')}" class="invalid-feedback"
+                                                role="alert">
+                                                <span th:errors="*{address}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="newAddress_city" class="form-label">Ciudad *</label>
+                                            <input type="text" th:field="*{city}" class="form-control"
+                                                th:classappend="${#fields.hasErrors('city')} ? 'is-invalid' : ''"
+                                                id="newAddress_city" placeholder="Madrid" maxlength="100">
+                                            <div th:if="${#fields.hasErrors('city')}" class="invalid-feedback"
+                                                role="alert">
+                                                <span th:errors="*{city}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="newAddress_postalCode" class="form-label">Código postal
+                                                *</label>
+                                            <input type="text" th:field="*{postalCode}" class="form-control"
+                                                th:classappend="${#fields.hasErrors('postalCode')} ? 'is-invalid' : ''"
+                                                id="newAddress_postalCode" placeholder="28001" maxlength="10"
+                                                pattern="[0-9]{5}" title="Debe ser un código postal de 5 dígitos">
+                                            <div th:if="${#fields.hasErrors('postalCode')}" class="invalid-feedback"
+                                                role="alert">
+                                                <span th:errors="*{postalCode}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="newAddress_province" class="form-label">Provincia *</label>
+                                            <input type="text" th:field="*{province}" class="form-control"
+                                                th:classappend="${#fields.hasErrors('province')} ? 'is-invalid' : ''"
+                                                id="newAddress_province" placeholder="Madrid" maxlength="100">
+                                            <div th:if="${#fields.hasErrors('province')}" class="invalid-feedback"
+                                                role="alert">
+                                                <span th:errors="*{province}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="newAddress_country" class="form-label">País *</label>
+                                            <input type="text" th:field="*{country}" class="form-control"
+                                                th:classappend="${#fields.hasErrors('country')} ? 'is-invalid' : ''"
+                                                id="newAddress_country" placeholder="España" value="España"
+                                                maxlength="100" readonly aria-describedby="newAddress_country_help">
+                                            <div id="newAddress_country_help" class="form-text">Actualmente solo
+                                                disponible en España</div>
+                                            <div th:if="${#fields.hasErrors('country')}" class="invalid-feedback"
+                                                role="alert">
+                                                <span th:errors="*{country}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <!-- Botones -->
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                    <a th:href="@{/requests/my-requests}" class="btn btn-outline-secondary">
+                                        <i class="bi bi-arrow-left"></i> Volver
+                                    </a>
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <span th:if="${modoEdicion}">
+                                            <i class="bi bi-check-lg"></i> Actualizar
+                                        </span>
+                                        <span th:unless="${modoEdicion}">
+                                            <i class="bi bi-plus-lg"></i> Crear Solicitud
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{components/footerPublic::footerPublic}"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const habitualRadio = document.getElementById('habitualAddress');
+            const newAddressRadio = document.getElementById('newAddress');
+            const newAddressFields = document.getElementById('newAddressFields');
+            const titleInput = document.getElementById('title');
+            const descriptionInput = document.getElementById('description');
+
+
+            // Esta función se ejecuta cuando el usuario cambia entre dirección habitual y nueva
+            function toggleAddressFields() {
+                // Comprobar si el usuario eligió "nueva dirección"
+                const eligioNuevaDireccion = newAddressRadio.checked;
+
+                if (eligioNuevaDireccion) {
+                    // MOSTRAR los campos de nueva dirección
+                    newAddressFields.style.display = '';
+                    newAddressFields.setAttribute('aria-hidden', 'false');
+
+                    // Hacer que los campos sean obligatorios
+                    const camposDireccion = newAddressFields.querySelectorAll('input[type="text"]');
+                    for (let i = 0; i < camposDireccion.length; i++) {
+                        const campo = camposDireccion[i];
+                        // El país no se marca como required porque ya está prellenado
+                        if (campo.id !== 'newAddress_country') {
+                            campo.setAttribute('required', 'true');
+                        }
+                    }
+                } else {
+                    // OCULTAR los campos de nueva dirección
+                    newAddressFields.style.display = 'none';
+                    newAddressFields.setAttribute('aria-hidden', 'true');
+
+                    // Quitar la obligatoriedad de los campos ocultos
+                    const camposDireccion = newAddressFields.querySelectorAll('input[type="text"]');
+                    for (let i = 0; i < camposDireccion.length; i++) {
+                        const campo = camposDireccion[i];
+                        campo.removeAttribute('required');
+                    }
+                }
+            }
+
+            // Validación título
+            if (titleInput) {
+                titleInput.addEventListener('input', function () {
+                    const length = this.value.length;
+                    if (length > 0 && length < 5) {
+                        this.setCustomValidity('El título debe tener al menos 5 caracteres');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                });
+            }
+
+            // Validación descripción
+            if (descriptionInput) {
+                descriptionInput.addEventListener('input', function () {
+                    const length = this.value.length;
+                    if (length > 0 && length < 20) {
+                        this.setCustomValidity('La descripción debe tener al menos 20 caracteres');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                });
+            }
+
+            // Event listeners para dirección
+            if (habitualRadio && newAddressRadio) {
+                habitualRadio.addEventListener('change', toggleAddressFields);
+                newAddressRadio.addEventListener('change', toggleAddressFields);
+                toggleAddressFields(); // Ejecutar al cargar
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+<div th:fragment="cardPublic(icon, color, titulo, texto)" xmlns:th="http://www.thymeleaf.org">
+    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body p-4 text-center d-flex flex-column justify-content-center align-items-center">
+            <div th:class="'bg-' + ${color} + ' bg-gradient rounded-circle p-3 mx-auto mb-3'"
+                style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                <i th:class="'bi ' + ${icon} + ' text-white fs-2'"></i>
+            </div>
+            <h4 th:class="'fw-bold text-' + ${color} + ' mb-2'" th:text="${titulo}">Título</h4>
+            <p class="text-muted small mb-0" th:text="${texto}">Texto</p>
+        </div>
+    </div>
+</div>
