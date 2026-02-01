@@ -6,7 +6,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
-public class EditarPerfilDTO {
+public class EditProfileDTO {
 
     @NotBlank(message = "El nombre es obligatorio")
     @Size(min = 2, max = 150, message = "El nombre debe tener entre 2 y 150 caracteres")
@@ -37,10 +37,10 @@ public class EditarPerfilDTO {
     @NotBlank(message = "El país es obligatorio")
     public String country;
 
-    public EditarPerfilDTO() {
+    public EditProfileDTO() {
     }
 
-    public EditarPerfilDTO(AppUser user) {
+    public EditProfileDTO(AppUser user) {
         if (user != null) {
             this.firstName = user.getFirstName();
             this.lastName = user.getLastName();
