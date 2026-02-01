@@ -31,7 +31,7 @@ public class CategoryDTO {
         }
     }
 
-    // Método para convertir a entidad
+    // Método para convertir a entidad y enviar al Constructor
     public Category toEntity() {
         Category category = new Category();
         category.setId(this.id);
