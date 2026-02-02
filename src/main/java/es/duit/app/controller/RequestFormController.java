@@ -34,7 +34,7 @@ public class RequestFormController {
     // INICIALIZA EL FORMULARIO CON VALORES POR DEFECTO
     // ============================================================================
     @ModelAttribute("form")
-    public RequestDTO inicializarFormulario() {
+    public RequestDTO initializeForm() {
         RequestDTO formulario = new RequestDTO();
         return formulario;
     }
@@ -43,7 +43,7 @@ public class RequestFormController {
     // MUESTRA EL FORMULARIO DE SOLICITUDES (CREAR O EDITAR)
     // ============================================================================
     @GetMapping("/request")
-    public String mostrarFormularioSolicitud(@ModelAttribute("form") RequestDTO form,
+    public String showRequestForm(@ModelAttribute("form") RequestDTO form,
             Authentication auth,
             Model model,
             @RequestParam(required = false) Long edit,
@@ -53,14 +53,14 @@ public class RequestFormController {
             AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
 
             // Configurar datos básicos del formulario
-            configurarDatosBasicosFormulario(model, usuarioLogueado, form);
+            basicFormData(model, usuarioLogueado, form);
 
             // Verificar si estamos editando una solicitud existente
             boolean esEdicion = edit != null;
             if (esEdicion) {
-                configurarFormularioParaEdicion(edit, usuarioLogueado, form, model);
+                formForEdit(edit, usuarioLogueado, form, model);
             } else {
-                configurarFormularioParaNuevaSolicitud(form);
+                formForNewRequest(form);
             }
 
             // Enviar formulario a la vista
@@ -78,7 +78,7 @@ public class RequestFormController {
     // PROCESA EL ENVÍO DEL FORMULARIO DE SOLICITUD
     // ============================================================================
     @PostMapping("/request")
-    public String procesarFormularioSolicitud(@Valid @ModelAttribute("form") RequestDTO form,
+    public String submitRequestForm(@Valid @ModelAttribute("form") RequestDTO form,
             BindingResult bindingResult,
             Authentication auth,
             Model model,
@@ -90,7 +90,8 @@ public class RequestFormController {
         try {
             // Validar que no hay errores en el formulario
             if (bindingResult.hasErrors()) {
-                // Manejar errores de validación - volver al formulario con errores y datos necesarios
+                // Manejar errores de validación - volver al formulario con errores y datos
+                // necesarios
                 model.addAttribute("habitualAddress", usuarioLogueado.getAddress());
                 model.addAttribute("categorias", serviceRequestService.getActiveCategories());
 
@@ -131,7 +132,7 @@ public class RequestFormController {
     // ============================================================================
     // CONFIGURA LOS DATOS BÁSICOS DEL FORMULARIO
     // ============================================================================
-    private void configurarDatosBasicosFormulario(Model model, AppUser usuario, RequestDTO form) {
+    private void basicFormData(Model model, AppUser usuario, RequestDTO form) {
         // Enviar datos comunes necesarios para el formulario
         model.addAttribute("habitualAddress", usuario.getAddress());
         model.addAttribute("categorias", serviceRequestService.getActiveCategories());
@@ -144,18 +145,18 @@ public class RequestFormController {
     // ============================================================================
     // CONFIGURA EL FORMULARIO PARA EDITAR UNA SOLICITUD EXISTENTE
     // ============================================================================
-    private void configurarFormularioParaEdicion(Long editId, AppUser usuario, RequestDTO form, Model model) {
+    private void formForEdit(Long editId, AppUser usuario, RequestDTO form, Model model) {
         // Buscar la solicitud que queremos editar
         ServiceRequest solicitudExistente = serviceRequestService.getUserRequest(editId, usuario);
 
         // Copiar datos básicos al formulario
-        copiarDatosBasicosSolicitud(solicitudExistente, form);
+        copyBasicRequestData(solicitudExistente, form);
 
         // Copiar fecha límite si existe
-        copiarFechaLimite(solicitudExistente, form);
+        copyDeadline(solicitudExistente, form);
 
         // Copiar información de dirección
-        copiarDireccionServicio(solicitudExistente, form);
+        copyServiceAddress(solicitudExistente, form);
 
         // Indicar que estamos en modo edición
         model.addAttribute("modoEdicion", true);
@@ -164,7 +165,7 @@ public class RequestFormController {
     // ============================================================================
     // CONFIGURA EL FORMULARIO PARA UNA NUEVA SOLICITUD
     // ============================================================================
-    private void configurarFormularioParaNuevaSolicitud(RequestDTO form) {
+    private void formForNewRequest(RequestDTO form) {
         // Establecer valores por defecto para nueva solicitud
         form.setAddressOption("habitual");
         form.setCountry("España");
@@ -173,7 +174,7 @@ public class RequestFormController {
     // ============================================================================
     // COPIA DATOS BÁSICOS DE LA SOLICITUD AL FORMULARIO
     // ============================================================================
-    private void copiarDatosBasicosSolicitud(ServiceRequest solicitud, RequestDTO form) {
+    private void copyBasicRequestData(ServiceRequest solicitud, RequestDTO form) {
         form.setEditId(solicitud.getId());
         form.setTitle(solicitud.getTitle());
         form.setDescription(solicitud.getDescription());
@@ -183,7 +184,7 @@ public class RequestFormController {
     // ============================================================================
     // COPIA LA FECHA LÍMITE DE LA SOLICITUD AL FORMULARIO
     // ============================================================================
-    private void copiarFechaLimite(ServiceRequest solicitud, RequestDTO form) {
+    private void copyDeadline(ServiceRequest solicitud, RequestDTO form) {
         // Verificar si la solicitud tiene fecha límite
         boolean tieneFechaLimite = solicitud.getDeadline() != null;
         if (tieneFechaLimite) {
@@ -194,7 +195,7 @@ public class RequestFormController {
     // ============================================================================
     // COPIA LA DIRECCIÓN DE SERVICIO DE LA SOLICITUD AL FORMULARIO
     // ============================================================================
-    private void copiarDireccionServicio(ServiceRequest solicitud, RequestDTO form) {
+    private void copyServiceAddress(ServiceRequest solicitud, RequestDTO form) {
         // Verificar si tiene dirección específica o usa la habitual
         boolean tienesDireccionEspecifica = solicitud.hasSpecificServiceAddress();
 

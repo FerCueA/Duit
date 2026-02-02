@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 @Transactional
 public class JobApplicationService {
 
-
     private final JobApplicationRepository jobApplicationRepository;
     private final ServiceRequestRepository serviceRequestRepository;
 
@@ -51,19 +50,6 @@ public class JobApplicationService {
     }
 
     // ============================================================================
-    // VALIDA QUE EL USUARIO TIENE UN PERFIL PROFESIONAL CONFIGURADO
-    // ============================================================================
-    private void validateUserHasProfessionalProfile(AppUser usuario) {
-        // Obtener el perfil profesional del usuario
-        Object perfilProfesional = usuario.getProfessionalProfile();
-
-        // Verificar que existe
-        if (perfilProfesional == null) {
-            throw new IllegalArgumentException("No tienes un perfil profesional configurado");
-        }
-    }
-
-    // ============================================================================
     // OBTIENE UNA OFERTA DE SERVICIO POR ID
     // ============================================================================
     private ServiceRequest getOfferById(Long ofertaId) {
@@ -86,6 +72,19 @@ public class JobApplicationService {
 
         if (!estaPublicada) {
             throw new IllegalArgumentException("La oferta no está disponible");
+        }
+    }
+
+    // ============================================================================
+    // VALIDA QUE EL USUARIO TIENE UN PERFIL PROFESIONAL CONFIGURADO
+    // ============================================================================
+    private void validateUserHasProfessionalProfile(AppUser usuario) {
+        // Obtener el perfil profesional del usuario
+        Object perfilProfesional = usuario.getProfessionalProfile();
+
+        // Verificar que existe
+        if (perfilProfesional == null) {
+            throw new IllegalArgumentException("No tienes un perfil profesional configurado");
         }
     }
 

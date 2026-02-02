@@ -47,7 +47,6 @@ public class RatingService {
         return ratingGuardada;
     }
 
-     
     // ============================================================================
     // OBTIENE UN TRABAJO POR ID
     // ============================================================================
@@ -58,7 +57,6 @@ public class RatingService {
 
         return trabajo;
     }
-
 
     // ============================================================================
     // VALIDA QUE LA PUNTUACIÓN ESTÉ ENTRE 1 Y 5
@@ -75,7 +73,6 @@ public class RatingService {
         }
     }
 
- 
     // ============================================================================
     // VALIDA QUE EL USUARIO TIENE PERMISO PARA VALORAR
     // ============================================================================

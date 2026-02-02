@@ -8,19 +8,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-    // ============================================================================
-    // SERVICIO PARA REGISTRAR LOS ACCESOS DE USUARIOS (LOGINS EXITOSOS Y FALLIDOS)
-    // ============================================================================
-    @Service
-    @Transactional
-    public class AccessLogService {
+// ============================================================================
+// SERVICIO PARA REGISTRAR LOS ACCESOS DE USUARIOS (LOGINS EXITOSOS Y FALLIDOS)
+// ============================================================================
+@Service
+@Transactional
+public class AccessLogService {
 
-        // Inyectar repositorios para trabajar con la BD
-        private final AccessLogRepository accessLogRepository;
-        private final AppUserRepository appUserRepository;
+    private final AccessLogRepository accessLogRepository;
+    private final AppUserRepository appUserRepository;
 
-        // Constructor con inyección de dependencias
-        public AccessLogService(AccessLogRepository accessLogRepository, AppUserRepository appUserRepository) {
+    public AccessLogService(AccessLogRepository accessLogRepository, AppUserRepository appUserRepository) {
         this.accessLogRepository = accessLogRepository;
         this.appUserRepository = appUserRepository;
     }

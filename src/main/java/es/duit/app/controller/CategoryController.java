@@ -26,7 +26,7 @@ public class CategoryController {
     // INICIALIZA EL DTO DE CATEGORÍA PARA EL FORMULARIO
     // ============================================================================
     @ModelAttribute("categoryDTO")
-    public CategoryDTO inicializarCategoryDTO() {
+    public CategoryDTO initializeCategoryDTO() {
         return new CategoryDTO();
     }
 
@@ -34,7 +34,7 @@ public class CategoryController {
     // MUESTRA LA PÁGINA DE GESTIÓN DE CATEGORÍAS
     // ============================================================================
     @GetMapping("/categories")
-    public String mostrarPaginaCategorias(Model model) {
+    public String categoriesPage(Model model) {
         // Obtener todas las categorías ordenadas y enviarlas a la vista
         model.addAttribute("categories", categoryService.findAllOrdered());
         return "admin/categories";
@@ -44,7 +44,7 @@ public class CategoryController {
     // PROCESA EL GUARDADO DE CATEGORÍAS (CREAR O EDITAR)
     // ============================================================================
     @PostMapping("/categories")
-    public String procesarGuardadoCategoria(@Valid @ModelAttribute CategoryDTO categoryDTO,
+    public String categorySave(@Valid @ModelAttribute CategoryDTO categoryDTO,
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes) {
@@ -78,7 +78,7 @@ public class CategoryController {
     // PREPARA UNA CATEGORÍA PARA EDICIÓN
     // ============================================================================
     @GetMapping("/edit/{id}")
-    public String prepararEdicionCategoria(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String categoryForEdit(@PathVariable Long id, RedirectAttributes redirectAttributes) {
 
         try {
             // Buscar la categoría por ID
@@ -107,7 +107,7 @@ public class CategoryController {
     // ELIMINA UNA CATEGORÍA ESPECÍFICA
     // ============================================================================
     @GetMapping("/delete/{id}")
-    public String eliminarCategoria(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String deleteCategory(@PathVariable Long id, RedirectAttributes redirectAttributes) {
 
         try {
             // Intentar eliminar la categoría
@@ -130,7 +130,7 @@ public class CategoryController {
     // CAMBIA EL ESTADO ACTIVO/INACTIVO DE UNA CATEGORÍA
     // ============================================================================
     @GetMapping("/toggle/{id}")
-    public String cambiarEstadoCategoria(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String toggleCategoryStatus(@PathVariable Long id, RedirectAttributes redirectAttributes) {
 
         try {
             // Cambiar el estado de la categoría
