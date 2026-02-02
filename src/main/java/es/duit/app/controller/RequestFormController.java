@@ -111,7 +111,8 @@ public class RequestFormController {
 
         } catch (IllegalArgumentException error) {
             // Manejar errores de validación de negocio
-            bindingResult.reject("error.global", error.getMessage());
+            String errorMessage = error.getMessage();
+            bindingResult.reject("error.global", errorMessage != null ? errorMessage : "Error desconocido");
 
             // Volver al formulario con datos necesarios
             model.addAttribute("habitualAddress", usuarioLogueado.getAddress());

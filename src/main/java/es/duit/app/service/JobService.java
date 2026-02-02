@@ -157,6 +157,9 @@ public class JobService {
     // OBTIENE UNA POSTULACIÓN POR ID O LANZA EXCEPCIÓN SI NO EXISTE
     // ============================================================================
     private JobApplication getApplicationById(Long applicationId) {
+        if (applicationId == null) {
+            throw new IllegalArgumentException("ID de aplicación requerido");
+        }
         return jobApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("Postulación no encontrada"));
     }
@@ -165,6 +168,9 @@ public class JobService {
     // OBTIENE UN TRABAJO POR ID O LANZA EXCEPCIÓN SI NO EXISTE
     // ============================================================================
     private ServiceJob getJobById(Long jobId) {
+        if (jobId == null) {
+            throw new IllegalArgumentException("ID de trabajo requerido");
+        }
         return serviceJobRepository.findById(jobId)
                 .orElseThrow(() -> new IllegalArgumentException("Trabajo no encontrado"));
     }

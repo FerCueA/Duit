@@ -174,21 +174,13 @@ public class RequestService {
             throw new IllegalArgumentException("No tienes permisos para editar esta solicitud");
         }
 
-        // Verificar que el estado permita edición
+        // Verificar que el estado permita edición (solo DRAFT y CANCELLED)
         ServiceRequest.Status estado = solicitud.getStatus();
         boolean esBorrador = estado == ServiceRequest.Status.DRAFT;
-        boolean estaPublicada = estado == ServiceRequest.Status.PUBLISHED;
+        boolean estaCancelada = estado == ServiceRequest.Status.CANCELLED;
 
-        if (!esBorrador && !estaPublicada) {
-            throw new IllegalArgumentException("Esta solicitud no se puede editar en su estado actual");
-        }
-
-        // Si está publicada, verificar que no tenga postulaciones
-        if (estaPublicada) {
-            int numeroPostulaciones = solicitud.getApplicationCount();
-            if (numeroPostulaciones > 0) {
-                throw new IllegalArgumentException("No se puede editar una solicitud que ya tiene postulaciones");
-            }
+        if (!esBorrador && !estaCancelada) {
+            throw new IllegalArgumentException("Solo se pueden editar solicitudes en borrador o canceladas. Estado actual: " + estado);
         }
 
         return solicitud;
@@ -286,7 +278,9 @@ public class RequestService {
         ServiceRequest solicitud = getUserRequest(solicitudId, usuario);
 
         // Eliminar de la base de datos
-        serviceRequestRepository.delete(solicitud);
+        if (solicitud != null) {
+            serviceRequestRepository.delete(solicitud);
+        }
     }
 
     // ============================================================================
@@ -303,12 +297,17 @@ public class RequestService {
     // OBTIENE UNA SOLICITUD DEL USUARIO CON VALIDACIONES
     // ============================================================================
     public ServiceRequest getUserRequest(Long solicitudId, AppUser usuario) {
-        // Buscar la solicitud en la base de datos
-        ServiceRequest solicitud = null;
-        if (serviceRequestRepository.findById(solicitudId).isEmpty()) {
-            throw new IllegalArgumentException("Solicitud no encontrada");
+        // Validar parámetros
+        if (solicitudId == null) {
+            throw new IllegalArgumentException("ID de solicitud requerido");
         }
-        solicitud = serviceRequestRepository.findById(solicitudId).get();
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuario requerido");
+        }
+        
+        // Buscar la solicitud en la base de datos
+        ServiceRequest solicitud = serviceRequestRepository.findById(solicitudId)
+                .orElseThrow(() -> new IllegalArgumentException("Solicitud no encontrada"));
 
         // Verificar que el usuario sea el dueño
         Long clienteId = solicitud.getClient().getId();

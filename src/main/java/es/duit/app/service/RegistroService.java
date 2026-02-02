@@ -33,17 +33,17 @@ public class RegistroService {
     // ============================================================================
     public AppUser registerUser(RegistroDTO registro) {
         // Validar que el email no esté registrado en el sistema
-        if (appUserRepository.findByUsername(registro.email()).isPresent()) {
+        if (appUserRepository.findByUsername(registro.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Este correo electrónico ya está registrado");
         }
 
         // Validar que el DNI no esté registrado en el sistema
-        if (appUserRepository.findByDni(registro.dni()).isPresent()) {
+        if (appUserRepository.findByDni(registro.getDni()).isPresent()) {
             throw new IllegalArgumentException("Este DNI ya está registrado");
         }
 
         // Obtener el rol según el tipo de usuario (USER o PROFESSIONAL)
-        UserRole.RoleName nombreRol = "USER".equals(registro.userType())
+        UserRole.RoleName nombreRol = "USER".equals(registro.getUserType())
                 ? UserRole.RoleName.USER
                 : UserRole.RoleName.PROFESSIONAL;
 
@@ -53,14 +53,14 @@ public class RegistroService {
 
         // Crear nueva instancia de usuario y asignar datos del formulario
         AppUser usuarioNuevo = new AppUser();
-        usuarioNuevo.setFirstName(registro.firstName().trim());
-        usuarioNuevo.setLastName(registro.lastName().trim());
-        usuarioNuevo.setDni(registro.dni().trim().toUpperCase());
-        usuarioNuevo.setUsername(registro.email().trim());
-        
+        usuarioNuevo.setFirstName(registro.getFirstName().trim());
+        usuarioNuevo.setLastName(registro.getLastName().trim());
+        usuarioNuevo.setDni(registro.getDni().trim().toUpperCase());
+        usuarioNuevo.setUsername(registro.getEmail().trim());
+
         // Encriptar la contraseña antes de guardar
-        usuarioNuevo.setPassword(passwordEncoder.encode(registro.password()));
-        usuarioNuevo.setPhone(registro.phone().trim());
+        usuarioNuevo.setPassword(passwordEncoder.encode(registro.getPassword()));
+        usuarioNuevo.setPhone(registro.getPhone().trim());
         usuarioNuevo.setRole(rol);
         usuarioNuevo.setActive(true);
 
@@ -68,4 +68,3 @@ public class RegistroService {
         return appUserRepository.save(usuarioNuevo);
     }
 }
-
