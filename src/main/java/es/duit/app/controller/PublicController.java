@@ -2,7 +2,7 @@
 package es.duit.app.controller;
 
 import es.duit.app.dto.RegistroDTO;
-import es.duit.app.entity.AppUser;
+
 import es.duit.app.service.RegistroService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
@@ -29,7 +29,7 @@ public class PublicController {
     // PÁGINA PRINCIPAL DE LA APLICACIÓN
     // ============================================================================
     @GetMapping("/")
-    public String mostrarPaginaPrincipal() {
+    public String showMainPage() {
         return "public/index";
     }
 
@@ -37,7 +37,7 @@ public class PublicController {
     // PÁGINA DE ÍNDICE ALTERNATIVA
     // ============================================================================
     @GetMapping("/index")
-    public String mostrarPaginaIndex() {
+    public String showIndexPage() {
         return "public/index";
     }
 
@@ -45,19 +45,19 @@ public class PublicController {
     // PÁGINA DE INICIO DE SESIÓN CON MANEJO DE MENSAJES
     // ============================================================================
     @GetMapping("/login")
-    public String mostrarPaginaLogin(@RequestParam(value = "error", required = false) String error,
+    public String showLoginPage(@RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
             Authentication auth,
             Model model) {
 
         // Verificar si el usuario ya está autenticado
-        boolean usuarioYaLogueado = verificarUsuarioYaAutenticado(auth);
+        boolean usuarioYaLogueado = checkUserAlreadyAuthenticated(auth);
         if (usuarioYaLogueado) {
             return "redirect:/home";
         }
 
         // Procesar mensajes de error y logout
-        procesarMensajesLogin(error, logout, model);
+        processLoginMessages(error, logout, model);
 
         return "public/login";
     }
@@ -65,34 +65,34 @@ public class PublicController {
     // ============================================================================
     // PÁGINA DE TÉRMINOS Y CONDICIONES
     // ============================================================================
-    @GetMapping({ "/terms", "/terminos" })
-    public String mostrarPaginaTerminos() {
+    @GetMapping({ "/terms" })
+    public String showTermsPage() {
         return "public/trems";
     }
 
     // ============================================================================
     // PÁGINA DE POLÍTICA DE PRIVACIDAD
     // ============================================================================
-    @GetMapping({ "/privacy", "/privacidad" })
-    public String mostrarPaginaPrivacidad() {
+    @GetMapping({ "/privacy" })
+    public String showPrivacyPage() {
         return "public/privacy";
     }
 
     // ============================================================================
     // PÁGINA DE AYUDA Y SOPORTE
     // ============================================================================
-    @GetMapping({ "/help", "/ayuda" })
-    public String mostrarPaginaAyuda() {
+    @GetMapping({ "/help" })
+    public String showHelpPage() {
         return "public/help";
     }
 
     // ============================================================================
     // FORMULARIO DE REGISTRO DE NUEVOS USUARIOS
     // ============================================================================
-    @GetMapping({ "/signup", "/registro" })
-    public String mostrarFormularioRegistro(Model model) {
+    @GetMapping({ "/signup" })
+    public String showRegistrationForm(Model model) {
         // Crear formulario vacío para el registro
-        RegistroDTO formularioVacio = crearFormularioRegistroVacio();
+        RegistroDTO formularioVacio = createEmptyRegistrationForm();
         model.addAttribute("registroDTO", formularioVacio);
         return "public/signup";
     }
@@ -101,7 +101,7 @@ public class PublicController {
     // PROCESA EL REGISTRO DE NUEVOS USUARIOS
     // ============================================================================
     @PostMapping("/register")
-    public String procesarRegistroUsuario(@Valid RegistroDTO registro,
+    public String processUserRegistration(@Valid RegistroDTO registro,
             BindingResult bindingResult,
             Model model) {
 
@@ -114,7 +114,7 @@ public class PublicController {
             }
 
             // Procesar registro del usuario usando el servicio
-            AppUser usuarioCreado = registroService.registerUser(registro);
+            registroService.registerUser(registro);
 
             // Preparar respuesta exitosa
             String mensajeExito = "Registro exitoso. Ya puedes iniciar sesión con tu email.";
@@ -126,12 +126,12 @@ public class PublicController {
             model.addAttribute("error", error.getMessage());
 
             // Preservar datos del formulario (excepto contraseña por seguridad)
-            model.addAttribute("firstName", registro.firstName());
-            model.addAttribute("lastName", registro.lastName());
-            model.addAttribute("dni", registro.dni());
-            model.addAttribute("email", registro.email());
-            model.addAttribute("phone", registro.phone());
-            model.addAttribute("userType", registro.userType());
+            model.addAttribute("firstName", registro.getFirstName());
+            model.addAttribute("lastName", registro.getLastName());
+            model.addAttribute("dni", registro.getDni());
+            model.addAttribute("email", registro.getEmail());
+            model.addAttribute("phone", registro.getPhone());
+            model.addAttribute("userType", registro.getUserType());
 
             return "public/signup";
 
@@ -146,7 +146,7 @@ public class PublicController {
     // ============================================================================
     // VERIFICA SI EL USUARIO YA ESTÁ AUTENTICADO
     // ============================================================================
-    private boolean verificarUsuarioYaAutenticado(Authentication auth) {
+    private boolean checkUserAlreadyAuthenticated(Authentication auth) {
         // Verificar si hay autenticación activa
         if (auth == null) {
             return false;
@@ -168,7 +168,7 @@ public class PublicController {
     // ============================================================================
     // PROCESA LOS MENSAJES DE ERROR Y LOGOUT EN LA PÁGINA DE LOGIN
     // ============================================================================
-    private void procesarMensajesLogin(String error, String logout, Model model) {
+    private void processLoginMessages(String error, String logout, Model model) {
         // Procesar mensaje de error de autenticación
         if (error != null) {
             String mensajeError = "Usuario o contraseña incorrectos. Por favor, verifica tus credenciales.";
@@ -185,8 +185,8 @@ public class PublicController {
     // ============================================================================
     // CREA UN FORMULARIO DE REGISTRO VACÍO CON VALORES POR DEFECTO
     // ============================================================================
-    private RegistroDTO crearFormularioRegistroVacio() {
-        // Crear formulario con todos los campos nulos
-        return new RegistroDTO(null, null, null, null, null, null, null);
+    private RegistroDTO createEmptyRegistrationForm() {
+        // Crear formulario con constructor vacío
+        return new RegistroDTO();
     }
 }

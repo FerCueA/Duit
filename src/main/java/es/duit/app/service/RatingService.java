@@ -41,16 +41,23 @@ public class RatingService {
         validateNoExistingRating(trabajo, type);
 
         Rating nuevaValoracion = buildRating(trabajo, type, score, comment);
+        
+        if (nuevaValoracion == null) {
+            throw new IllegalStateException("Error al crear la valoración");
+        }
 
-        Rating ratingGuardada = ratingRepository.save(nuevaValoracion);
-
-        return ratingGuardada;
+        return ratingRepository.save(nuevaValoracion);
     }
 
     // ============================================================================
     // OBTIENE UN TRABAJO POR ID
     // ============================================================================
     private ServiceJob getJobById(Long jobId) {
+        // Validar que el ID no sea nulo
+        if (jobId == null) {
+            throw new IllegalArgumentException("El ID del trabajo es requerido");
+        }
+        
         // Buscar el trabajo en la base de datos
         ServiceJob trabajo = serviceJobRepository.findById(jobId)
                 .orElseThrow(() -> new IllegalArgumentException("Trabajo no encontrado"));

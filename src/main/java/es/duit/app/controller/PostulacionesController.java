@@ -233,6 +233,9 @@ public class PostulacionesController {
     // ============================================================================
     private ServiceRequest buscarYValidarSolicitud(Long id, AppUser usuario) {
         // Buscar la solicitud en la base de datos
+        if (id == null) {
+            throw new IllegalArgumentException("ID de solicitud requerido");
+        }
         ServiceRequest solicitudEncontrada = serviceRequestRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Solicitud no encontrada"));
 
@@ -249,6 +252,9 @@ public class PostulacionesController {
     // BUSCA UNA POSTULACIÓN POR SU ID
     // ============================================================================
     private JobApplication buscarPostulacionPorId(Long postulacionId) {
+        if (postulacionId == null) {
+            throw new IllegalArgumentException("ID de postulación requerido");
+        }
         return jobApplicationRepository.findById(postulacionId)
                 .orElseThrow(() -> new IllegalArgumentException("Postulación no encontrada"));
     }

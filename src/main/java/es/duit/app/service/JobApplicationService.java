@@ -43,10 +43,12 @@ public class JobApplicationService {
         validatePriceIsValid(precio);
 
         JobApplication postulacion = buildJobApplication(oferta, usuario, precio, mensaje);
+        
+        if (postulacion == null) {
+            throw new IllegalStateException("Error al crear la postulación");
+        }
 
-        JobApplication postulacionGuardada = jobApplicationRepository.save(postulacion);
-
-        return postulacionGuardada;
+        return jobApplicationRepository.save(postulacion);
     }
 
     // ============================================================================
@@ -54,6 +56,9 @@ public class JobApplicationService {
     // ============================================================================
     private ServiceRequest getOfferById(Long ofertaId) {
         // Buscar la oferta en la BD
+        if (ofertaId == null) {
+            throw new IllegalArgumentException("ID de oferta requerido");
+        }
         ServiceRequest oferta = serviceRequestRepository.findById(ofertaId)
                 .orElseThrow(() -> new IllegalArgumentException("La oferta no existe"));
 

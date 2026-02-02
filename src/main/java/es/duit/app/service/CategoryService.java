@@ -47,6 +47,9 @@ public class CategoryService {
     // BUSCA UNA CATEGORÍA POR ID
     // ============================================================================
     public CategoryDTO findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID de categoría requerido");
+        }
         Optional<Category> categoryOptional = categoryRepository.findById(id);
 
         // Si no existe, devolver null
@@ -91,6 +94,9 @@ public class CategoryService {
     // ============================================================================
     public void deleteById(Long id) {
         // Verificar si existe la categoría
+        if (id == null) {
+            throw new IllegalArgumentException("ID de categoría requerido");
+        }
         boolean existe = categoryRepository.existsById(id);
         if (!existe) {
             throw new IllegalArgumentException("La categoría no existe");
@@ -104,6 +110,11 @@ public class CategoryService {
     // CAMBIA EL ESTADO ACTIVO/INACTIVO DE UNA CATEGORÍA
     // ============================================================================
     public void toggleStatus(Long id) {
+        // Validar el ID
+        if (id == null) {
+            throw new IllegalArgumentException("ID de categoría requerido");
+        }
+        
         // Buscar la categoría por ID
         Optional<Category> categoryOptional = categoryRepository.findById(id);
 

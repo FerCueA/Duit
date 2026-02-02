@@ -17,7 +17,7 @@
 
 
             <!-- Consejos para crear solicitud -->
-                    <div th:replace="~{components/requestManagementTips::requestManagementTips}"></div>
+            <div th:replace="~{components/requestManagementTips::requestManagementTips}"></div>
 
             <!-- Header -->
             <div class="row mb-4">
@@ -38,14 +38,21 @@
                 </div>
             </div>
 
-            
 
-            
+
+
 
             <!-- Mensaje de éxito -->
             <div th:if="${success}" class="alert alert-success alert-dismissible fade show shadow-sm">
                 <i class="bi bi-check-circle-fill me-2"></i>
                 <strong>¡Perfecto!</strong> <span th:text="${success}">Success message</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Mensaje de error -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show shadow-sm">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>¡Error!</strong> <span th:text="${error}">Error message</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
 
@@ -104,12 +111,12 @@
                             <table class="table table-hover align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="border-0 ps-4">Solicitud</th>
-                                        <th class="border-0">Categoría</th>
-                                        <th class="border-0">Estado</th>
-                                        <th class="border-0 text-center">Postulaciones</th>
-                                        <th class="border-0">Fecha</th>
-                                        <th class="border-0 pe-4">Acciones</th>
+                                        <th scope="col" class="border-0 ps-4">Solicitud</th>
+                                        <th scope="col" class="border-0">Categoría</th>
+                                        <th scope="col" class="border-0">Estado</th>
+                                        <th scope="col" class="border-0 text-center">Postulaciones</th>
+                                        <th scope="col" class="border-0">Fecha</th>
+                                        <th scope="col" class="border-0 pe-4">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -160,21 +167,21 @@
                                         <td class="pe-4">
                                             <div class="d-flex flex-column gap-1">
                                                 <!-- Editar -->
-                                                <a th:href="@{'/requests/request?edit=' + ${solicitud.id}}"
+                                                <a th:href="@{/requests/request(edit=${solicitud.id})}"
                                                     class="btn btn-sm btn-outline-primary">
                                                     <i class="bi bi-pencil"></i> Editar
                                                 </a>
 
                                                 <!-- Ver postulaciones -->
                                                 <a th:if="${solicitud.status.name() == 'PUBLISHED' and solicitud.applicationCount > 0}"
-                                                    th:href="@{'/jobs/applications/' + ${solicitud.id}}"
+                                                    th:href="@{/requests/applications/{id}(id=${solicitud.id})}"
                                                     class="btn btn-sm btn-outline-info">
                                                     <i class="bi bi-envelope"></i> Ver Postulaciones
                                                 </a>
 
                                                 <!-- Publicar -->
                                                 <form th:if="${solicitud.status.name() == 'DRAFT'}"
-                                                    th:action="@{'/requests/publicar/' + ${solicitud.id}}"
+                                                    th:action="@{/requests/publish/{id}(id=${solicitud.id})}"
                                                     method="POST">
                                                     <button type="submit" class="btn btn-sm btn-outline-success w-100"
                                                         onclick="return confirm('¿Publicar esta solicitud?')">
@@ -184,7 +191,7 @@
 
                                                 <!-- Despublicar -->
                                                 <form th:if="${solicitud.status.name() == 'PUBLISHED'}"
-                                                    th:action="@{'/requests/publicar/' + ${solicitud.id}}"
+                                                    th:action="@{/requests/unpublish/{id}(id=${solicitud.id})}"
                                                     method="POST">
                                                     <button type="submit" class="btn btn-sm btn-outline-secondary w-100"
                                                         onclick="return confirm('¿Despublicar? Volverá a borrador.')">
@@ -194,7 +201,7 @@
 
                                                 <!-- Cancelar -->
                                                 <form th:if="${solicitud.status.name() == 'PUBLISHED'}"
-                                                    th:action="@{'/requests/cancelar/' + ${solicitud.id}}"
+                                                    th:action="@{/requests/cancel/{id}(id=${solicitud.id})}"
                                                     method="POST">
                                                     <button type="submit" class="btn btn-sm btn-outline-warning w-100"
                                                         onclick="return confirm('¿Cancelar esta solicitud?')">
@@ -204,7 +211,7 @@
 
                                                 <!-- Reactivar -->
                                                 <form th:if="${solicitud.status.name() == 'CANCELLED'}"
-                                                    th:action="@{'/requests/reactivar/' + ${solicitud.id}}"
+                                                    th:action="@{/requests/reactivate/{id}(id=${solicitud.id})}"
                                                     method="POST">
                                                     <button type="submit" class="btn btn-sm btn-outline-success w-100"
                                                         onclick="return confirm('¿Reactivar? Volverá a borrador.')">
@@ -215,7 +222,7 @@
                                                 <!-- Eliminar -->
                                                 <form
                                                     th:if="${solicitud.status.name() == 'DRAFT' or solicitud.status.name() == 'CANCELLED'}"
-                                                    th:action="@{'/requests/eliminar/' + ${solicitud.id}}"
+                                                    th:action="@{/requests/delete/{id}(id=${solicitud.id})}"
                                                     method="POST">
                                                     <button type="submit" class="btn btn-sm btn-outline-danger w-100"
                                                         onclick="return confirm('¿Eliminar? No se puede deshacer.')">

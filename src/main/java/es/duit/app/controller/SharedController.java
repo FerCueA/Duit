@@ -106,60 +106,6 @@ public class SharedController {
     }
 
     // ============================================================================
-    // OBTIENE TODOS LOS TRABAJOS COMPLETADOS DEL USUARIO
-    // ============================================================================
-    private List<ServiceJob> obtenerTrabajosCompletados(AppUser usuario) {
-        // Buscar trabajos donde el usuario es cliente
-        List<ServiceJob> trabajosComoCliente = serviceJobRepository.findByCliente(usuario);
-
-        // Buscar trabajos donde el usuario es profesional
-        List<ServiceJob> trabajosComoProfesional = serviceJobRepository.findByProfesional(usuario);
-
-        // Combinar ambas listas
-        List<ServiceJob> todosLosTrabajos = new ArrayList<>();
-        todosLosTrabajos.addAll(trabajosComoCliente);
-        todosLosTrabajos.addAll(trabajosComoProfesional);
-
-        // Filtrar solo los trabajos completados
-        List<ServiceJob> trabajosCompletados = new ArrayList<>();
-        for (ServiceJob trabajo : todosLosTrabajos) {
-            boolean estaCompletado = trabajo.getStatus() == ServiceJob.Status.COMPLETED;
-            if (estaCompletado) {
-                trabajosCompletados.add(trabajo);
-            }
-        }
-
-        return trabajosCompletados;
-    }
-
-    // ============================================================================
-    // CLASIFICA TRABAJOS EN PENDIENTES O FINALIZADAS SEGÚN VALORACIONES
-    // ============================================================================
-    private void clasificarTrabajosPorValoraciones(List<ServiceJob> trabajosCompletados,
-            List<ServiceJob> trabajosPendientes,
-            List<ServiceJob> trabajosFinalizadas) {
-
-        // Revisar cada trabajo completado
-        for (ServiceJob trabajo : trabajosCompletados) {
-            // Verificar si el cliente ha valorado al profesional
-            boolean clienteHaValorado = ratingRepository.findByJobAndType(trabajo, Rating.Type.CLIENT_TO_PROFESSIONAL)
-                    .isPresent();
-
-            // Verificar si el profesional ha valorado al cliente
-            boolean profesionalHaValorado = ratingRepository
-                    .findByJobAndType(trabajo, Rating.Type.PROFESSIONAL_TO_CLIENT).isPresent();
-
-            // Si ambos han valorado, está finalizada
-            if (clienteHaValorado && profesionalHaValorado) {
-                trabajosFinalizadas.add(trabajo);
-            } else {
-                // Si falta alguna valoración, está pendiente
-                trabajosPendientes.add(trabajo);
-            }
-        }
-    }
-
-    // ============================================================================
     // CARGA UN TRABAJO ESPECÍFICO SI SE PROPORCIONA SU ID
     // ============================================================================
     private void cargarTrabajoEspecifico(Long jobId, Model model) {

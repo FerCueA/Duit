@@ -1,7 +1,6 @@
 package es.duit.app.controller;
 
 import es.duit.app.entity.AppUser;
-import es.duit.app.entity.Rating;
 import es.duit.app.service.AuthService;
 import es.duit.app.service.RatingService;
 
@@ -43,7 +42,7 @@ public class RatingsController {
             String comentarioNormalizado = (comment == null || comment.trim().isEmpty()) ? null : comment.trim();
 
             // Crear la valoración usando el servicio
-            Rating valoracionCreada = ratingService.createRating(jobId, score, comentarioNormalizado, usuarioLogueado);
+            ratingService.createRating(jobId, score, comentarioNormalizado, usuarioLogueado);
 
             // Preparar mensaje de éxito y redirigir
             String mensajeExito = "Valoración registrada correctamente.";
