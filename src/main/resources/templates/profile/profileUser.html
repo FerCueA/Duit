@@ -31,7 +31,7 @@
                             </div>
 
                             <!-- Formulario de edición de perfil -->
-                            <form th:action="@{/profile/edit}" method="post" th:object="${editProfileDTO}" novalidate>
+                            <form th:action="@{/profile/edit}" method="post" th:object="${editProfileDTO}">
                                 <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger" role="alert">
                                     <ul class="mb-0">
                                         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
