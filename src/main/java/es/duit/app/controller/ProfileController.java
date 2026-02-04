@@ -81,8 +81,14 @@ public class ProfileController {
     // ============================================================================
     // MUESTRA EL PERFIL PROFESIONAL
     // ============================================================================
-    @GetMapping({"/professional", "/profesional"})
-    public String professional() {
+    @GetMapping({ "/professional", "/profesional" })
+    public String professional(Model model) {
+
+        AppUser userPro = appUserService.getCurrentUser();
+        EditProfileDTO dto = new EditProfileDTO(userPro);
+
+        model.addAttribute("editProfileDTO", dto);
+        model.addAttribute("user", userPro);
         return "profile/profileProfessional";
     }
 }
