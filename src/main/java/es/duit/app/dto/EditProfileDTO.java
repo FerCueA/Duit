@@ -1,7 +1,11 @@
 package es.duit.app.dto;
 
+import java.math.BigDecimal;
+
 import es.duit.app.entity.Address;
 import es.duit.app.entity.AppUser;
+import es.duit.app.entity.ProfessionalProfile;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -38,6 +42,17 @@ public class EditProfileDTO {
     @Size(max = 100, message = "El país no puede exceder los 100 caracteres")
     public String country;
 
+    @NotNull(message = "La tarifa por hora es obligatoria")
+    @DecimalMin(value = "5.00", message = "La tarifa por hora mínima es 5€")
+    @DecimalMax(value = "500.00", message = "La tarifa por hora máxima es 500€")
+    @Column(name = "hourly_rate", precision = 8, scale = 2, nullable = false)
+    private BigDecimal hourlyRate;
+
+    @NotBlank(message = "El NIF es obligatorio para profesionales")
+    @Pattern(regexp = "^[0-9]{8}[A-Z]$", message = "El NIF debe tener el formato correcto (8 dígitos + letra)")
+    @Column(name = "nif", length = 9, unique = true, nullable = false)
+    private String nif;
+
     public EditProfileDTO() {
     }
 
@@ -47,6 +62,7 @@ public class EditProfileDTO {
             this.lastName = user.getLastName();
             this.phone = user.getPhone();
             copyAddress(user.getAddress());
+            copyProfessionalProfile(user.getProfessionalProfile());
         }
     }
 
@@ -57,6 +73,13 @@ public class EditProfileDTO {
             this.postalCode = addr.getPostalCode();
             this.province = addr.getProvince();
             this.country = addr.getCountry();
+        }
+    }
+
+    private void copyProfessionalProfile(ProfessionalProfile hour) {
+        if (hour != null) {
+            this.hourlyRate = hour.getHourlyRate();
+            this.nif = hour.getNif();
         }
     }
 
