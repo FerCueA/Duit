@@ -289,6 +289,7 @@ public class MyRequestsService {
         // Solo se pueden editar solicitudes en borrador o canceladas
         if (request.getStatus() != ServiceRequest.Status.DRAFT && 
             request.getStatus() != ServiceRequest.Status.CANCELLED) {
+                System.out.println("Estado actual de la solicitud: " + request.getStatus());
             throw new RuntimeException("Solo se pueden editar solicitudes en borrador o canceladas. Estado actual: " + request.getStatus());
         }
 

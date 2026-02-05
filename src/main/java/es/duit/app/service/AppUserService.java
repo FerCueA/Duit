@@ -49,6 +49,10 @@ public class AppUserService {
         // Obtener el usuario actualmente logueado
         AppUser user = getCurrentUser();
 
+        if (dto == null) {
+            throw new IllegalArgumentException("Datos de perfil requeridos");
+        }
+
         // Actualizar datos personales
         user.setFirstName(dto.getFirstName().trim());
         user.setLastName(dto.getLastName().trim());
@@ -83,6 +87,9 @@ public class AppUserService {
     public AppUser updateProfessionalProfile(EditProfileDTO dto) {
         // Obtener el usuario actualmente logueado
         AppUser userPro = getCurrentUser();
+        if (dto == null) {
+            throw new IllegalArgumentException("Datos de perfil requeridos");
+        }
 
         // Actualizar datos personales
         userPro.setFirstName(dto.getFirstName().trim());
