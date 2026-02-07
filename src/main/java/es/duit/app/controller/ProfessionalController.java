@@ -1,110 +1,133 @@
 package es.duit.app.controller;
 
+import es.duit.app.dto.SearchRequestDTO;
 import es.duit.app.entity.AppUser;
-import es.duit.app.entity.Category;
 import es.duit.app.entity.JobApplication;
 import es.duit.app.entity.ServiceJob;
-import es.duit.app.entity.ServiceRequest;
-import es.duit.app.repository.CategoryRepository;
 import es.duit.app.repository.JobApplicationRepository;
 import es.duit.app.repository.ServiceJobRepository;
-import es.duit.app.repository.ServiceRequestRepository;
 import es.duit.app.service.AuthService;
+import es.duit.app.service.SearchService;
 import es.duit.app.service.JobApplicationService;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-// Controlador para profesionales
+// CONTROLADOR DE PROFESIONALES
 @Controller
 @RequestMapping("/professional")
+@RequiredArgsConstructor
 public class ProfessionalController {
 
-    private final ServiceRequestRepository serviceRequestRepository;
-    private final CategoryRepository categoryRepository;
     private final JobApplicationRepository jobApplicationRepository;
     private final ServiceJobRepository serviceJobRepository;
     private final AuthService authService;
     private final JobApplicationService jobApplicationService;
+    private final SearchService searchService;
 
-    public ProfessionalController(
-            ServiceRequestRepository serviceRequestRepository,
-            CategoryRepository categoryRepository,
-            JobApplicationRepository jobApplicationRepository,
-            ServiceJobRepository serviceJobRepository,
-            AuthService authService,
-            JobApplicationService jobApplicationService) {
-        this.serviceRequestRepository = serviceRequestRepository;
-        this.categoryRepository = categoryRepository;
-        this.jobApplicationRepository = jobApplicationRepository;
-        this.serviceJobRepository = serviceJobRepository;
-        this.authService = authService;
-        this.jobApplicationService = jobApplicationService;
+    // Mostrar página de búsqueda
+    @GetMapping("/search")
+    public String searchJobs(
+            @RequestParam(required = false) String textoBusqueda,
+            @RequestParam(required = false) Long categoriaId,
+            @RequestParam(required = false) String codigoPostal,
+            Authentication auth,
+            Model model) {
+
+        // Crear DTO a partir de parámetros GET
+        SearchRequestDTO filters = new SearchRequestDTO();
+        filters.setTextoBusqueda(textoBusqueda);
+        filters.setCategoriaId(categoriaId);
+        filters.setCodigoPostal(codigoPostal);
+
+        AppUser currentUser = authService.getAuthenticatedUser(auth);
+        searchService.prepareSearchPageData(filters, currentUser, model);
+
+        return "jobs/search";
     }
 
-    // Buscar trabajos
-    @GetMapping({"/search"})
-    public String buscarTrabajos(Authentication auth, Model model) {
-        authService.getAuthenticatedUser(auth);
-        
-        // Obtener solo solicitudes publicadas
-        List<ServiceRequest> ofertas = serviceRequestRepository.findByStatus(ServiceRequest.Status.PUBLISHED);
-        
-        // Obtener categorías activas
-        List<Category> categorias = categoryRepository.findByActiveTrue();
-        
-        // Obtener códigos postales únicos de las ofertas
-        Set<String> codigosPostales = ofertas.stream()
-            .map(o -> o.getEffectiveServiceAddress() != null ? o.getEffectiveServiceAddress().getPostalCode() : null)
-            .filter(cp -> cp != null && !cp.isEmpty())
-            .collect(Collectors.toSet());
-        
-        model.addAttribute("ofertas", ofertas);
-        model.addAttribute("categorias", categorias);
-        model.addAttribute("codigosPostales", codigosPostales);
+    // Buscar con filtros
+    @PostMapping("/search")
+    public String searchJobsWithForm(
+            @Valid @ModelAttribute SearchRequestDTO filters,
+            BindingResult bindingResult,
+            Authentication auth,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        // Si hay errores, redirigir con mensaje de error
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Revisa los datos del formulario");
+            return "redirect:/professional/search";
+        }
+
+        AppUser currentUser = authService.getAuthenticatedUser(auth);
+        searchService.prepareSearchPageData(filters, currentUser, model);
+        model.addAttribute("filtrosAplicados", filters);
+
         return "jobs/search";
     }
 
     // Ver mis postulaciones
-    @GetMapping({"/applications"})
+    @GetMapping({ "/applications" })
     public String verPostulaciones(Authentication auth, Model model) {
         AppUser usuario = authService.getAuthenticatedUser(auth);
-        
+
         // Postulaciones del profesional
-        List<JobApplication> postulaciones = jobApplicationRepository.findByProfessional(usuario.getProfessionalProfile());
-        
+        List<JobApplication> postulaciones = jobApplicationRepository
+                .findByProfessional(usuario.getProfessionalProfile());
+
         // Obtener trabajos en progreso
         List<ServiceJob> trabajosEnProgreso = serviceJobRepository.findByProfesional(usuario);
-        
+
         model.addAttribute("postulaciones", postulaciones);
         model.addAttribute("trabajosEnProgreso", trabajosEnProgreso);
-        return "jobs/myaplication";
+        return "jobs/myapplications";
     }
 
-    // Postularse a una oferta
+    // Enviar postulación
     @PostMapping("/postular/{ofertaId}")
     public String postularse(
             @PathVariable Long ofertaId,
             @RequestParam(name = "mensaje", required = false) String mensaje,
-            @RequestParam(name = "precio") BigDecimal precio,
+            @RequestParam(name = "precio") String precioStr,
             Authentication auth,
             RedirectAttributes redirectAttributes) {
 
+        // Validar precio
+        BigDecimal precio;
         try {
-            AppUser usuario = authService.getAuthenticatedUser(auth);
-            jobApplicationService.postularseAOferta(ofertaId, precio, mensaje, usuario);
-            redirectAttributes.addFlashAttribute("success", "¡Postulación enviada correctamente!");
+            String precioLimpio = precioStr.replace(",", ".");
+            precio = new BigDecimal(precioLimpio);
+
+            if (precio.compareTo(BigDecimal.ONE) < 0 || precio.compareTo(new BigDecimal("99999")) > 0) {
+                redirectAttributes.addFlashAttribute("error", "El precio debe estar entre 1€ y 99.999€");
+                return "redirect:/professional/search";
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Precio no válido");
             return "redirect:/professional/search";
-        } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+
+        AppUser usuario = authService.getAuthenticatedUser(auth);
+
+        try {
+            jobApplicationService.postularseAOferta(ofertaId, precio, mensaje, usuario);
+            redirectAttributes.addFlashAttribute("success", "Postulación enviada correctamente");
+            return "redirect:/professional/search";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al enviar postulación");
             return "redirect:/professional/search";
         }
     }
