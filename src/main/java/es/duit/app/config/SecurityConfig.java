@@ -29,10 +29,10 @@ public class SecurityConfig {
                                 .csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers(
-                                                                "/", "/index", "/public/**", "/login", "/registro",
+                                                                "/", "/index", "/public/**", "/login", "/signup",
                                                                 "/register",
                                                                 "/css/**", "/js/**", "/img/**", "/static/**",
-                                                                "/privacidad", "/terminos", "/ayuda")
+                                                                "/privacy", "/terms", "/help")
                                                 .permitAll()
                                                 .anyRequest().authenticated())
                                 .formLogin(form -> form

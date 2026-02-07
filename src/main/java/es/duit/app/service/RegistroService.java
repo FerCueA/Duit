@@ -32,39 +32,46 @@ public class RegistroService {
     // REGISTRA UN NUEVO USUARIO CON VALIDACIONES
     // ============================================================================
     public AppUser registerUser(RegistroDTO registro) {
-        // Validar que el email no esté registrado en el sistema
-        if (appUserRepository.findByUsername(registro.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Este correo electrónico ya está registrado");
+        try {
+            // Validar que el email no esté registrado en el sistema
+            if (appUserRepository.findByUsername(registro.getEmail()).isPresent()) {
+                throw new IllegalArgumentException("Este correo electrónico ya está registrado");
+            }
+
+            // Validar que el DNI no esté registrado en el sistema
+            if (appUserRepository.findByDni(registro.getDni()).isPresent()) {
+                throw new IllegalArgumentException("Este DNI ya está registrado");
+            }
+
+            // Obtener el rol según el tipo de usuario (USER o PROFESSIONAL)
+            UserRole.RoleName nombreRol = "USER".equals(registro.getUserType())
+                    ? UserRole.RoleName.USER
+                    : UserRole.RoleName.PROFESSIONAL;
+
+            // Buscar el rol en la BD
+            UserRole rol = roleRepository.findByName(nombreRol)
+                    .orElseThrow(() -> new IllegalArgumentException("Rol " + nombreRol + " no encontrado en la base de datos"));
+
+            // Crear nueva instancia de usuario y asignar datos del formulario
+            AppUser usuarioNuevo = new AppUser();
+            usuarioNuevo.setFirstName(registro.getFirstName().trim());
+            usuarioNuevo.setLastName(registro.getLastName().trim());
+            usuarioNuevo.setDni(registro.getDni().trim().toUpperCase());
+            usuarioNuevo.setUsername(registro.getEmail().trim());
+
+            // Encriptar la contraseña antes de guardar
+            usuarioNuevo.setPassword(passwordEncoder.encode(registro.getPassword()));
+            usuarioNuevo.setPhone(registro.getPhone().trim());
+            usuarioNuevo.setRole(rol);
+            usuarioNuevo.setActive(true);
+
+            // Guardar usuario en la BD y devolver
+            return appUserRepository.save(usuarioNuevo);
+
+        } catch (Exception e) {
+            System.err.println("Error en RegistroService.registerUser: " + e.getMessage());
+            e.printStackTrace();
+            throw e; // Re-lanza la excepción para que llegue al controlador
         }
-
-        // Validar que el DNI no esté registrado en el sistema
-        if (appUserRepository.findByDni(registro.getDni()).isPresent()) {
-            throw new IllegalArgumentException("Este DNI ya está registrado");
-        }
-
-        // Obtener el rol según el tipo de usuario (USER o PROFESSIONAL)
-        UserRole.RoleName nombreRol = "USER".equals(registro.getUserType())
-                ? UserRole.RoleName.USER
-                : UserRole.RoleName.PROFESSIONAL;
-
-        // Buscar el rol en la BD
-        UserRole rol = roleRepository.findByName(nombreRol)
-                .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado en la base de datos"));
-
-        // Crear nueva instancia de usuario y asignar datos del formulario
-        AppUser usuarioNuevo = new AppUser();
-        usuarioNuevo.setFirstName(registro.getFirstName().trim());
-        usuarioNuevo.setLastName(registro.getLastName().trim());
-        usuarioNuevo.setDni(registro.getDni().trim().toUpperCase());
-        usuarioNuevo.setUsername(registro.getEmail().trim());
-
-        // Encriptar la contraseña antes de guardar
-        usuarioNuevo.setPassword(passwordEncoder.encode(registro.getPassword()));
-        usuarioNuevo.setPhone(registro.getPhone().trim());
-        usuarioNuevo.setRole(rol);
-        usuarioNuevo.setActive(true);
-
-        // Guardar usuario en la BD y devolver
-        return appUserRepository.save(usuarioNuevo);
     }
 }

@@ -28,16 +28,8 @@ public class PublicController {
     // ============================================================================
     // PÁGINA PRINCIPAL DE LA APLICACIÓN
     // ============================================================================
-    @GetMapping("/")
+    @GetMapping({"/", "/index"})
     public String showMainPage() {
-        return "public/index";
-    }
-
-    // ============================================================================
-    // PÁGINA DE ÍNDICE ALTERNATIVA
-    // ============================================================================
-    @GetMapping("/index")
-    public String showIndexPage() {
         return "public/index";
     }
 
@@ -67,7 +59,7 @@ public class PublicController {
     // ============================================================================
     @GetMapping({ "/terms" })
     public String showTermsPage() {
-        return "public/trems";
+        return "public/terms";
     }
 
     // ============================================================================
@@ -136,9 +128,11 @@ public class PublicController {
             return "public/signup";
 
         } catch (Exception error) {
-            // Manejar errores inesperados
-            String mensajeErrorGenerico = "Error en el registro. Por favor, inténtalo de nuevo.";
-            model.addAttribute("error", mensajeErrorGenerico);
+            // Manejar errores inesperados con más detalle
+            String mensajeError = "Error en el registro: " + error.getMessage();
+            System.err.println("Error en registro: " + error.getMessage());
+            error.printStackTrace();
+            model.addAttribute("error", mensajeError);
             return "public/signup";
         }
     }

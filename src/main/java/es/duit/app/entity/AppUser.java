@@ -53,7 +53,7 @@ public class AppUser extends BaseEntity {
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
-    @Pattern(regexp = "^\\+34[0-9]{9}$", message = "El teléfono debe ser español: +34 seguido de 9 dígitos")
+    @Pattern(regexp = "^[+]?[0-9]{9,15}$", message = "El teléfono debe tener entre 9 y 15 dígitos, puede empezar con +")
     @Column(name = "phone", length = 20)
     private String phone;
 

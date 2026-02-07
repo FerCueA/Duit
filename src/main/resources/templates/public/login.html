@@ -51,7 +51,8 @@
                                         th:value="${param.username != null ? param.username[0] : ''}" required
                                         maxlength="100" autocomplete="username">
                                     <div class="invalid-feedback">
-                                        <i class="bi bi-exclamation-circle me-1"></i>Por favor, ingresa un correo electrónico válido.
+                                        <i class="bi bi-exclamation-circle me-1"></i>Por favor, ingresa un correo
+                                        electrónico válido.
                                     </div>
                                 </div>
 
@@ -70,16 +71,25 @@
                                         </button>
                                     </div>
                                     <div class="invalid-feedback">
-                                        <i class="bi bi-exclamation-circle me-1"></i>La contraseña debe tener al menos 6 caracteres.
+                                        <i class="bi bi-exclamation-circle me-1"></i>La contraseña debe tener al menos 6
+                                        caracteres.
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="remember-me" name="remember-me">
-                                        <label class="form-check-label" for="remember-me">
-                                            <i class="bi bi-clock me-1"></i>Mantenerme conectado (24h)
-                                        </label>
+                                    <div
+                                        class="border border-primary-subtle bg-primary-subtle bg-opacity-10 rounded-3 p-3">
+                                        <div class="form-check form-switch d-flex align-items-center">
+                                            <input class="form-check-input me-3 fs-5" type="checkbox" role="switch"
+                                                id="remember-me" name="remember-me"
+                                                style="width: 3rem; height: 1.5rem;">
+                                            <label class="form-check-label fw-medium fs-6" for="remember-me">
+                                                <i class="bi bi-clock text-primary me-2 fs-5"></i>
+                                                <span class="text-dark">Mantenerme conectado</span>
+                                                <small
+                                                    class="badge bg-primary text-white ms-2 rounded-pill px-2 py-1">24h</small>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -100,13 +110,19 @@
                             </div>
 
                             <!-- Cuentas de prueba -->
-                            <div class="mt-4 p-3 bg-light rounded-3">
-                                <h6 class="text-muted mb-2"><i class="bi bi-info-circle me-1"></i>Cuentas de prueba:
+                            <div class="mt-4 p-4 bg-light rounded-3">
+                                <h6 class="text-muted mb-2 fst-italic fs-5"><i
+                                        class="bi bi-info-circle me-1"></i>Cuentas de prueba:
                                 </h6>
-                                <div class="small">
+                                <div class="small fs-5">
                                     <p class="mb-1"><strong>Cliente:</strong> ana.gonzalez@example.com</p>
 
                                     <p class="mb-1"><strong>Profesional:</strong> laura.jimenez@professional.com</p>
+
+                                    <p class="mb-1"><strong>Admin:</strong> admin@duit.es</p>
+
+                                    <p class="mb-1 bg-success text-white rounded-3 px-2 py-1">
+                                        <strong>Contraseña:</strong> 1234</p>
 
                                 </div>
                             </div>
@@ -121,10 +137,10 @@
     <!-- JavaScript para funcionalidades del login -->
     <script>
         // Toggle password visibility
-        document.getElementById('togglePassword').addEventListener('click', function() {
+        document.getElementById('togglePassword').addEventListener('click', function () {
             const passwordInput = document.getElementById('password');
             const toggleIcon = document.getElementById('toggleIcon');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleIcon.className = 'bi bi-eye-slash';
@@ -133,7 +149,7 @@
                 toggleIcon.className = 'bi bi-eye';
             }
         });
-        
+
         // Focus automático en el email
         document.getElementById('username').focus();
     </script>
