@@ -14,17 +14,11 @@
 
     <main class="flex-grow-1 bg-light">
         <div class="container py-4">
-            <!-- Navegación -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/requests/my-requests}">Mis Solicitudes</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Postulaciones</li>
-                </ol>
-            </nav>
+           
 
             <!-- Información de la solicitud -->
             <div th:if="${solicitud != null}" class="card border-0 shadow-sm mb-4">
-                <div class="card-body bg-primary bg-gradient text-white">
+                <div class="card-body bg-dark text-white">
                     <div class="row align-items-center">
                         <div class="col-md-8">
                             <h4 class="card-title mb-2">
@@ -45,7 +39,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                            <div class="badge bg-light text-primary fs-5 py-2 px-3">
+                            <div class="badge bg-light text-dark fs-5 py-2 px-3">
                                 <i class="bi bi-people-fill"></i>
                                 <span th:text="${postulaciones != null ? postulaciones.size() : 0}">0</span>
                                 Postulaciones
@@ -58,10 +52,10 @@
             <!-- Sin acceso o error -->
             <div th:if="${solicitud == null}" class="card border-0 shadow-sm">
                 <div class="card-body text-center py-5">
-                    <i class="bi bi-exclamation-triangle-fill text-warning display-1"></i>
+                    <i class="bi bi-exclamation-triangle-fill text-muted display-1"></i>
                     <h3 class="mt-3">No se encontró la solicitud</h3>
                     <p class="text-muted">No tienes acceso a esta solicitud o no existe.</p>
-                    <a th:href="@{/requests/my-requests}" class="btn btn-primary">
+                    <a th:href="@{/requests/my-requests}" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Volver a Mis Solicitudes
                     </a>
                 </div>
@@ -86,116 +80,96 @@
 
                         <input type="radio" class="btn-check" name="filter" id="filterRejected" autocomplete="off"
                             onclick="filterPostulaciones('REJECTED')">
-                        <label class="btn btn-outline-danger" for="filterRejected">Rechazadas</label>
+                        <label class="btn btn-outline-secondary" for="filterRejected">Rechazadas</label>
                     </div>
                 </div>
 
-                <div class="row g-3">
+                <!-- Lista de postulaciones -->
+                <div class="row g-4">
                     <div th:each="postulacion : ${postulaciones}" class="col-12 postulacion-item"
                         th:attr="data-status=${postulacion.status.name()}">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-body">
-                                <div class="row">
-                                    <!-- Información del profesional -->
-                                    <div class="col-md-8">
-                                        <div class="d-flex align-items-start mb-3">
-                                            <div class="bg-primary bg-gradient rounded-circle d-flex align-items-center justify-content-center text-white me-3"
-                                                style="width: 60px; height: 60px;">
-                                                <i class="bi bi-person-fill fs-2"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <h5 class="card-title mb-1"
-                                                    th:text="${postulacion.professional.user.fullName}">
-                                                    Nombre del Profesional
-                                                </h5>
-                                                <p class="text-muted mb-1">
-                                                    <i class="bi bi-envelope"></i>
-                                                    <span
-                                                        th:text="${postulacion.professional.user.email}">email@example.com</span>
-                                                </p>
-                                                <p class="text-muted mb-0">
-                                                    <i class="bi bi-telephone"></i>
-                                                    <span
-                                                        th:text="${postulacion.professional.user.phone}">Teléfono</span>
-                                                </p>
-                                            </div>
+                        <div class="card border-secondary shadow-sm h-100">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-secondary rounded-circle p-3 me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                            <i class="bi bi-person-fill text-white"></i>
                                         </div>
-
-                                        <!-- Mensaje de la postulación -->
-                                        <div th:if="${postulacion.message != null and !#strings.isEmpty(postulacion.message)}"
-                                            class="alert alert-light border mb-3">
-                                            <strong><i class="bi bi-chat-left-quote"></i> Mensaje:</strong>
-                                            <p class="mb-0 mt-2" th:text="${postulacion.message}">Mensaje de la
-                                                postulación</p>
-                                        </div>
-
-                                        <!-- Información adicional -->
-                                        <div class="row g-2">
-                                            <div class="col-auto" th:if="${postulacion.proposedPrice != null}">
-                                                <span class="badge bg-success bg-gradient fs-6 py-2 px-3">
-                                                    <i class="bi bi-currency-dollar"></i>
-                                                    $<span
-                                                        th:text="${#numbers.formatDecimal(postulacion.proposedPrice, 0, 2)}">0.00</span>
-                                                </span>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="text-muted">
-                                                    <i class="bi bi-calendar-event"></i>
-                                                    <span
-                                                        th:text="${#temporals.format(postulacion.appliedAt, 'dd/MM/yyyy HH:mm')}">Fecha</span>
-                                                </span>
-                                            </div>
-                                            <div class="col-auto" th:if="${postulacion.respondedAt != null}">
-                                                <span class="text-muted">
-                                                    <i class="bi bi-clock-history"></i>
-                                                    Respondida: <span
-                                                        th:text="${#temporals.format(postulacion.respondedAt, 'dd/MM/yyyy HH:mm')}">Fecha</span>
-                                                </span>
-                                            </div>
+                                        <div>
+                                            <h5 class="mb-1 text-dark" th:text="${postulacion.professional.user.fullName}">Nombre del Profesional</h5>
+                                            <p class="text-muted mb-0 small">
+                                                <i class="bi bi-envelope me-1"></i><span th:text="${postulacion.professional.user.email}">email@example.com</span>
+                                            </p>
+                                            <p class="text-muted mb-0 small" th:if="${postulacion.professional.user.phone}">
+                                                <i class="bi bi-telephone me-1"></i><span th:text="${postulacion.professional.user.phone}">Teléfono</span>
+                                            </p>
                                         </div>
                                     </div>
-
-                                    <!-- Estado y acciones -->
-                                    <div class="col-md-4 border-start mt-3 mt-md-0">
-                                        <div class="d-flex flex-column h-100 justify-content-center">
-                                            <!-- Badge de estado -->
-                                            <div class="text-center mb-3">
-                                                <span th:switch="${postulacion.status.name()}"
-                                                    class="badge fs-6 py-2 px-3">
-                                                    <span th:case="'PENDING'" class="badge bg-warning text-dark">
-                                                        <i class="bi bi-hourglass-split"></i> Pendiente
-                                                    </span>
-                                                    <span th:case="'ACCEPTED'" class="badge bg-success">
-                                                        <i class="bi bi-check-circle-fill"></i> Aceptada
-                                                    </span>
-                                                    <span th:case="'REJECTED'" class="badge bg-danger">
-                                                        <i class="bi bi-x-circle-fill"></i> Rechazada
-                                                    </span>
-                                                    <span th:case="'WITHDRAWN'" class="badge bg-secondary">
-                                                        <i class="bi bi-arrow-return-left"></i> Retirada
-                                                    </span>
-                                                </span>
-                                            </div>
-
-                                            <!-- Botones de acción (solo para pendientes) -->
-                                            <div th:if="${postulacion.status.name() == 'PENDING'}" class="d-grid gap-2">
-                                                    <form th:action="@{'/jobs/applications/aceptar/' + ${postulacion.id}}"
-                                                    method="POST"
-                                                    onsubmit="return confirm('¿Estás seguro de aceptar esta postulación? Se rechazarán automáticamente todas las demás postulaciones pendientes.');">
-                                                    <button type="submit" class="btn btn-success w-100">
-                                                        <i class="bi bi-check-circle-fill"></i> Aceptar
-                                                    </button>
-                                                </form>
-                                                    <form th:action="@{'/jobs/applications/rechazar/' + ${postulacion.id}}"
-                                                    method="POST"
-                                                    onsubmit="return confirm('¿Estás seguro de rechazar esta postulación?');">
-                                                    <button type="submit" class="btn btn-outline-danger w-100">
-                                                        <i class="bi bi-x-circle"></i> Rechazar
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
+                                    <div class="text-end">
+                                        <span th:switch="${postulacion.status.name()}" class="badge fs-6 py-2 px-3">
+                                            <span th:case="'PENDING'" class="badge bg-light text-dark">
+                                                <i class="bi bi-hourglass-split"></i> Pendiente
+                                            </span>
+                                            <span th:case="'ACCEPTED'" class="badge bg-secondary">
+                                                <i class="bi bi-check-circle-fill"></i> Aceptada
+                                            </span>
+                                            <span th:case="'REJECTED'" class="badge bg-light text-dark">
+                                                <i class="bi bi-x-circle-fill"></i> Rechazada
+                                            </span>
+                                            <span th:case="'WITHDRAWN'" class="badge bg-secondary">
+                                                <i class="bi bi-arrow-return-left"></i> Retirada
+                                            </span>
+                                        </span>
                                     </div>
+                                </div>
+
+                                <!-- Información adicional -->
+                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                    <div th:if="${postulacion.proposedPrice != null}">
+                                        <span class="badge bg-secondary fs-6 py-2 px-3">
+                                            <i class="bi bi-currency-euro me-1"></i>
+                                            <span th:text="${#numbers.formatDecimal(postulacion.proposedPrice, 0, 2)}">0.00</span>€
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span class="text-muted small">
+                                            <i class="bi bi-calendar-event me-1"></i>
+                                            <span th:text="${#temporals.format(postulacion.appliedAt, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                                        </span>
+                                    </div>
+                                    <div th:if="${postulacion.respondedAt != null}">
+                                        <span class="text-muted small">
+                                            <i class="bi bi-clock-history me-1"></i>
+                                            Respondida: <span th:text="${#temporals.format(postulacion.respondedAt, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Mensaje de la postulación -->
+                                <div th:if="${postulacion.message != null and !#strings.isEmpty(postulacion.message)}"
+                                    class="bg-light border-start border-secondary border-3 p-3 mb-3">
+                                    <p class="mb-0 text-muted small">
+                                        <i class="bi bi-chat-left-quote me-1"></i><strong>Mensaje:</strong>
+                                    </p>
+                                    <p class="mb-0 mt-1" th:text="${postulacion.message}">Mensaje de la postulación</p>
+                                </div>
+
+                                <!-- Botones de acción (solo para pendientes) -->
+                                <div th:if="${postulacion.status.name() == 'PENDING'}" class="d-flex gap-2 justify-content-end">
+                                    <form th:action="@{'/jobs/applications/aceptar/' + ${postulacion.id}}" method="POST"
+                                        onsubmit="return confirm('¿Estás seguro de aceptar esta postulación? Se rechazarán automáticamente todas las demás postulaciones pendientes.');" 
+                                        class="d-inline">
+                                        <button type="submit" class="btn btn-outline-success btn-sm">
+                                            <i class="bi bi-check-circle-fill me-1"></i>Aceptar
+                                        </button>
+                                    </form>
+                                    <form th:action="@{'/jobs/applications/rechazar/' + ${postulacion.id}}" method="POST"
+                                        onsubmit="return confirm('¿Estás seguro de rechazar esta postulación?');"
+                                        class="d-inline">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                            <i class="bi bi-x-circle me-1"></i>Rechazar
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -209,19 +183,13 @@
                     <i class="bi bi-inbox display-1 text-muted"></i>
                     <h3 class="mt-3">Sin postulaciones</h3>
                     <p class="text-muted">Aún no hay profesionales que se hayan postulado a esta solicitud.</p>
-                    <a th:href="@{/requests/my-requests}" class="btn btn-primary">
+                    <a th:href="@{/requests/my-requests}" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left"></i> Volver a Mis Solicitudes
                     </a>
                 </div>
             </div>
 
-            <!-- Botón de volver -->
-            <div th:if="${postulaciones != null and !postulaciones.isEmpty()}" class="mt-4">
-                <a th:href="@{/requests/my-requests}" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left"></i> Volver a Mis Solicitudes
-                </a>
-            </div>
-        </div>
+         
     </main>
 
     <div th:replace="~{components/footerPublic::footerPublic}"></div>

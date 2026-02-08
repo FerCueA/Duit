@@ -22,7 +22,7 @@
             <!-- Header -->
             <div class="row mb-4">
                 <div class="col">
-                    <div class="card border-0 shadow-sm bg-gradient bg-primary text-white">
+                    <div class="card border-secondary shadow-sm bg-dark text-white">
                         <div class="card-body py-4">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
@@ -136,16 +136,16 @@
                                                 <span th:case="'DRAFT'" class="badge bg-secondary">
                                                     <i class="bi bi-file-earmark"></i> Borrador
                                                 </span>
-                                                <span th:case="'PUBLISHED'" class="badge bg-success">
+                                                <span th:case="'PUBLISHED'" class="badge bg-secondary">
                                                     <i class="bi bi-send-check"></i> Publicada
                                                 </span>
-                                                <span th:case="'IN_PROGRESS'" class="badge bg-info">
+                                                <span th:case="'IN_PROGRESS'" class="badge bg-dark">
                                                     <i class="bi bi-hourglass-split"></i> En progreso
                                                 </span>
-                                                <span th:case="'COMPLETED'" class="badge bg-primary">
+                                                <span th:case="'COMPLETED'" class="badge bg-secondary">
                                                     <i class="bi bi-check-circle"></i> Completada
                                                 </span>
-                                                <span th:case="'CANCELLED'" class="badge bg-danger">
+                                                <span th:case="'CANCELLED'" class="badge bg-light text-dark">
                                                     <i class="bi bi-x-circle"></i> Cancelada
                                                 </span>
                                             </span>
@@ -153,7 +153,7 @@
                                         <td class="text-center">
                                             <span th:if="${solicitud.applicationCount == 0}" class="text-muted">—</span>
                                             <span th:if="${solicitud.applicationCount > 0}"
-                                                class="badge bg-primary rounded-pill fs-6"
+                                                class="badge bg-secondary rounded-pill fs-6"
                                                 th:text="${solicitud.applicationCount}">0</span>
                                         </td>
                                         <td>
@@ -167,7 +167,8 @@
                                         <td class="pe-4">
                                             <div class="d-flex flex-column gap-1">
                                                 <!-- Editar -->
-                                                <a th:href="@{/requests/request(edit=${solicitud.id})}"
+                                                <a th:if="${solicitud.status.name() == 'DRAFT' or solicitud.status.name() == 'CANCELLED'}"
+                                                    th:href="@{/requests/request(edit=${solicitud.id})}"
                                                     class="btn btn-sm btn-outline-primary">
                                                     <i class="bi bi-pencil"></i> Editar
                                                 </a>
@@ -245,7 +246,7 @@
                         </div>
                         <h4 class="text-muted mb-3">No tienes solicitudes todavía</h4>
                         <p class="text-muted mb-4">Crea tu primera solicitud para encontrar profesionales</p>
-                        <a th:href="@{/requests/request}" class="btn btn-primary btn-lg shadow">
+                        <a th:href="@{/requests/request}" class="btn btn-success btn-lg shadow">
                             <i class="bi bi-plus-circle"></i> Crear Primera Solicitud
                         </a>
                     </div>

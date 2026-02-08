@@ -147,8 +147,8 @@ public class RequestFormController {
     // CONFIGURA EL FORMULARIO PARA EDITAR UNA SOLICITUD EXISTENTE
     // ============================================================================
     private void formForEdit(Long editId, AppUser usuario, RequestDTO form, Model model) {
-        // Buscar la solicitud que queremos editar
-        ServiceRequest solicitudExistente = serviceRequestService.getUserRequest(editId, usuario);
+        // Buscar la solicitud que queremos editar (con validación de estado)
+        ServiceRequest solicitudExistente = serviceRequestService.getUserRequestForEditing(editId, usuario);
 
         // Copiar datos básicos al formulario
         copyBasicRequestData(solicitudExistente, form);

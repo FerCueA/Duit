@@ -24,11 +24,11 @@
 			<!-- Botones de navegación principal -->
 			<div class="d-flex flex-row flex-wrap align-items-center gap-4 ms-auto">
 				<a th:href="@{/home}"
-					class="btn btn-light btn-sm px-4 py-2 text-primary fw-semibold d-inline-flex align-items-center justify-content-center gap-2 rounded-2">
+					class="btn btn-light btn-sm px-4 py-2 text-dark fw-semibold d-inline-flex align-items-center justify-content-center gap-2 rounded-2">
 					<i class="bi bi-house-door fs-5"></i> <span class="d-none d-md-inline">Menú Principal</span>
 				</a>
 				<a th:href="@{/logout}"
-					class="btn btn-outline-danger btn-sm px-3 py-2 text-danger d-flex align-items-center gap-2 rounded-2 bg-danger text-white">
+					class="btn btn-light btn-sm px-3 py-2 text-dark d-flex align-items-center gap-2 rounded-2">
 					<i class="bi bi-box-arrow-right fs-5"></i> <span class="d-none d-md-inline">Cerrar sesión</span>
 				</a>
 			</div>
@@ -87,17 +87,17 @@
 
 					<!-- Enlaces de administración (solo para admins) -->
 					<li class="nav-item">
-						<a class="nav-link text-danger" th:href="@{/admin/users}">
+						<a class="nav-link text-muted" th:href="@{/admin/users}">
 							<i class="bi bi-people"></i> Usuarios
 						</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link text-danger" th:href="@{/admin/stats}">
+						<a class="nav-link text-muted" th:href="@{/admin/stats}">
 							<i class="bi bi-bar-chart-line"></i> Estadísticas
 						</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link text-danger" th:href="@{/admin/categories}">
+						<a class="nav-link text-muted" th:href="@{/admin/categories}">
 							<i class="bi bi-tags"></i> Categorías
 						</a>
 					</li>

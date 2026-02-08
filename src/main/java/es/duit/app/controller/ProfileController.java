@@ -61,18 +61,22 @@ public class ProfileController {
 
         AppUser user = appUserService.getCurrentUser();
 
+        if (errors.hasErrors()) {
+            model.addAttribute("editProfileDTO", editProfileDTO);
+            model.addAttribute("user", user);
+            return "profile/profileUser";
+        }
+
         try {
-            if (errors.hasErrors()) {
-                model.addAttribute("editProfileDTO", editProfileDTO);
-                model.addAttribute("user", user);
-                return "profile/profileUser";
-            }
             appUserService.updateUserProfile(editProfileDTO);
             flash.addFlashAttribute("success", "Perfil actualizado correctamente");
         } catch (IllegalArgumentException e) {
             flash.addFlashAttribute("errors", e.getMessage());
-            flash.addFlashAttribute("editProfileDTO", editProfileDTO);
-            return "redirect:/profile/edit";
+            model.addAttribute("editProfileDTO", editProfileDTO);
+            model.addAttribute("user", user);
+            return "profile/profileUser";
+        } catch (Exception e) {
+            flash.addFlashAttribute("errors", "Error inesperado al actualizar el perfil");
         }
 
         return "redirect:/profile/edit";
@@ -90,5 +94,37 @@ public class ProfileController {
         model.addAttribute("editProfileDTO", dto);
         model.addAttribute("user", userPro);
         return "profile/profileProfessional";
+    }
+
+    // ============================================================================
+    // PROCESA LA ACTUALIZACIÓN DEL PERFIL PROFESIONAL
+    // ============================================================================
+    @PostMapping({ "/professional", "/profesional" })
+    public String updateProfessionalProfile(@Valid @ModelAttribute("editProfileDTO") EditProfileDTO editProfileDTO,
+            BindingResult errors,
+            Model model,
+            RedirectAttributes flash) {
+
+        AppUser user = appUserService.getCurrentUser();
+
+        if (errors.hasErrors()) {
+            model.addAttribute("editProfileDTO", editProfileDTO);
+            model.addAttribute("user", user);
+            return "profile/profileProfessional";
+        }
+
+        try {
+            appUserService.updateProfessionalProfile(editProfileDTO);
+            flash.addFlashAttribute("success", "Perfil profesional actualizado correctamente");
+        } catch (IllegalArgumentException e) {
+            flash.addFlashAttribute("errors", e.getMessage());
+            model.addAttribute("editProfileDTO", editProfileDTO);
+            model.addAttribute("user", user);
+            return "profile/profileProfessional";
+        } catch (Exception e) {
+            flash.addFlashAttribute("errors", "Error inesperado al actualizar el perfil profesional");
+        }
+
+        return "redirect:/profile/professional";
     }
 }

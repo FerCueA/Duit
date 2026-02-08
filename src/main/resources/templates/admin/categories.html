@@ -15,7 +15,7 @@
         <div class="container py-5">
             <div class="row">
                 <div class="col-12">
-                    <h1 class="mb-4">Gestión de Categorías</h1>
+                    <h1 class="mb-4 text-dark">Gestión de Categorías</h1>
 
                     <!-- BLOQUE DE MENSAJES VALIDACIONES-->
                     <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
@@ -27,17 +27,23 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
 
-                    <div class="card">
+                    <div class="card border-secondary shadow">
                         <div class="card-body">
+
+
                             <!-- Formulario añadir/editar -->
                             <form th:action="@{/admin/categories}" th:object="${categoryDTO}" method="post"
-                                class="row g-3 mb-4" role="form" aria-label="Formulario de categorías">
+                                class="row g-3 mb-4"
+                                th:classappend="${categoryDTO.id != null ? 'editing-form p-3 border border-primary rounded bg-light-subtle' : ''}"
+                                role="form" aria-label="Formulario de categorías">
                                 <input type="hidden" th:field="*{id}" />
                                 <!-- Campo Nombre -->
                                 <div class="col-md-4">
-                                    <label for="categoryName" class="visually-hidden">Nombre de la categoría</label>
+                                    <label for="categoryName" class="form-label fw-bold"
+                                        th:classappend="${categoryDTO.id != null ? 'text-primary' : ''}">Nombre de la
+                                        categoría</label>
                                     <input type="text" th:field="*{name}" id="categoryName"
-                                        th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                                        th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : '' + ${categoryDTO.id != null ? ' border-primary shadow-sm' : ''}"
                                         class="form-control" placeholder="Nombre" required aria-describedby="nameError">
                                     <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback" id="nameError"
                                         role="alert">
@@ -46,10 +52,12 @@
                                 </div>
                                 <!-- Campo Descripción -->
                                 <div class="col-md-5">
-                                    <label for="categoryDescription" class="visually-hidden">Descripción de la
+                                    <label for="categoryDescription" class="form-label fw-bold"
+                                        th:classappend="${categoryDTO.id != null ? 'text-primary' : ''}">Descripción de
+                                        la
                                         categoría</label>
                                     <input type="text" th:field="*{description}" id="categoryDescription"
-                                        th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
+                                        th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : '' + ${categoryDTO.id != null ? ' border-primary shadow-sm' : ''}"
                                         class="form-control" placeholder="Descripción"
                                         aria-describedby="descriptionError">
                                     <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback"
@@ -59,12 +67,14 @@
                                 </div>
                                 <!-- Botones Enviar/Cancelar -->
                                 <div class="col-md-3 text-end">
-                                    <button type="submit" class="btn btn-primary"
+                                    <button type="submit" class="btn btn-outline-dark"
+                                        th:classappend="${categoryDTO.id != null ? 'btn-primary' : ''}"
                                         th:aria-label="${categoryDTO.id != null ? 'Actualizar categoría' : 'Añadir nueva categoría'}"
                                         th:text="${categoryDTO.id != null ? 'Actualizar' : 'Añadir'}">
                                     </button>
                                     <a th:if="${categoryDTO.id != null}" th:href="@{/admin/categories}"
-                                        class="btn btn-secondary ms-2" aria-label="Cancelar edición">Cancelar</a>
+                                        class="btn btn-outline-secondary ms-2" aria-label="Cancelar edición">
+                                        <i class="bi bi-x-circle me-1"></i>Cancelar</a>
                                 </div>
                             </form>
 
@@ -85,7 +95,7 @@
                                         <td th:text="${cat.name}"></td>
                                         <td th:text="${cat.description ?: '-'}"></td>
                                         <td>
-                                            <span th:if="${cat.active}" class="text-success">Activa</span>
+                                            <span th:if="${cat.active}" class="text-muted">Activa</span>
                                             <span th:if="${!cat.active}" class="text-muted">Inactiva</span>
                                         </td>
                                         <td>

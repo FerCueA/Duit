@@ -92,7 +92,7 @@ public class ProfessionalController {
 
         model.addAttribute("postulaciones", postulaciones);
         model.addAttribute("trabajosEnProgreso", trabajosEnProgreso);
-        return "jobs/myapplications";
+        return "jobs/myaplication";
     }
 
     // Enviar postulación

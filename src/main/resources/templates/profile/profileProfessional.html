@@ -15,8 +15,8 @@
         <div class="container py-5">
             <div class="row">
                 <div class="col-12">
-                    <h1 class="mb-4"><i class="bi bi-person-workspace"></i> Editar Perfil Profesional</h1>
-                    <div class="card shadow">
+                    <h1 class="mb-4 text-dark"><i class="bi bi-person-workspace"></i> Editar Perfil Profesional</h1>
+                    <div class="card shadow border-secondary">
                         <div class="card-body">
 
                             <!-- Mensajes de éxito y error -->
@@ -31,160 +31,303 @@
                             </div>
 
                             <!-- Formulario de edición de perfil -->
-                            <form th:action="@{/profile/edit}" method="post" th:object="${editProfileDTO}">
-                                <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger" role="alert">
-                                    <ul class="mb-0">
-                                        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
-                                    </ul>
+                            <form th:action="@{/profile/professional}" method="post" th:object="${editProfileDTO}">`
+                                <!-- Errores globales -->
+                                <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger d-flex align-items-center" role="alert">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    <div>
+                                        <ul class="mb-0">
+                                            <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+                                        </ul>
+                                    </div>
                                 </div>
 
-                                <div class="row g-3">
-                                    <!-- Nombre -->
-                                    <div class="col-md-6">
-                                        <label for="firstName" class="form-label">Nombre *</label>
-                                        <input type="text" class="form-control" id="firstName" th:field="*{firstName}"
-                                            th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''"
-                                            placeholder="Ej: Juan" minlength="2" maxlength="150" required>
-                                        <div class="form-text">Entre 2 y 150 caracteres</div>
-                                        <div th:if="${#fields.hasErrors('firstName')}" class="invalid-feedback"
-                                            role="alert">
-                                            <span th:errors="*{firstName}"></span>
-                                        </div>
+                                <!-- Sección: Información Personal -->
+                                <div class="card border-secondary bg-white mb-4">
+                                    <div class="card-header bg-dark text-white">
+                                        <h5 class="mb-0"><i class="bi bi-person-fill me-2"></i>Información Personal</h5>
                                     </div>
+                                    <div class="card-body">
+                                        <div class="row g-3">
+                                            <!-- Nombre -->
+                                            <div class="col-md-6">
+                                                <label for="firstName" class="form-label fw-semibold">
+                                                <i class="bi bi-person text-muted me-1"></i>Nombre *
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0">
+                                                        <i class="bi bi-person-badge text-muted"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control border-start-0" id="firstName" th:field="*{firstName}"
+                                                        th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''"
+                                                        placeholder="Ej: Juan" minlength="2" maxlength="150" required>
+                                                </div>
+                                                <div class="form-text text-muted">
+                                                    <i class="bi bi-info-circle me-1"></i>Entre 2 y 150 caracteres
+                                                </div>
+                                                <div th:if="${#fields.hasErrors('firstName')}" class="invalid-feedback d-block">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                                    <span th:errors="*{firstName}"></span>
+                                                </div>
+                                            </div>
 
-                                    <!-- Apellido -->
-                                    <div class="col-md-6">
-                                        <label for="lastName" class="form-label">Apellidos *</label>
-                                        <input type="text" class="form-control" id="lastName" th:field="*{lastName}"
-                                            th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''"
-                                            placeholder="Ej: García López" maxlength="150" required>
-                                        <div class="form-text">Máximo 150 caracteres</div>
-                                        <div th:if="${#fields.hasErrors('lastName')}" class="invalid-feedback"
-                                            role="alert">
-                                            <span th:errors="*{lastName}"></span>
-                                        </div>
-                                    </div>
+                                            <!-- Apellidos -->
+                                            <div class="col-md-6">
+                                                <label for="lastName" class="form-label fw-semibold">
+                                                    <i class="bi bi-people text-muted me-1"></i>Apellidos *
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0">
+                                                        <i class="bi bi-people-fill text-muted"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control border-start-0" id="lastName" th:field="*{lastName}"
+                                                        th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''"
+                                                        placeholder="Ej: García López" maxlength="150" required>
+                                                </div>
+                                                <div class="form-text text-muted">
+                                                    <i class="bi bi-info-circle me-1"></i>Máximo 150 caracteres
+                                                </div>
+                                                <div th:if="${#fields.hasErrors('lastName')}" class="invalid-feedback d-block">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                                    <span th:errors="*{lastName}"></span>
+                                                </div>
+                                            </div>
 
-                                    <!-- Teléfono -->
-                                    <div class="col-md-6">
-                                        <label for="phone" class="form-label">Teléfono</label>
-                                        <input type="tel" class="form-control" id="phone" th:field="*{phone}"
-                                            th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''"
-                                            placeholder="+34612345678" pattern="\+34[0-9]{9}">
-                                        <div class="form-text">Formato: +34 seguido de 9 dígitos</div>
-                                        <div th:if="${#fields.hasErrors('phone')}" class="invalid-feedback"
-                                            role="alert">
-                                            <span th:errors="*{phone}"></span>
-                                        </div>
-                                    </div>
+                                            <!-- Teléfono -->
+                                            <div class="col-md-6">
+                                                <label for="phone" class="form-label fw-semibold">
+                                                    <i class="bi bi-telephone text-muted me-1"></i>Teléfono
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0">
+                                                        <i class="bi bi-telephone-fill text-muted"></i>
+                                                    </span>
+                                                    <input type="tel" class="form-control border-start-0" id="phone" th:field="*{phone}"
+                                                        th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''"
+                                                        placeholder="+34612345678" pattern="\+34[0-9]{9}">
+                                                </div>
+                                                <div class="form-text text-muted">
+                                                    <i class="bi bi-info-circle me-1"></i>Formato: +34 seguido de 9 dígitos
+                                                </div>
+                                                <div th:if="${#fields.hasErrors('phone')}" class="invalid-feedback d-block">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                                    <span th:errors="*{phone}"></span>
+                                                </div>
+                                            </div>
 
-                                    <!-- Dni -->
-                                    <div class="col-md-6">
-                                        <label for="nif" class="form-label ">DNI</label>
-                                        <input type="text" class="form-control bg-dark-subtle text-muted" id="nif"
-                                            th:field="*{nif}" readonly
-                                            th:classappend="${#fields.hasErrors('nif')} ? 'is-invalid' : ''"
-                                            placeholder="Ej: 12345678Z" maxlength="9" required>
-                                        <div class="form-text">Documento nacional de identidad</div>
-                                        <div th:if="${#fields.hasErrors('nif')}" class="invalid-feedback" role="alert">
-                                            <span th:errors="*{nif}"></span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Tarifa -->
-                                    <div class="col-md-6">
-                                        <label for="hourlyRate" class="form-label">Tarifa por hora * (€)</label>
-                                        <input type="number" class="form-control" id="hourlyRate"
-                                            th:field="*{hourlyRate}"
-                                            th:classappend="${#fields.hasErrors('hourlyRate')} ? 'is-invalid' : ''"
-                                            placeholder="Ej: 25.00" min="5.00" max="500.00" step=".50">
-                                        <div class="form-text">Entre 5 y 500 €</div>
-                                        <div th:if="${#fields.hasErrors('hourlyRate')}" class="invalid-feedback"
-                                            role="alert">
-                                            <span th:errors="*{hourlyRate}"></span>
-                                        </div>
-                                        <div th:if="${#fields.hasErrors('phone')}" class="invalid-feedback"
-                                            role="alert">
-                                            <span th:errors="*{phone}"></span>
-                                        </div>
-                                    </div>
-
-
-
-                                    <!-- Ciudad -->
-                                    <div class="col-md-6">
-                                        <label for="city" class="form-label">Ciudad *</label>
-                                        <input type="text" class="form-control" id="city" th:field="*{city}"
-                                            th:classappend="${#fields.hasErrors('city')} ? 'is-invalid' : ''"
-                                            placeholder="Madrid" minlength="2" maxlength="100" required>
-                                        <div class="form-text">Entre 2 y 100 caracteres</div>
-                                        <div th:if="${#fields.hasErrors('city')}" class="invalid-feedback" role="alert">
-                                            <span th:errors="*{city}"></span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Dirección -->
-                                    <div class="col-12">
-                                        <label for="address" class="form-label">Dirección *</label>
-                                        <input type="text" class="form-control" id="address" th:field="*{address}"
-                                            th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''"
-                                            placeholder="Ej: Calle Mayor 123, 2º A" minlength="5" maxlength="200"
-                                            required>
-                                        <div class="form-text">Entre 5 y 200 caracteres</div>
-                                        <div th:if="${#fields.hasErrors('address')}" class="invalid-feedback"
-                                            role="alert">
-                                            <span th:errors="*{address}"></span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Código Postal -->
-                                    <div class="col-md-4">
-                                        <label for="postalCode" class="form-label">Código Postal</label>
-                                        <input type="text" class="form-control" id="postalCode" th:field="*{postalCode}"
-                                            th:classappend="${#fields.hasErrors('postalCode')} ? 'is-invalid' : ''"
-                                            placeholder="28001" pattern="[0-9]{5}" maxlength="5">
-                                        <div class="form-text">5 dígitos</div>
-                                        <div th:if="${#fields.hasErrors('postalCode')}" class="invalid-feedback"
-                                            role="alert">
-                                            <span th:errors="*{postalCode}"></span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Provincia -->
-                                    <div class="col-md-4">
-                                        <label for="province" class="form-label">Provincia *</label>
-                                        <input type="text" class="form-control" id="province" th:field="*{province}"
-                                            th:classappend="${#fields.hasErrors('province')} ? 'is-invalid' : ''"
-                                            placeholder="Madrid" minlength="2" maxlength="100" required>
-                                        <div class="form-text">Entre 2 y 100 caracteres</div>
-                                        <div th:if="${#fields.hasErrors('province')}" class="invalid-feedback"
-                                            role="alert">
-                                            <span th:errors="*{province}"></span>
-                                        </div>
-                                    </div>
-
-                                    <!-- País -->
-                                    <div class="col-md-4">
-                                        <label for="country" class="form-label">País *</label>
-                                        <input type="text" class="form-control" id="country" th:field="*{country}"
-                                            th:classappend="${#fields.hasErrors('country')} ? 'is-invalid' : ''"
-                                            value="España" readonly>
-                                        <div class="form-text">Actualmente solo disponible en España</div>
-                                        <div th:if="${#fields.hasErrors('country')}" class="invalid-feedback"
-                                            role="alert">
-                                            <span th:errors="*{country}"></span>
+                                            <!-- DNI -->
+                                            <div class="col-md-6">
+                                                <label for="nif" class="form-label fw-semibold">
+                                                    <i class="bi bi-card-text text-muted me-1"></i>DNI
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0">
+                                                        <i class="bi bi-credit-card text-muted"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control border-start-0 bg-light" id="nif" th:field="*{nif}" readonly
+                                                        th:classappend="${#fields.hasErrors('nif')} ? 'is-invalid' : ''"
+                                                        placeholder="Ej: 12345678Z" maxlength="9" required>
+                                                </div>
+                                                <div class="form-text text-muted">
+                                                    <i class="bi bi-lock me-1"></i>Documento nacional de identidad
+                                                </div>
+                                                <div th:if="${#fields.hasErrors('nif')}" class="invalid-feedback d-block">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                                    <span th:errors="*{nif}"></span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Botones -->
-                                <div class="d-flex justify-content-end mt-4 gap-2">
-                                    <a th:href="@{/home}" class="btn btn-outline-secondary">
-                                        Descartar cambios
-                                    </a>
-                                    <button type="submit" class="btn btn-primary">
-                                        Guardar cambios
-                                    </button>
+                                <!-- Sección: Información Profesional -->
+                                <div class="card border-0 bg-light mb-4">
+                                    <div class="card-header bg-secondary text-white">
+                                        <h5 class="mb-0"><i class="bi bi-tools me-2"></i>Información Profesional</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3">
+                                            <!-- Tarifa por hora -->
+                                            <div class="col-md-6">
+                                                <label for="hourlyRate" class="form-label fw-semibold">
+                                                    <i class="bi bi-currency-euro text-muted me-1"></i>Tarifa por hora * (€)
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0">
+                                                        <i class="bi bi-cash-coin text-muted"></i>
+                                                    </span>
+                                                    <input type="number" class="form-control border-start-0" id="hourlyRate" th:field="*{hourlyRate}"
+                                                        th:classappend="${#fields.hasErrors('hourlyRate')} ? 'is-invalid' : ''"
+                                                        placeholder="Ej: 25.00" min="5.00" max="500.00" step=".50">
+                                                    <span class="input-group-text bg-light">€/h</span>
+                                                </div>
+                                                <div class="form-text text-muted">
+                                                    <i class="bi bi-info-circle me-1"></i>Entre 5 y 500 €
+                                                </div>
+                                                <div th:if="${#fields.hasErrors('hourlyRate')}" class="invalid-feedback d-block">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                                    <span th:errors="*{hourlyRate}"></span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Descripción profesional -->
+                                            <div class="col-12">
+                                                <label for="description" class="form-label fw-semibold">
+                                                    <i class="bi bi-file-text text-muted me-1"></i>Descripción profesional *
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0">
+                                                        <i class="bi bi-card-text text-muted"></i>
+                                                    </span>
+                                                    <textarea class="form-control border-start-0" id="description" th:field="*{description}"
+                                                        th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
+                                                        placeholder="Describe tu experiencia, especialidades y servicios que ofreces..."
+                                                        rows="4" minlength="50" maxlength="2000" required></textarea>
+                                                </div>
+                                                <div class="form-text text-muted">
+                                                    <i class="bi bi-info-circle me-1"></i>Entre 50 y 2000 caracteres. Describe tus habilidades, experiencia y servicios.
+                                                </div>
+                                                <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback d-block">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                                    <span th:errors="*{description}"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sección: Ubicación -->
+                                <div class="card border-0 bg-light mb-4">
+                                    <div class="card-header bg-secondary text-white">
+                                        <h5 class="mb-0"><i class="bi bi-geo-alt-fill me-2"></i>Ubicación</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3">
+                                            <!-- Dirección -->
+                                            <div class="col-12">
+                                                <label for="address" class="form-label fw-semibold">
+                                                    <i class="bi bi-house text-muted me-1"></i>Dirección *
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0">
+                                                        <i class="bi bi-house-door text-muted"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control border-start-0" id="address" th:field="*{address}"
+                                                        th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''"
+                                                        placeholder="Ej: Calle Mayor 123, 2º A" minlength="5" maxlength="200" required>
+                                                </div>
+                                                <div class="form-text text-muted">
+                                                    <i class="bi bi-info-circle me-1"></i>Entre 5 y 200 caracteres
+                                                </div>
+                                                <div th:if="${#fields.hasErrors('address')}" class="invalid-feedback d-block">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                                    <span th:errors="*{address}"></span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Ciudad -->
+                                            <div class="col-md-6">
+                                                <label for="city" class="form-label fw-semibold">
+                                                    <i class="bi bi-buildings text-muted me-1"></i>Ciudad *
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0">
+                                                        <i class="bi bi-building text-muted"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control border-start-0" id="city" th:field="*{city}"
+                                                        th:classappend="${#fields.hasErrors('city')} ? 'is-invalid' : ''"
+                                                        placeholder="Madrid" minlength="2" maxlength="100" required>
+                                                </div>
+                                                <div class="form-text text-muted">
+                                                    <i class="bi bi-info-circle me-1"></i>Entre 2 y 100 caracteres
+                                                </div>
+                                                <div th:if="${#fields.hasErrors('city')}" class="invalid-feedback d-block">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                                    <span th:errors="*{city}"></span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Código Postal -->
+                                            <div class="col-md-6">
+                                                <label for="postalCode" class="form-label fw-semibold">
+                                                    <i class="bi bi-signpost text-muted me-1"></i>Código Postal
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0">
+                                                        <i class="bi bi-signpost-2 text-muted"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control border-start-0" id="postalCode" th:field="*{postalCode}"
+                                                        th:classappend="${#fields.hasErrors('postalCode')} ? 'is-invalid' : ''"
+                                                        placeholder="28001" pattern="[0-9]{5}" maxlength="5">
+                                                </div>
+                                                <div class="form-text text-muted">
+                                                    <i class="bi bi-info-circle me-1"></i>5 dígitos
+                                                </div>
+                                                <div th:if="${#fields.hasErrors('postalCode')}" class="invalid-feedback d-block">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                                    <span th:errors="*{postalCode}"></span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Provincia -->
+                                            <div class="col-md-6">
+                                                <label for="province" class="form-label fw-semibold">
+                                                    <i class="bi bi-map text-muted me-1"></i>Provincia *
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0">
+                                                        <i class="bi bi-map-fill text-muted"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control border-start-0" id="province" th:field="*{province}"
+                                                        th:classappend="${#fields.hasErrors('province')} ? 'is-invalid' : ''"
+                                                        placeholder="Madrid" minlength="2" maxlength="100" required>
+                                                </div>
+                                                <div class="form-text text-muted">
+                                                    <i class="bi bi-info-circle me-1"></i>Entre 2 y 100 caracteres
+                                                </div>
+                                                <div th:if="${#fields.hasErrors('province')}" class="invalid-feedback d-block">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                                    <span th:errors="*{province}"></span>
+                                                </div>
+                                            </div>
+
+                                            <!-- País -->
+                                            <div class="col-md-6">
+                                                <label for="country" class="form-label fw-semibold">
+                                                    <i class="bi bi-flag text-muted me-1"></i>País *
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-end-0">
+                                                        <i class="bi bi-flag-fill text-muted"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control border-start-0 bg-light" id="country" th:field="*{country}"
+                                                        th:classappend="${#fields.hasErrors('country')} ? 'is-invalid' : ''"
+                                                        value="España" readonly>
+                                                </div>
+                                                <div class="form-text text-muted">
+                                                    <i class="bi bi-lock me-1"></i>Actualmente solo disponible en España
+                                                </div>
+                                                <div th:if="${#fields.hasErrors('country')}" class="invalid-feedback d-block">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                                    <span th:errors="*{country}"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Botones de acción -->
+                                <div class="card border-0">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-column flex-md-row justify-content-end gap-3">
+                                            <a th:href="@{/home}" class="btn btn-outline-secondary btn-lg d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-x-circle me-2"></i>Descartar cambios
+                                            </a>
+                                            <button type="submit" class="btn btn-primary btn-lg d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-check-circle me-2"></i>Guardar cambios
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>

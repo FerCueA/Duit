@@ -53,6 +53,10 @@ public class EditProfileDTO {
     @Column(name = "nif", length = 9, unique = true, nullable = false)
     private String nif;
 
+    @NotBlank(message = "La descripción profesional es obligatoria")
+    @Size(min = 50, max = 2000, message = "La descripción debe tener entre 50 y 2000 caracteres")
+    private String description;
+
     public EditProfileDTO() {
     }
 
@@ -80,6 +84,7 @@ public class EditProfileDTO {
         if (hour != null) {
             this.hourlyRate = hour.getHourlyRate();
             this.nif = hour.getNif();
+            this.description = hour.getDescription();
         }
     }
 

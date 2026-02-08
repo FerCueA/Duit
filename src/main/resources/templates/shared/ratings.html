@@ -15,17 +15,17 @@
         <div class="container py-5">
             <div class="row">
                 <div class="col-12">
-                    <h1 class="mb-4"><i class="bi bi-star"></i> Valoraciones</h1>
+                    <h1 class="mb-4 text-dark"><i class="bi bi-star"></i> Valoraciones</h1>
                     
                     <!-- Trabajos pendientes de valoración -->
-                    <div class="card shadow mb-4" th:if="${!trabajosPendientes.isEmpty()}">
-                        <div class="card-header bg-primary text-white">
+                    <div class="card shadow border-secondary mb-4" th:if="${!trabajosPendientes.isEmpty()}">
+                        <div class="card-header bg-dark text-white">
                             <h5 class="mb-0"><i class="bi bi-exclamation-circle"></i> Trabajos Pendientes de Valorar</h5>
                         </div>
                         <div class="card-body">
                             <div class="row" th:each="trabajo : ${trabajosPendientes}">
                                 <div class="col-md-12 mb-3">
-                                    <div class="card" th:classappend="${trabajo.id} == ${trabajoSeleccionado?.id} ? 'border-primary border-2' : ''">
+                                    <div class="card border-secondary" th:classappend="${trabajo.id} == ${trabajoSeleccionado?.id} ? 'border-dark border-2' : ''">>
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -48,7 +48,7 @@
                                                         <i class="bi bi-calendar-check"></i>
                                                         Fin: <span th:text="${#temporals.format(trabajo.endDate, 'dd/MM/yyyy')}"></span>
                                                     </p>
-                                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalValoracion" th:data-job-id="${trabajo.id}">
+                                                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalValoracion" th:data-job-id="${trabajo.id}">
                                                         <i class="bi bi-star"></i> Valorar
                                                     </button>
                                                 </div>
@@ -61,24 +61,24 @@
                     </div>
 
                     <!-- Mensaje si no hay trabajos pendientes -->
-                    <div class="card shadow mb-4" th:if="${trabajosPendientes.isEmpty() && trabajosFinalizadas.isEmpty()}">
+                    <div class="card shadow border-secondary mb-4" th:if="${trabajosPendientes.isEmpty() && trabajosFinalizadas.isEmpty()}">
                         <div class="card-body">
                             <div class="text-center py-5">
-                                <i class="bi bi-check-circle fs-1 text-success"></i>
+                                <i class="bi bi-check-circle fs-1 text-muted"></i></i>
                                 <p class="mt-3 text-muted">No tienes trabajos completados aún</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Trabajos Finalizadas (ambas partes han valorado) -->
-                    <div class="card shadow mb-4" th:if="${!trabajosFinalizadas.isEmpty()}">
-                        <div class="card-header bg-success text-white">
+                    <div class="card shadow border-secondary mb-4" th:if="${!trabajosFinalizadas.isEmpty()}">>
+                        <div class="card-header bg-secondary text-white">
                             <h5 class="mb-0"><i class="bi bi-check-circle"></i> Valoraciones Finalizadas</h5>
                         </div>
                         <div class="card-body">
                             <div class="row" th:each="trabajo : ${trabajosFinalizadas}">
                                 <div class="col-md-12 mb-3">
-                                    <div class="card">
+                                    <div class="card border-secondary">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -101,7 +101,7 @@
                                                         <i class="bi bi-calendar-check"></i>
                                                         Fin: <span th:text="${#temporals.format(trabajo.endDate, 'dd/MM/yyyy')}"></span>
                                                     </p>
-                                                    <span class="badge bg-success"><i class="bi bi-check-circle"></i> Valoraciones Completadas</span>
+                                                    <span class="badge bg-secondary"><i class="bi bi-check-circle"></i> Valoraciones Completadas</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,7 +144,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnEnviarValoracion">Enviar Valoración</button>
+                    <button type="button" class="btn btn-warning" id="btnEnviarValoracion">Enviar Valoración</button>
                 </div>
             </div>
         </div>

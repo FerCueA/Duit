@@ -120,11 +120,13 @@ public class AppUserService {
 
         if (profesional == null) {
             profesional = new ProfessionalProfile();
+            profesional.setUser(userPro);
             userPro.setProfessionalProfile(profesional);
         }
         // Actualizar datos del perfil profesional
         profesional.setHourlyRate(dto.getHourlyRate());
         profesional.setNif(dto.getNif().trim());
+        profesional.setDescription(dto.getDescription().trim());
 
         // Guardar perfil profesional en la BD
         professionalProfileRepository.save(profesional);

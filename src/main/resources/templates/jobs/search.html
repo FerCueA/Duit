@@ -20,13 +20,9 @@
 
             <!-- Header -->
             <header class="mb-4">
-                <h1 class="text-primary h2"><i class="bi bi-search" aria-hidden="true"></i> Buscar Trabajos</h1>
-                <p class="text-muted">Encuentra trabajos perfectos para ti -
-                    <span th:text="${totalOfertas ?: 0}">0</span>
-                    <span th:switch="${totalOfertas}">
-                        <span th:case="1">trabajo disponible</span>
-                        <span th:case="*">trabajos disponibles</span>
-                    </span>
+                <h1 class="text-dark h2"><i class="bi bi-search" aria-hidden="true"></i> Buscar Trabajos</h1>
+                <p class="text-muted">Encuentra trabajos perfectos para ti
+                   
                 </p>
             </header>
 
@@ -45,123 +41,155 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar mensaje"></button>
             </div>
             <!-- Formulario de búsqueda -->
-            <section class="card mb-4">
-                <div class="card-body">
-                    <h2 class="h5 mb-3">
-                        <i class="bi bi-sliders" aria-hidden="true"></i> Filtros de búsqueda
+            <section class="card border-secondary shadow-lg mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h2 class="h5 mb-0 d-flex align-items-center">
+                        <i class="bi bi-funnel-fill me-2" aria-hidden="true"></i> Filtros de búsqueda
                     </h2>
-
+                </div>
+                <div class="card-body bg-light">
                     <form th:action="@{/professional/search}" method="get" role="search">
-                        <div class="row g-3">
+                        <div class="row g-4">
                             <!-- Campo de texto -->
                             <div class="col-md-6">
-                                <label for="textoBusqueda" class="form-label">
-                                    <i class="bi bi-search" aria-hidden="true"></i> ¿Qué trabajo buscas?
+                                <label for="textoBusqueda" class="form-label fw-semibold">
+                                    <i class="bi bi-search text-muted me-1" aria-hidden="true"></i> ¿Qué trabajo buscas?
                                 </label>
-                                <input type="search" class="form-control" id="textoBusqueda" name="textoBusqueda"
-                                    th:value="${param.textoBusqueda}" placeholder="programador, fontanero, limpieza..."
-                                    maxlength="100" aria-describedby="texto-help">
-                                <small id="texto-help" class="form-text text-muted">Busca en título y
-                                    descripción</small>
+                                <div class="input-group input-group-lg shadow-sm">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="bi bi-search text-muted"></i>
+                                    </span>
+                                    <input type="search" class="form-control border-start-0 border-end-0" id="textoBusqueda" name="textoBusqueda"
+                                        th:value="${param.textoBusqueda}" placeholder="programador, fontanero, limpieza..."
+                                        maxlength="100" aria-describedby="texto-help">
+                                    <span class="input-group-text bg-light border-start-0">
+                                        <i class="bi bi-lightning text-muted"></i>
+                                    </span>
+                                </div>
+                                <small id="texto-help" class="form-text text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>Busca en título y descripción
+                                </small>
                             </div>
 
                             <!-- Categoría -->
                             <div class="col-md-3">
-                                <label for="categoriaId" class="form-label">
-                                    <i class="bi bi-tags" aria-hidden="true"></i> Categoría
+                                <label for="categoriaId" class="form-label fw-semibold">
+                                    <i class="bi bi-tags text-muted me-1" aria-hidden="true"></i> Categoría
                                 </label>
-                                <select id="categoriaId" name="categoriaId" class="form-select">
-                                    <option value="" selected>Todas las categorías</option>
-                                    <option th:each="categoria : ${categorias}" th:value="${categoria.id}"
-                                        th:text="${categoria.name}"
-                                        th:selected="${param.categoriaId != null and param.categoriaId[0] == categoria.id.toString()}">
-                                    </option>
-
-                                </select>
+                                <div class="input-group shadow-sm">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="bi bi-tag text-muted"></i>
+                                    </span>
+                                    <select id="categoriaId" name="categoriaId" class="form-select border-start-0">
+                                        <option value="" selected>Todas las categorías</option>
+                                        <option th:each="categoria : ${categorias}" th:value="${categoria.id}"
+                                            th:text="${categoria.name}"
+                                            th:selected="${param.categoriaId != null and param.categoriaId[0] == categoria.id.toString()}">
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
+
                             <!-- Ubicación -->
                             <div class="col-md-3">
-                                <label for="codigoPostal" class="form-label">
-                                    <i class="bi bi-geo-alt" aria-hidden="true"></i> Ubicación
+                                <label for="codigoPostal" class="form-label fw-semibold">
+                                    <i class="bi bi-geo-alt text-muted me-1" aria-hidden="true"></i> Ubicación
                                 </label>
-                                <select id="codigoPostal" name="codigoPostal" class="form-select">
-                                    <option value="" selected>Cualquier ubicación</option>
-                                    <option th:each="cp : ${codigosPostales}" th:value="${cp}" th:text="${cp}"
-                                        th:selected="${param.codigoPostal != null and param.codigoPostal[0] == cp}">
-                                    </option>
-                                </select>
+                                <div class="input-group shadow-sm">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="bi bi-geo-alt-fill text-muted"></i>
+                                    </span>
+                                    <select id="codigoPostal" name="codigoPostal" class="form-select border-start-0">
+                                        <option value="" selected>Cualquier ubicación</option>
+                                        <option th:each="cp : ${codigosPostales}" th:value="${cp}" th:text="${cp}"
+                                            th:selected="${param.codigoPostal != null and param.codigoPostal[0] == cp}">
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mt-4">
-                            <button type="submit" class="btn btn-primary" aria-label="Buscar trabajos con filtros">
-                                <i class="bi bi-search" aria-hidden="true"></i> Buscar trabajos
+                        <div class="d-flex flex-column flex-md-row gap-3 mt-4 pt-3 border-top">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm d-flex align-items-center justify-content-center" aria-label="Buscar trabajos con filtros">
+                                <i class="bi bi-search me-2" aria-hidden="true"></i> Buscar trabajos
                             </button>
-                            <a th:href="@{/professional/search}" class="btn btn-outline-secondary ms-2"
+                            <a th:href="@{/professional/search}" class="btn btn-outline-secondary btn-lg shadow-sm d-flex align-items-center justify-content-center"
                                 aria-label="Limpiar todos los filtros">
-                                <i class="bi bi-arrow-clockwise" aria-hidden="true"></i> Limpiar filtros
+                                <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i> Limpiar filtros
                             </a>
                         </div>
                     </form>
                 </div>
             </section>
             <!-- Resultados -->
-            <section class="card">
-                <header class="card-header d-flex justify-content-between align-items-center">
-                    <h2 class="h5 card-title mb-0">
-                        <i class="bi bi-briefcase" aria-hidden="true"></i>
-                        <span th:switch="${totalOfertas}">
-                            <span th:case="0">No hay trabajos disponibles</span>
-                            <span th:case="1">1 trabajo encontrado</span>
-                            <span th:case="*" th:text="${totalOfertas} + ' trabajos encontrados'">Trabajos</span>
-                        </span>
-                    </h2>
-                    <span class="badge bg-dark" th:if="${totalOfertas > 0}" th:text="${totalOfertas}"
-                        aria-label="Total de trabajos">0</span>
+            <section class="card border-0 shadow-lg">
+                <header class="card-header bg-secondary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h5 mb-0 d-flex align-items-center">
+                            <i class="bi bi-briefcase-fill me-2" aria-hidden="true"></i>
+                            <span th:switch="${totalOfertas}">
+                                <span th:case="0">No hay trabajos disponibles</span>
+                                <span th:case="1">1 trabajo encontrado</span>
+                                <span th:case="*" th:text="${totalOfertas} + ' trabajos encontrados'">Trabajos</span>
+                            </span>
+                        </h2>
+                        <span class="badge bg-light text-dark fs-6 px-3 py-2" th:if="${totalOfertas > 0}" th:text="${totalOfertas}"
+                            aria-label="Total de trabajos">0</span>
+                    </div>
                 </header>
 
-                <div class="card-body">
+                <div class="card-body bg-light">
                     <!-- Lista de trabajos -->
                     <div th:if="${ofertas != null and !#lists.isEmpty(ofertas)}">
-                        <div class="row g-3">
+                        <div class="row g-4">
                             <article class="col-12" th:each="oferta : ${ofertas}">
-                                <div class="card border h-100">
-                                    <div class="card-body">
+                                <div class="card border-0 h-100 shadow-sm hover-shadow transition">
+                                    <div class="card-body p-4">
                                         <div class="row align-items-center">
                                             <div class="col-md-9">
-                                                <h3 class="text-primary mb-1 h6" th:text="${oferta.title}">Título</h3>
+                                                <!-- Título con icono -->
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="bg-secondary rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                        <i class="bi bi-tools text-white"></i>
+                                                    </div>
+                                                    <h3 class="text-dark mb-0 h5 fw-bold" th:text="${oferta.title}">Título</h3>
+                                                </div>
 
-                                                <p class="text-muted small mb-2"
+                                                <!-- Descripción -->
+                                                <p class="text-muted mb-3 lh-sm"
                                                     th:text="${#strings.abbreviate(oferta.description, 120)}">
                                                     Descripción
                                                 </p>
 
-                                                <div class="d-flex gap-2 flex-wrap">
-                                                    <span class="badge bg-dark text-white"
-                                                        th:if="${oferta.category != null}"
-                                                        th:text="${oferta.category.name}">Cat</span>
-
-                                                    <span class="badge bg-dark text-white"
-                                                        th:if="${oferta.effectiveServiceAddress != null}">
-                                                        <i class="bi bi-geo-alt-fill" aria-hidden="true"></i>
-                                                        <span
-                                                            th:text="${oferta.effectiveServiceAddress.city}">Ciudad</span>
+                                                <!-- Badges informativos -->
+                                                <div class="d-flex gap-2 flex-wrap mb-2">
+                                                    <span class="badge bg-secondary px-3 py-2 fs-6"
+                                                        th:if="${oferta.category != null}">
+                                                        <i class="bi bi-tag-fill me-1"></i>
+                                                        <span th:text="${oferta.category.name}">Categoría</span>
                                                     </span>
 
-                                                    <span class="text-muted small"
+                                                    <span class="badge bg-light text-dark px-3 py-2 fs-6"
+                                                        th:if="${oferta.effectiveServiceAddress != null}">
+                                                        <i class="bi bi-geo-alt-fill me-1"></i>
+                                                        <span th:text="${oferta.effectiveServiceAddress.city}">Ciudad</span>
+                                                    </span>
+
+                                                    <span class="badge bg-light text-dark px-3 py-2 fs-6"
                                                         th:if="${oferta.requestedAt != null}">
-                                                        <i class="bi bi-calendar3" aria-hidden="true"></i>
-                                                        <span
-                                                            th:text="${#temporals.format(oferta.requestedAt, 'dd/MM/yyyy')}">Fecha</span>
+                                                        <i class="bi bi-calendar3 me-1"></i>
+                                                        <span th:text="${#temporals.format(oferta.requestedAt, 'dd/MM/yyyy')}">Fecha</span>
                                                     </span>
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3 text-end">
-                                                <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                                            <!-- Botón de acción -->
+                                            <div class="col-md-3 text-center text-md-end">
+                                                <button class="btn btn-success btn-lg shadow-sm px-4 py-3" type="button" data-bs-toggle="modal"
                                                     th:data-bs-target="'#modal_' + ${oferta.id}"
                                                     th:aria-label="'Postularse a: ' + ${oferta.title}">
-                                                    <i class="bi bi-send" aria-hidden="true"></i> Postularme
+                                                    <i class="bi bi-send-fill me-2" aria-hidden="true"></i>
+                                                    <span class="fw-semibold">Postularme</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -174,24 +202,29 @@
                     <!-- Sin resultados -->
                     <div th:unless="${ofertas != null and !#lists.isEmpty(ofertas)}" class="text-center py-5"
                         role="status">
-                        <div class="mb-4">
-                            <i class="bi bi-search text-muted" style="font-size: 3rem;" aria-hidden="true"></i>
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+                             style="width: 80px; height: 80px;">
+                            <i class="bi bi-search text-muted" style="font-size: 2rem;" aria-hidden="true"></i>
                         </div>
 
-                        <h3 class="text-muted mb-3 h5">No encontramos trabajos</h3>
+                        <h3 class="text-muted mb-3 h4 fw-semibold">No encontramos trabajos</h3>
 
-                        <p class="text-muted mb-4"
-                            th:if="${param.textoBusqueda != null or param.categoriaId != null or param.codigoPostal != null}">
-                            Prueba cambiando los filtros.
-                        </p>
-                        <p class="text-muted mb-4"
-                            th:unless="${param.textoBusqueda != null or param.categoriaId != null or param.codigoPostal != null}">
-                            No hay trabajos disponibles ahora.
-                        </p>
+                        <div class="mb-4">
+                            <p class="text-muted"
+                                th:if="${param.textoBusqueda != null or param.categoriaId != null or param.codigoPostal != null}">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Prueba cambiando los filtros para encontrar más oportunidades.
+                            </p>
+                            <p class="text-muted"
+                                th:unless="${param.textoBusqueda != null or param.categoriaId != null or param.codigoPostal != null}">
+                                <i class="bi bi-clock me-1"></i>
+                                No hay trabajos disponibles en este momento. ¡Vuelve pronto!
+                            </p>
+                        </div>
 
-                        <a th:href="@{/professional/search}" class="btn btn-primary"
+                        <a th:href="@{/professional/search}" class="btn btn-primary btn-lg shadow-sm"
                             aria-label="Ver todos los trabajos">
-                            <i class="bi bi-arrow-clockwise" aria-hidden="true"></i> Ver todos
+                            <i class="bi bi-arrow-clockwise me-2" aria-hidden="true"></i> Ver todos los trabajos
                         </a>
                     </div>
                 </div>
@@ -204,65 +237,84 @@
         <div class="modal fade" th:id="'modal_' + ${oferta.id}" tabindex="-1" role="dialog"
             th:aria-labelledby="'titulo_' + ${oferta.id}">
             <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
+                <div class="modal-content border-0 shadow-lg">
                     <form th:action="@{'/professional/postular/' + ${oferta.id}}" method="post">
 
-                        <header class="modal-header bg-primary text-white">
-                            <h2 class="modal-title h5" th:id="'titulo_' + ${oferta.id}">
-                                <i class="bi bi-send" aria-hidden="true"></i> Postularse a la oferta
+                        <header class="modal-header bg-dark text-white">
+                            <h2 class="modal-title h5 d-flex align-items-center" th:id="'titulo_' + ${oferta.id}">
+                                <i class="bi bi-send-fill me-2" aria-hidden="true"></i> Postularse a la oferta
                             </h2>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                 aria-label="Cerrar modal"></button>
                         </header>
 
-                        <div class="modal-body">
+                        <div class="modal-body p-4">
                             <!-- Info del trabajo -->
-                            <div class="bg-primary p-3 rounded mb-4">
-                                <h4 class="fw-bold text-white mb-2 h6" th:text="${oferta.title}">Título</h4>
-                                <p class="mb-2" th:text="${oferta.description}">Descripción</p>
-                                <address class="mb-0">
-                                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
-                                    <span
-                                        th:text="${oferta.effectiveServiceAddress?.city + ', ' + oferta.effectiveServiceAddress?.postalCode}">Ubicación</span>
-                                </address>
+                            <div class="card border-0 bg-secondary text-white mb-4">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start">
+                                        <div class="bg-white rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <i class="bi bi-briefcase-fill text-white"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h4 class="fw-bold mb-2 h6" th:text="${oferta.title}">Título</h4>
+                                            <p class="mb-3 opacity-90" th:text="${oferta.description}">Descripción</p>
+                                            <address class="mb-0 d-flex align-items-center">
+                                                <i class="bi bi-geo-alt-fill me-2" aria-hidden="true"></i>
+                                                <span th:text="${oferta.effectiveServiceAddress?.city + ', ' + oferta.effectiveServiceAddress?.postalCode}">Ubicación</span>
+                                            </address>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Formulario -->
                             <fieldset>
                                 <legend class="visually-hidden">Datos de postulación</legend>
 
-                                <div class="mb-3">
-                                    <label for="precio" class="form-label fw-semibold required">
-                                        <i class="bi bi-currency-euro" aria-hidden="true"></i> Precio propuesto *
+                                <div class="mb-4">
+                                    <label for="precio" class="form-label fw-semibold d-flex align-items-center">
+                                        <i class="bi bi-currency-euro text-muted me-2" aria-hidden="true"></i> Precio propuesto *
                                     </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" aria-hidden="true">€</span>
+                                    <div class="input-group input-group-lg shadow-sm">
+                                        <span class="input-group-text bg-light" aria-hidden="true">
+                                            <i class="bi bi-cash"></i>
+                                        </span>
                                         <input type="text" class="form-control" id="precio" name="precio" required
                                             placeholder="150 o 150,50 o 150.50" aria-describedby="precio-help">
+                                        <span class="input-group-text bg-light">€</span>
                                     </div>
-                                    <small id="precio-help" class="form-text text-muted">Mínimo 1€, máximo
-                                        99.999€</small>
+                                    <small id="precio-help" class="form-text text-muted">
+                                        <i class="bi bi-info-circle me-1"></i>Mínimo 1€, máximo 99.999€
+                                    </small>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="mensaje" class="form-label fw-semibold">
-                                        <i class="bi bi-chat-text" aria-hidden="true"></i> Mensaje (opcional)
+                                <div class="mb-4">
+                                    <label for="mensaje" class="form-label fw-semibold d-flex align-items-center">
+                                        <i class="bi bi-chat-text text-muted me-2" aria-hidden="true"></i> Mensaje (opcional)
                                     </label>
-                                    <textarea class="form-control" id="mensaje" name="mensaje" rows="4" maxlength="1000"
-                                        placeholder="Presenta tu propuesta y experiencia..."
-                                        aria-describedby="mensaje-help"></textarea>
-                                    <small id="mensaje-help" class="form-text text-muted">Máximo 1000 caracteres</small>
+                                    <div class="input-group shadow-sm">
+                                        <span class="input-group-text bg-light border-end-0" style="align-self: flex-start;">
+                                            <i class="bi bi-chat-dots text-muted"></i>
+                                        </span>
+                                        <textarea class="form-control border-start-0" id="mensaje" name="mensaje" rows="4" maxlength="1000"
+                                            placeholder="Presenta tu propuesta y experiencia..."
+                                            aria-describedby="mensaje-help"></textarea>
+                                    </div>
+                                    <small id="mensaje-help" class="form-text text-muted">
+                                        <i class="bi bi-info-circle me-1"></i>Máximo 1000 caracteres
+                                    </small>
                                 </div>
                             </fieldset>
                         </div>
 
-                        <footer class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        <footer class="modal-footer bg-light">
+                            <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-dismiss="modal"
                                 aria-label="Cancelar postulación">
-                                <i class="bi bi-x-circle" aria-hidden="true"></i> Cancelar
+                                <i class="bi bi-x-circle me-2" aria-hidden="true"></i> Cancelar
                             </button>
-                            <button type="submit" class="btn btn-primary" aria-label="Enviar postulación">
-                                <i class="bi bi-send-fill" aria-hidden="true"></i> Enviar postulación
+                            <button type="submit" class="btn btn-success btn-lg shadow-sm" aria-label="Enviar postulación">
+                                <i class="bi bi-send-fill me-2" aria-hidden="true"></i> Enviar postulación
                             </button>
                         </footer>
                     </form>

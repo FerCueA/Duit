@@ -152,6 +152,13 @@ public class RequestService {
     }
 
     // ============================================================================
+    // OBTIENE SOLICITUD PARA EDITAR CON VALIDACIONES (MÉTODO PÚBLICO)
+    // ============================================================================
+    public ServiceRequest getUserRequestForEditing(Long solicitudId, AppUser usuario) {
+        return getRequestForEditing(solicitudId, usuario);
+    }
+
+    // ============================================================================
     // OBTIENE SOLICITUD PARA EDITAR CON VALIDACIONES
     // ============================================================================
     private ServiceRequest getRequestForEditing(Long solicitudId, AppUser usuario) {
