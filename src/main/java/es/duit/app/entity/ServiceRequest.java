@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +83,7 @@ public class ServiceRequest extends BaseEntity {
 
     @PrePersist
     protected void onCreate() {
+        super.onCreate();
         if (requestedAt == null) {
             requestedAt = LocalDateTime.now();
         }
