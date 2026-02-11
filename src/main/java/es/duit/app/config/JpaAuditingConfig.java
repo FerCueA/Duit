@@ -46,7 +46,8 @@ public class JpaAuditingConfig {
                     // Obtener el nombre de usuario autenticado (en nuestro caso, el email)
                     String nombreUsuario = authentication.getName();
 
-                    // Verificar que no sea usuario anónimo para el caso de operaciones sin autenticación
+                    // Verificar que no sea usuario anónimo para el caso de operaciones sin
+                    // autenticación
                     // Esto puede ocurrir en el Registro de nuevos usuarios
                     if ("anonymousUser".equals(nombreUsuario)) {
                         // Intentar recuperar el email del formulario (registro o login)
@@ -61,7 +62,7 @@ public class JpaAuditingConfig {
                     return Optional.of(nombreUsuario);
 
                 } catch (Exception error) {
-                    System.err.println("Error obteniendo usuario para auditoría: " + error.getMessage());
+
                     return Optional.of("unknown");
                 }
             }
@@ -73,15 +74,12 @@ public class JpaAuditingConfig {
     // ==========================================================================
     private String getEmailFromRequest() {
         try {
-            ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            if (attrs == null) {
+            var attrs = RequestContextHolder.getRequestAttributes();
+            if (!(attrs instanceof ServletRequestAttributes servletAttrs)) {
                 return "";
             }
 
-            HttpServletRequest request = attrs.getRequest();
-            if (request == null) {
-                return "";
-            }
+            HttpServletRequest request = servletAttrs.getRequest();
 
             // En registro viene como "email"; en login como "username"
             String email = request.getParameter("email");

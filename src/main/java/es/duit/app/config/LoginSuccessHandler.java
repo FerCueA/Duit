@@ -34,7 +34,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         // ====== EXTRAER EL EMAIL DEL USUARIO ======
         String emailDelUsuario = usuarioAutenticado.getName();
 
-        System.out.println("[LoginSuccessHandler] Login OK para: " + emailDelUsuario);
+        
 
         // ====== GUARDAR EN LA BD QUE ESTE USUARIO HIZO LOGIN ======
         accessLogService.saveSuccessfulLogin(emailDelUsuario, peticion);

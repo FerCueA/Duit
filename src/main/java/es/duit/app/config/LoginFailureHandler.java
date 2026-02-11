@@ -33,8 +33,6 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
         // ====== EXTRAER EL EMAIL QUE EL USUARIO INTENTÓ USAR ======
         String emailIntentado = peticion.getParameter("username");
 
-        System.out.println("[LoginFailureHandler] Login FALLIDO para: " + emailIntentado);
-
         // ====== VALIDAR QUE EL EMAIL NO ESTÉ VACÍO ======
         boolean emailEsValido = (emailIntentado != null && !emailIntentado.trim().isEmpty());
 
