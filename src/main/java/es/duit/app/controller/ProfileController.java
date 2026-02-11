@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import es.duit.app.dto.EditProfileDTO;
 import es.duit.app.entity.AppUser;
 import es.duit.app.service.AppUserService;
-import jakarta.validation.Valid;
 
 // ============================================================================
 // CONTROLADOR DE PERFIL - GESTIONA EDICIÓN Y VISUALIZACIÓN DE PERFILES
