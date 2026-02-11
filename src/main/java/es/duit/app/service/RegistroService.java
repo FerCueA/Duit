@@ -33,35 +33,52 @@ public class RegistroService {
     // ============================================================================
     public AppUser registerUser(RegistroDTO registro) {
         try {
+            // Normalizar y validar email antes de cualquier operacion
+            String emailNormalizado = (registro.getEmail() != null) ? registro.getEmail().trim().toLowerCase() : "";
+            if (emailNormalizado.isEmpty()) {
+                throw new IllegalArgumentException("El correo electrónico es obligatorio");
+            }
+
             // Validar que el email no esté registrado en el sistema
-            if (appUserRepository.findByUsername(registro.getEmail()).isPresent()) {
+            if (appUserRepository.findByUsername(emailNormalizado).isPresent()) {
                 throw new IllegalArgumentException("Este correo electrónico ya está registrado");
             }
 
+            String dniNormalizado = (registro.getDni() != null) ? registro.getDni().trim().toUpperCase() : "";
+            if (dniNormalizado.isEmpty()) {
+                throw new IllegalArgumentException("El DNI es obligatorio");
+            }
+
             // Validar que el DNI no esté registrado en el sistema
-            if (appUserRepository.findByDni(registro.getDni()).isPresent()) {
+            if (appUserRepository.findByDni(dniNormalizado).isPresent()) {
                 throw new IllegalArgumentException("Este DNI ya está registrado");
             }
 
             // Obtener el rol según el tipo de usuario (USER o PROFESSIONAL)
-            UserRole.RoleName nombreRol = "USER".equals(registro.getUserType())
+            String tipoUsuario = (registro.getUserType() != null) ? registro.getUserType().trim().toUpperCase() : "";
+            UserRole.RoleName nombreRol = "USER".equals(tipoUsuario)
                     ? UserRole.RoleName.USER
                     : UserRole.RoleName.PROFESSIONAL;
 
             // Buscar el rol en la BD
             UserRole rol = roleRepository.findByName(nombreRol)
-                    .orElseThrow(() -> new IllegalArgumentException("Rol " + nombreRol + " no encontrado en la base de datos"));
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Rol " + nombreRol + " no encontrado en la base de datos"));
 
             // Crear nueva instancia de usuario y asignar datos del formulario
             AppUser usuarioNuevo = new AppUser();
-            usuarioNuevo.setFirstName(registro.getFirstName().trim());
-            usuarioNuevo.setLastName(registro.getLastName().trim());
-            usuarioNuevo.setDni(registro.getDni().trim().toUpperCase());
-            usuarioNuevo.setUsername(registro.getEmail().trim());
+            String nombre = (registro.getFirstName() != null) ? registro.getFirstName().trim() : "";
+            String apellidos = (registro.getLastName() != null) ? registro.getLastName().trim() : "";
+            String telefonoNormalizado = (registro.getPhone() != null) ? registro.getPhone().trim() : "";
+
+            usuarioNuevo.setFirstName(nombre);
+            usuarioNuevo.setLastName(apellidos);
+            usuarioNuevo.setDni(dniNormalizado);
+            usuarioNuevo.setUsername(emailNormalizado);
 
             // Encriptar la contraseña antes de guardar
             usuarioNuevo.setPassword(passwordEncoder.encode(registro.getPassword()));
-            usuarioNuevo.setPhone(registro.getPhone().trim());
+            usuarioNuevo.setPhone(telefonoNormalizado);
             usuarioNuevo.setRole(rol);
             usuarioNuevo.setActive(true);
 

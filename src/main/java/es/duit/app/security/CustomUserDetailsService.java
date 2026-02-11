@@ -22,14 +22,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        // Validar username
+        // Validar y normalizar username (email)
         if (username == null || username.trim().isEmpty()) {
             throw new UsernameNotFoundException("El correo electrónico no puede estar vacío");
         }
 
+        String emailNormalizado = username.trim().toLowerCase();
+
         // Buscar usuario
-        AppUser user = appUserRepository.findByUsername(username.trim())
-            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+        AppUser user = appUserRepository.findByUsername(emailNormalizado)
+            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + emailNormalizado));
 
         // Verificar usuario activo
         if (user.getActive() == null || !user.getActive()) {

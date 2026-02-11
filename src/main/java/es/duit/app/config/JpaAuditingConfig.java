@@ -7,7 +7,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 /// ============================================================================
@@ -46,6 +49,12 @@ public class JpaAuditingConfig {
                     // Verificar que no sea usuario anónimo para el caso de operaciones sin autenticación
                     // Esto puede ocurrir en el Registro de nuevos usuarios
                     if ("anonymousUser".equals(nombreUsuario)) {
+                        // Intentar recuperar el email del formulario (registro o login)
+                        String emailFormulario = getEmailFromRequest();
+                        if (emailFormulario != null && !emailFormulario.isEmpty()) {
+                            return Optional.of(emailFormulario);
+                        }
+
                         return Optional.of("anonymous");
                     }
 
@@ -57,6 +66,38 @@ public class JpaAuditingConfig {
                 }
             }
         };
+    }
+
+    // ==========================================================================
+    // INTENTA LEER EL EMAIL DESDE EL REQUEST ACTUAL
+    // ==========================================================================
+    private String getEmailFromRequest() {
+        try {
+            ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            if (attrs == null) {
+                return "";
+            }
+
+            HttpServletRequest request = attrs.getRequest();
+            if (request == null) {
+                return "";
+            }
+
+            // En registro viene como "email"; en login como "username"
+            String email = request.getParameter("email");
+            if (email == null || email.trim().isEmpty()) {
+                email = request.getParameter("username");
+            }
+
+            if (email == null) {
+                return "";
+            }
+
+            return email.trim().toLowerCase();
+
+        } catch (Exception error) {
+            return "";
+        }
     }
 
 }

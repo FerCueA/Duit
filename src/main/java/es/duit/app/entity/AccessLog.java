@@ -30,8 +30,8 @@ public class AccessLog {
     private String sourceIp;
 
     @NotNull
-    @Column(name = "success", nullable = false)
-    private Boolean success = false;
+    @Column(name = "success", nullable = false, columnDefinition = "boolean default false")
+    private boolean success = false;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -28,12 +28,17 @@ public class AccessLogService {
     // ============================================================================
     public void saveSuccessfulLogin(String emailUsuario, HttpServletRequest request) {
         try {
+            String emailNormalizado = normalizeEmail(emailUsuario);
+
+            System.out.println("[AccessLog] Login exitoso recibido para: " + emailNormalizado);
+
             // Buscar el usuario en la BD
-            AppUser usuario = appUserRepository.findByUsername(emailUsuario)
+            AppUser usuario = appUserRepository.findByUsername(emailNormalizado)
                     .orElse(null);
 
             // Si no existe, salir
             if (usuario == null) {
+                System.out.println("[AccessLog] Usuario no encontrado, no se guarda log: " + emailNormalizado);
                 return;
             }
 
@@ -46,8 +51,17 @@ public class AccessLogService {
             // Guardar en la BD
             accessLogRepository.save(registroAcceso);
 
+            System.out.println("[AccessLog] Log guardado para usuario ID: " + usuario.getId());
+
+            // Actualizar ultimo login del usuario
+            usuario.setLastLoginAt(java.time.LocalDateTime.now());
+            appUserRepository.save(usuario);
+
+            System.out.println("[AccessLog] lastLoginAt actualizado para usuario ID: " + usuario.getId());
+
         } catch (Exception error) {
             // Si hay error, no hacer nada
+            System.err.println("Error guardando login exitoso: " + error.getMessage());
         }
     }
 
@@ -56,8 +70,12 @@ public class AccessLogService {
     // ============================================================================
     public void saveFailedLogin(String emailUsuario, HttpServletRequest request) {
         try {
+            String emailNormalizado = normalizeEmail(emailUsuario);
+
+            System.out.println("[AccessLog] Login fallido recibido para: " + emailNormalizado);
+
             // Buscar el usuario en la BD
-            AppUser usuario = appUserRepository.findByUsername(emailUsuario).orElse(null);
+            AppUser usuario = appUserRepository.findByUsername(emailNormalizado).orElse(null);
 
             // Solo guardar si el usuario existe
             if (usuario != null) {
@@ -69,10 +87,15 @@ public class AccessLogService {
 
                 // Guardar en la BD
                 accessLogRepository.save(registroAcceso);
+
+                System.out.println("[AccessLog] Log fallido guardado para usuario ID: " + usuario.getId());
+            } else {
+                System.out.println("[AccessLog] Usuario no encontrado, no se guarda log: " + emailNormalizado);
             }
 
         } catch (Exception error) {
             // Si hay error, no hacer nada
+            System.err.println("Error guardando login fallido: " + error.getMessage());
         }
     }
 
@@ -113,5 +136,15 @@ public class AccessLogService {
     // ============================================================================
     private boolean isInvalidIp(String ip) {
         return ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip);
+    }
+
+    // ==========================================================================
+    // NORMALIZA EMAIL PARA BUSQUEDAS CONSISTENTES
+    // ==========================================================================
+    private String normalizeEmail(String email) {
+        if (email == null) {
+            return "";
+        }
+        return email.trim().toLowerCase();
     }
 }
