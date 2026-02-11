@@ -95,6 +95,61 @@ public class ProfessionalController {
         return "jobs/myaplication";
     }
 
+    // =========================================================================
+    // EDITAR UNA POSTULACION PROPIA (SOLO PENDING)
+    // =========================================================================
+    @PostMapping("/applications/edit/{postulacionId}")
+    public String editarPostulacion(
+            @PathVariable Long postulacionId,
+            @RequestParam(name = "mensaje", required = false) String mensaje,
+            @RequestParam(name = "precio", required = false) String precioStr,
+            Authentication auth,
+            RedirectAttributes redirectAttributes) {
+
+        AppUser usuario = authService.getAuthenticatedUser(auth);
+
+        BigDecimal precio = null;
+        if (precioStr != null && !precioStr.trim().isEmpty()) {
+            try {
+                String precioLimpio = precioStr.replace(",", ".");
+                precio = new BigDecimal(precioLimpio);
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("error", "Precio no válido");
+                return "redirect:/professional/applications";
+            }
+        }
+
+        try {
+            jobApplicationService.editarPostulacion(postulacionId, usuario, precio, mensaje);
+            redirectAttributes.addFlashAttribute("success", "Postulación actualizada correctamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+
+        return "redirect:/professional/applications";
+    }
+
+    // =========================================================================
+    // RETIRAR UNA POSTULACION PROPIA (SOLO PENDING)
+    // =========================================================================
+    @PostMapping("/applications/withdraw/{postulacionId}")
+    public String retirarPostulacion(
+            @PathVariable Long postulacionId,
+            Authentication auth,
+            RedirectAttributes redirectAttributes) {
+
+        AppUser usuario = authService.getAuthenticatedUser(auth);
+
+        try {
+            jobApplicationService.retirarPostulacion(postulacionId, usuario);
+            redirectAttributes.addFlashAttribute("success", "Postulación retirada correctamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+
+        return "redirect:/professional/applications";
+    }
+
     // Enviar postulación
     @PostMapping("/postular/{ofertaId}")
     public String postularse(
@@ -127,7 +182,8 @@ public class ProfessionalController {
             return "redirect:/professional/search";
 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al enviar postulación");
+            System.err.println("Error al enviar postulación: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/professional/search";
         }
     }

@@ -3,8 +3,10 @@ package es.duit.app.service;
 import es.duit.app.dto.SearchRequestDTO;
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.Category;
+import es.duit.app.entity.JobApplication;
 import es.duit.app.entity.ServiceRequest;
 import es.duit.app.repository.CategoryRepository;
+import es.duit.app.repository.JobApplicationRepository;
 import es.duit.app.repository.ServiceRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 // ============================================================================
 // SERVICIO DE BÚSQUEDA DE TRABAJOS
@@ -28,6 +31,7 @@ public class SearchService {
 
     private final ServiceRequestRepository jobRepository;
     private final CategoryRepository categoryRepository;
+    private final JobApplicationRepository jobApplicationRepository;
 
     // ============================================================================
     // PREPARAR DATOS PARA PÁGINA DE BÚSQUEDA
@@ -100,13 +104,32 @@ public class SearchService {
     // ============================================================================
     // BUSCAR TRABAJOS CON FILTROS
     // IMPORTANTE: SOLO MUESTRA OFERTAS CON ESTADO PUBLISHED
+    // EXCLUYE OFERTAS DONDE EL USUARIO YA SE HA POSTULADO (NO RETIRADAS)
     // ============================================================================
     public List<ServiceRequest> searchJobs(SearchRequestDTO filters, AppUser user) {
         List<ServiceRequest> jobs = getPublishedJobs();
 
-        // Sin filtros, devolver todo
+        // Obtener IDs de ofertas donde el usuario ya se ha postulado (no retiradas)
+        final Set<Long> appliedJobIds;
+        if (user != null && user.getProfessionalProfile() != null) {
+            List<JobApplication> myApplications = jobApplicationRepository
+                .findByProfessional(user.getProfessionalProfile());
+            
+            // Filtrar solo postulaciones activas (no retiradas)
+            appliedJobIds = myApplications.stream()
+                .filter(app -> app.getStatus() != JobApplication.Status.WITHDRAWN)
+                .map(app -> app.getRequest().getId())
+                .collect(Collectors.toSet());
+        } else {
+            appliedJobIds = new HashSet<>();
+        }
+
+        // Sin filtros, devolver todo (excluyendo ofertas ya postuladas)
         if (filters == null) {
-            return sortJobsByDate(jobs);
+            List<ServiceRequest> filtered = jobs.stream()
+                .filter(job -> !appliedJobIds.contains(job.getId()))
+                .collect(Collectors.toList());
+            return sortJobsByDate(filtered);
         }
 
         List<ServiceRequest> result = new ArrayList<>();
@@ -114,6 +137,11 @@ public class SearchService {
         // Buscar en cada trabajo
         for (ServiceRequest job : jobs) {
             boolean matches = true;
+
+            // Filtro: excluir ofertas donde ya me postulé
+            if (appliedJobIds.contains(job.getId())) {
+                continue;
+            }
 
             // Filtro por texto (si existe)
             if (filters.getTextoBusqueda() != null && !filters.getTextoBusqueda().trim().isEmpty()) {

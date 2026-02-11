@@ -57,7 +57,7 @@ public class PostulacionesController {
             model.addAttribute("postulaciones", postulacionesEncontradas);
             model.addAttribute("solicitud", solicitudEncontrada);
 
-            return "jobs/myaplication";
+            return "jobs/applications";
 
         } catch (IllegalArgumentException error) {
             // Manejar error en la visualización de postulaciones

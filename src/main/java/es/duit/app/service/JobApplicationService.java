@@ -51,6 +51,51 @@ public class JobApplicationService {
         return jobApplicationRepository.save(postulacion);
     }
 
+    // =========================================================================
+    // PERMITE EDITAR UNA POSTULACION PROPIA (SOLO SI ESTA PENDING)
+    // =========================================================================
+    public JobApplication editarPostulacion(Long postulacionId, AppUser usuario, BigDecimal precio,
+            String mensaje) {
+        validateUserHasProfessionalProfile(usuario);
+
+        JobApplication postulacion = getApplicationById(postulacionId);
+
+        validateApplicationOwnership(postulacion, usuario);
+
+        validateApplicationIsPending(postulacion);
+
+        if (precio != null) {
+            validatePriceIsValid(precio);
+            postulacion.setProposedPrice(precio);
+        }
+
+        String mensajeFinal = null;
+        if (mensaje != null && !mensaje.trim().isEmpty()) {
+            mensajeFinal = mensaje.trim();
+        }
+        postulacion.setMessage(mensajeFinal);
+
+        return jobApplicationRepository.save(postulacion);
+    }
+
+    // =========================================================================
+    // PERMITE RETIRAR UNA POSTULACION PROPIA (SOLO SI ESTA PENDING)
+    // =========================================================================
+    public JobApplication retirarPostulacion(Long postulacionId, AppUser usuario) {
+        validateUserHasProfessionalProfile(usuario);
+
+        JobApplication postulacion = getApplicationById(postulacionId);
+
+        validateApplicationOwnership(postulacion, usuario);
+
+        validateApplicationIsPending(postulacion);
+
+        postulacion.setStatus(JobApplication.Status.WITHDRAWN);
+        postulacion.setRespondedAt(java.time.LocalDateTime.now());
+
+        return jobApplicationRepository.save(postulacion);
+    }
+
     // ============================================================================
     // OBTIENE UNA OFERTA DE SERVICIO POR ID
     // ============================================================================
@@ -63,6 +108,18 @@ public class JobApplicationService {
                 .orElseThrow(() -> new IllegalArgumentException("La oferta no existe"));
 
         return oferta;
+    }
+
+    // =========================================================================
+    // OBTIENE UNA POSTULACION POR ID
+    // =========================================================================
+    private JobApplication getApplicationById(Long postulacionId) {
+        if (postulacionId == null) {
+            throw new IllegalArgumentException("ID de postulación requerido");
+        }
+
+        return jobApplicationRepository.findById(postulacionId)
+                .orElseThrow(() -> new IllegalArgumentException("Postulación no encontrada"));
     }
 
     // ============================================================================
@@ -90,6 +147,27 @@ public class JobApplicationService {
         // Verificar que existe
         if (perfilProfesional == null) {
             throw new IllegalArgumentException("No tienes un perfil profesional configurado");
+        }
+    }
+
+    // =========================================================================
+    // VALIDA QUE LA POSTULACION ES DEL PROFESIONAL LOGUEADO
+    // =========================================================================
+    private void validateApplicationOwnership(JobApplication postulacion, AppUser usuario) {
+        Long usuarioId = usuario.getId();
+        Long profesionalId = postulacion.getProfessional().getUser().getId();
+
+        if (!profesionalId.equals(usuarioId)) {
+            throw new IllegalArgumentException("No tienes permiso para modificar esta postulación");
+        }
+    }
+
+    // =========================================================================
+    // VALIDA QUE LA POSTULACION ESTA PENDING
+    // =========================================================================
+    private void validateApplicationIsPending(JobApplication postulacion) {
+        if (postulacion.getStatus() != JobApplication.Status.PENDING) {
+            throw new IllegalArgumentException("Solo puedes modificar postulaciones en estado pendiente");
         }
     }
 
