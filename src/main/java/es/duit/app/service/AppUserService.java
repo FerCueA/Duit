@@ -71,7 +71,7 @@ public class AppUserService {
         address.setCity(dto.getCity().trim());
         address.setPostalCode(dto.getPostalCode() != null ? dto.getPostalCode().trim() : null);
         address.setProvince(dto.getProvince().trim());
-        address.setCountry(dto.getCountry().trim());
+        address.setCountry("España");
 
         // Guardar dirección en la BD
         addressRepository.save(address);
@@ -109,7 +109,7 @@ public class AppUserService {
         address.setCity(dto.getCity().trim());
         address.setPostalCode(dto.getPostalCode() != null ? dto.getPostalCode().trim() : null);
         address.setProvince(dto.getProvince().trim());
-        address.setCountry(dto.getCountry().trim());
+        address.setCountry("España");
 
         // Guardar dirección en la BD
         addressRepository.save(address);
@@ -125,7 +125,11 @@ public class AppUserService {
         }
         // Actualizar datos del perfil profesional
         profesional.setHourlyRate(dto.getHourlyRate());
-        profesional.setNif(dto.getNif().trim());
+        String nif = userPro.getDni();
+        if (nif == null || nif.trim().isEmpty()) {
+            nif = dto.getNif() != null ? dto.getNif().trim() : null;
+        }
+        profesional.setNif(nif);
         profesional.setDescription(dto.getDescription().trim());
 
         // Guardar perfil profesional en la BD
