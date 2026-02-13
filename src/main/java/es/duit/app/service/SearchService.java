@@ -78,7 +78,7 @@ public class SearchService {
     // IMPORTANTE: SOLO MUESTRA OFERTAS CON ESTADO PUBLISHED
     // EXCLUYE OFERTAS DONDE EL USUARIO YA SE HA POSTULADO (NO RETIRADAS)
     // ============================================================================
-    public List<ServiceRequest> searchJobs(SearchRequestDTO filters, AppUser user) {
+    private List<ServiceRequest> searchJobs(SearchRequestDTO filters, AppUser user) {
         List<ServiceRequest> jobs = getPublishedJobs();
 
         // Obtener IDs de ofertas donde el usuario ya se ha postulado (no retiradas)

@@ -6,7 +6,6 @@ import es.duit.app.entity.ServiceJob;
 import es.duit.app.entity.ServiceRequest;
 import es.duit.app.repository.ServiceJobRepository;
 import es.duit.app.service.AuthService;
-import es.duit.app.service.MyRequestsService;
 import es.duit.app.service.RequestService;
 
 import org.springframework.security.core.Authentication;
@@ -26,16 +25,13 @@ import java.util.List;
 public class MyRequestsController {
 
     private final RequestService serviceRequestService;
-    private final MyRequestsService myRequestsService;
     private final ServiceJobRepository serviceJobRepository;
     private final AuthService authService;
 
     public MyRequestsController(RequestService serviceRequestService,
-            MyRequestsService myRequestsService,
             ServiceJobRepository serviceJobRepository,
             AuthService authService) {
         this.serviceRequestService = serviceRequestService;
-        this.myRequestsService = myRequestsService;
         this.serviceJobRepository = serviceJobRepository;
         this.authService = authService;
     }
@@ -48,7 +44,7 @@ public class MyRequestsController {
         // Obtener usuario logueado
         AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
 
-        List<ServiceRequest> solicitudesUsuario = myRequestsService.getMyRequests();
+        List<ServiceRequest> solicitudesUsuario = serviceRequestService.getMyRequests();
         List<ServiceJob> trabajosUsuario = serviceJobRepository.findByCliente(usuarioLogueado);
 
         // Preparar datos para la vista
@@ -66,8 +62,11 @@ public class MyRequestsController {
             Authentication auth,
             RedirectAttributes redirectAttributes) {
         try {
-            // Publicar la solicitud usando el nuevo servicio
-            myRequestsService.publishRequest(id);
+            // Obtener usuario logueado
+            AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
+
+            // Publicar la solicitud usando el servicio
+            serviceRequestService.publishRequest(id, usuarioLogueado);
 
             // Preparar respuesta exitosa
             String mensajeExito = "Solicitud publicada correctamente.";
@@ -115,8 +114,11 @@ public class MyRequestsController {
             Authentication auth,
             RedirectAttributes redirectAttributes) {
         try {
-            // Cancelar la solicitud usando el nuevo servicio (sin necesidad de usuario)
-            myRequestsService.cancelRequest(id);
+            // Obtener usuario logueado
+            AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
+
+            // Cancelar la solicitud usando el servicio
+            serviceRequestService.cancelRequest(id, usuarioLogueado);
 
             // Preparar respuesta exitosa
             String mensajeExito = "Solicitud cancelada correctamente.";
@@ -301,7 +303,7 @@ public class MyRequestsController {
     public String completeRequest(@PathVariable Long id,
             RedirectAttributes redirectAttributes) {
         try {
-            myRequestsService.completeRequest(id);
+            serviceRequestService.completeRequest(id);
 
             redirectAttributes.addFlashAttribute("success", "Solicitud completada correctamente.");
             return "redirect:/requests/my-requests";
@@ -320,7 +322,7 @@ public class MyRequestsController {
             @RequestParam Long applicationId,
             RedirectAttributes redirectAttributes) {
         try {
-            myRequestsService.acceptRequest(requestId, applicationId);
+            serviceRequestService.acceptRequest(requestId, applicationId);
 
             redirectAttributes.addFlashAttribute("success", "Aplicación aceptada correctamente.");
             return "redirect:/requests/my-requests";
@@ -338,8 +340,8 @@ public class MyRequestsController {
     public String viewApplications(@PathVariable Long requestId, Model model,
             RedirectAttributes redirectAttributes) {
         try {
-            List<JobApplication> aplicaciones = myRequestsService.getApplicationsForMyRequest(requestId);
-            ServiceRequest solicitud = myRequestsService.getMyRequestById(requestId);
+            List<JobApplication> aplicaciones = serviceRequestService.getApplicationsForMyRequest(requestId);
+            ServiceRequest solicitud = serviceRequestService.getMyRequestById(requestId);
 
             model.addAttribute("aplicaciones", aplicaciones);
             model.addAttribute("solicitud", solicitud);
