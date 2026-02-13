@@ -1,27 +1,26 @@
 package es.duit.app.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import es.duit.app.entity.AccessLog;
 import es.duit.app.entity.AppUser;
 import es.duit.app.repository.AccessLogRepository;
 import es.duit.app.repository.AppUserRepository;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 // ============================================================================
 // SERVICIO PARA REGISTRAR LOS ACCESOS DE USUARIOS (LOGINS EXITOSOS Y FALLIDOS)
 // ============================================================================
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class AccessLogService {
 
     private final AccessLogRepository accessLogRepository;
     private final AppUserRepository appUserRepository;
-
-    public AccessLogService(AccessLogRepository accessLogRepository, AppUserRepository appUserRepository) {
-        this.accessLogRepository = accessLogRepository;
-        this.appUserRepository = appUserRepository;
-    }
 
     // ============================================================================
     // REGISTRA UN LOGIN EXITOSO DE UN USUARIO

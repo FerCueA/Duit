@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 
 @Data
 public class MyRequestDTO {
-    // Solo datos básicos de la entidad
     private Long id;
     private String title;
     private String description;

@@ -1,30 +1,27 @@
 package es.duit.app.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.JobApplication;
 import es.duit.app.entity.ServiceRequest;
 import es.duit.app.repository.JobApplicationRepository;
 import es.duit.app.repository.ServiceRequestRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
+import lombok.RequiredArgsConstructor;
 
 // ============================================================================
 // SERVICIO DE POSTULACIONES - GESTIONA POSTULACIONES A SERVICIOS
 // ============================================================================
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class JobApplicationService {
 
     private final JobApplicationRepository jobApplicationRepository;
     private final ServiceRequestRepository serviceRequestRepository;
-
-    public JobApplicationService(JobApplicationRepository jobApplicationRepository,
-            ServiceRequestRepository serviceRequestRepository) {
-        this.jobApplicationRepository = jobApplicationRepository;
-        this.serviceRequestRepository = serviceRequestRepository;
-    }
 
     // ============================================================================
     // PERMITE QUE UN PROFESIONAL SE POSTULE A UNA OFERTA DE SERVICIO
@@ -43,7 +40,7 @@ public class JobApplicationService {
         validatePriceIsValid(precio);
 
         JobApplication postulacion = buildJobApplication(oferta, usuario, precio, mensaje);
-        
+
         if (postulacion == null) {
             throw new IllegalStateException("Error al crear la postulación");
         }
@@ -52,7 +49,7 @@ public class JobApplicationService {
     }
 
     // =========================================================================
-    // PERMITE EDITAR UNA POSTULACION PROPIA (SOLO SI ESTA PENDING)
+    // ACTUALIZAR UNA POSTULACION PROPIA (SOLO SI ESTA PENDING)
     // =========================================================================
     public JobApplication editarPostulacion(Long postulacionId, AppUser usuario, BigDecimal precio,
             String mensaje) {
@@ -79,7 +76,7 @@ public class JobApplicationService {
     }
 
     // =========================================================================
-    // PERMITE RETIRAR UNA POSTULACION PROPIA (SOLO SI ESTA PENDING)
+    // RETIRAR UNA POSTULACION PROPIA (SOLO SI ESTA PENDING)
     // =========================================================================
     public JobApplication retirarPostulacion(Long postulacionId, AppUser usuario) {
         validateUserHasProfessionalProfile(usuario);
@@ -94,32 +91,6 @@ public class JobApplicationService {
         postulacion.setRespondedAt(java.time.LocalDateTime.now());
 
         return jobApplicationRepository.save(postulacion);
-    }
-
-    // ============================================================================
-    // OBTIENE UNA OFERTA DE SERVICIO POR ID
-    // ============================================================================
-    private ServiceRequest getOfferById(Long ofertaId) {
-        // Buscar la oferta en la BD
-        if (ofertaId == null) {
-            throw new IllegalArgumentException("ID de oferta requerido");
-        }
-        ServiceRequest oferta = serviceRequestRepository.findById(ofertaId)
-                .orElseThrow(() -> new IllegalArgumentException("La oferta no existe"));
-
-        return oferta;
-    }
-
-    // =========================================================================
-    // OBTIENE UNA POSTULACION POR ID
-    // =========================================================================
-    private JobApplication getApplicationById(Long postulacionId) {
-        if (postulacionId == null) {
-            throw new IllegalArgumentException("ID de postulación requerido");
-        }
-
-        return jobApplicationRepository.findById(postulacionId)
-                .orElseThrow(() -> new IllegalArgumentException("Postulación no encontrada"));
     }
 
     // ============================================================================
@@ -217,6 +188,32 @@ public class JobApplicationService {
         if (comparacion <= 0) {
             throw new IllegalArgumentException("El precio debe ser mayor a 0");
         }
+    }
+
+    // ============================================================================
+    // OBTIENE UNA OFERTA DE SERVICIO POR ID
+    // ============================================================================
+    private ServiceRequest getOfferById(Long ofertaId) {
+        // Buscar la oferta en la BD
+        if (ofertaId == null) {
+            throw new IllegalArgumentException("ID de oferta requerido");
+        }
+        ServiceRequest oferta = serviceRequestRepository.findById(ofertaId)
+                .orElseThrow(() -> new IllegalArgumentException("La oferta no existe"));
+
+        return oferta;
+    }
+
+    // =========================================================================
+    // OBTIENE UNA POSTULACION POR ID
+    // =========================================================================
+    private JobApplication getApplicationById(Long postulacionId) {
+        if (postulacionId == null) {
+            throw new IllegalArgumentException("ID de postulación requerido");
+        }
+
+        return jobApplicationRepository.findById(postulacionId)
+                .orElseThrow(() -> new IllegalArgumentException("Postulación no encontrada"));
     }
 
     // ============================================================================

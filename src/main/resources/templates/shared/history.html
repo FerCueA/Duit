@@ -25,37 +25,198 @@
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtrar por estado:</h5>
                                     <div class="btn-group btn-group-sm" role="group">
-                                        <input type="radio" class="btn-check" name="filterHistorial" id="filterHistorialAll"
-                                            checked autocomplete="off" onclick="filterHistorial('all')">
+                                        <input type="radio" class="btn-check" name="filterHistorial"
+                                            id="filterHistorialAll" checked autocomplete="off"
+                                            onclick="filterHistorial('all')">
                                         <label class="btn btn-outline-secondary" for="filterHistorialAll">Todos</label>
 
-                                        <input type="radio" class="btn-check" name="filterHistorial" id="filterHistorialCompleted"
-                                            autocomplete="off" onclick="filterHistorial('COMPLETED')">
-                                        <label class="btn btn-outline-primary" for="filterHistorialCompleted">Completados</label>
+                                        <input type="radio" class="btn-check" name="filterHistorial"
+                                            id="filterHistorialCreated" autocomplete="off"
+                                            onclick="filterHistorial('CREATED')">
+                                        <label class="btn btn-outline-info" for="filterHistorialCreated">Creados</label>
 
-                                        <input type="radio" class="btn-check" name="filterHistorial" id="filterHistorialCancelled"
-                                            autocomplete="off" onclick="filterHistorial('CANCELLED')">
-                                        <label class="btn btn-outline-danger" for="filterHistorialCancelled">Cancelados</label>
+                                        <input type="radio" class="btn-check" name="filterHistorial"
+                                            id="filterHistorialInProgress" autocomplete="off"
+                                            onclick="filterHistorial('IN_PROGRESS')">
+                                        <label class="btn btn-outline-warning" for="filterHistorialInProgress">En
+                                            progreso</label>
+
+                                        <input type="radio" class="btn-check" name="filterHistorial"
+                                            id="filterHistorialPaused" autocomplete="off"
+                                            onclick="filterHistorial('PAUSED')">
+                                        <label class="btn btn-outline-dark" for="filterHistorialPaused">Pausados</label>
+
+                                        <input type="radio" class="btn-check" name="filterHistorial"
+                                            id="filterHistorialCompleted" autocomplete="off"
+                                            onclick="filterHistorial('COMPLETED')">
+                                        <label class="btn btn-outline-primary"
+                                            for="filterHistorialCompleted">Completados</label>
+
+                                        <input type="radio" class="btn-check" name="filterHistorial"
+                                            id="filterHistorialCancelled" autocomplete="off"
+                                            onclick="filterHistorial('CANCELLED')">
+                                        <label class="btn btn-outline-danger"
+                                            for="filterHistorialCancelled">Cancelados</label>
                                     </div>
                                 </div>
 
-                                <div class="list-group">
+                                <div class="accordion" id="historyAccordion">
                                     <div th:each="item : ${historial}"
-                                        class="list-group-item mb-3 shadow-sm rounded historial-item"
-                                        th:attr="data-status=${item.status}">
-                                        <div class="d-flex w-100 justify-content-between align-items-center">
-                                            <div>
-                                                <h5 class="mb-1">
-                                                    <i class="bi bi-briefcase"></i>
-                                                    <span th:text="${item.title}">Título</span>
-                                                </h5>
-                                                <small class="text-muted">
-                                                    <span th:text="${item.date}">Fecha</span>
-                                                </small>
+                                        class="accordion-item mb-3 shadow-sm rounded historial-item"
+                                        th:attr="data-status=${item.jobStatus}">
+                                        <h2 class="accordion-header" th:attr="id=${'heading-' + item.jobId}">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                th:attr="data-bs-target=${'#collapse-' + item.jobId},aria-controls=${'collapse-' + item.jobId}">
+                                                <div class="w-100">
+                                                    <div class="d-flex justify-content-between align-items-start">
+                                                        <div>
+                                                            <div class="fw-semibold">
+                                                                <i class="bi bi-briefcase"></i>
+                                                                <span
+                                                                    th:text="${item.request != null ? item.request.title : 'Sin título'}">Título</span>
+                                                            </div>
+                                                            <div class="text-muted small">
+                                                                <span
+                                                                    th:text="${item.request != null ? item.request.categoryName : '-'}">Categoria</span>
+                                                                <span class="mx-2">•</span>
+                                                                <span
+                                                                    th:text="${item.startDate != null ? #temporals.format(item.startDate, 'dd/MM/yyyy HH:mm') : '-'}">Fecha</span>
+                                                                <span class="mx-2">•</span>
+                                                                <span th:text="${item.agreedPrice}">Precio</span>
+                                                            </div>
+                                                        </div>
+                                                        <span class="badge"
+                                                            th:classappend="${item.jobStatus == 'COMPLETED'} ? ' bg-success' :
+                                                            (${item.jobStatus == 'CANCELLED'} ? ' bg-danger' :
+                                                            (${item.jobStatus == 'IN_PROGRESS'} ? ' bg-warning text-dark' :
+                                                            (${item.jobStatus == 'PAUSED'} ? ' bg-dark' :
+                                                            (${item.jobStatus == 'CREATED'} ? ' bg-info text-dark' : ' bg-secondary'))))"
+                                                            th:text="${item.jobStatus}">Estado</span>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        </h2>
+                                        <div class="accordion-collapse collapse"
+                                            th:attr="id=${'collapse-' + item.jobId},aria-labelledby=${'heading-' + item.jobId}"
+                                            data-bs-parent="#historyAccordion">
+                                            <div class="accordion-body">
+                                                <p class="text-muted mb-3"
+                                                    th:text="${item.request != null ? item.request.description : ''}">
+                                                    Descripción</p>
+
+                                                <div class="row g-3">
+                                                    <div class="col-12 col-lg-6">
+                                                        <h6 class="text-uppercase text-muted">Oferta</h6>
+                                                        <div><strong>Categoria:</strong> <span
+                                                                th:text="${item.request != null ? item.request.categoryName : '-'}">Categoria</span>
+                                                        </div>
+                                                        <div><strong>Fecha limite:</strong> <span
+                                                                th:text="${item.request != null and item.request.deadline != null ? #temporals.format(item.request.deadline, 'dd/MM/yyyy HH:mm') : '-'}">Fecha</span>
+                                                        </div>
+                                                        <div
+                                                            th:if="${item.request != null and item.request.serviceAddress != null}">
+                                                            <strong>Direccion servicio:</strong>
+                                                            <span
+                                                                th:text="${item.request.serviceAddress}">Direccion</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-6" th:if="${item.client != null}">
+                                                        <h6 class="text-uppercase text-muted">Cliente</h6>
+                                                        <div><strong>Nombre:</strong> <span
+                                                                th:text="${item.client.fullName}">Nombre</span></div>
+                                                        <div><strong>Email:</strong> <span
+                                                                th:text="${item.client.email}">Email</span></div>
+                                                        <div><strong>Telefono:</strong> <span
+                                                                th:text="${item.client.phone}">Telefono</span></div>
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-6" th:if="${item.professional != null}">
+                                                        <h6 class="text-uppercase text-muted">Profesional</h6>
+                                                        <div><strong>Nombre:</strong> <span
+                                                                th:text="${item.professional.fullName}">Nombre</span>
+                                                        </div>
+                                                        <div><strong>Telefono:</strong> <span
+                                                                th:text="${item.professional.phone}">Telefono</span>
+                                                        </div>
+                                                        <div><strong>Detalles:</strong> <span
+                                                                th:text="${item.professional.professionalDetails}">Detalles</span>
+                                                        </div>
+                                                        <div><strong>Tarifa:</strong> <span
+                                                                th:text="${item.professional.hourlyRate}">Tarifa</span>
+                                                        </div>
+                                                        <div th:if="${item.professional.professionalAddress != null}">
+                                                            <strong>Direccion profesional:</strong>
+                                                            <span
+                                                                th:text="${item.professional.professionalAddress}">Direccion</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12" th:if="${item.application != null}">
+                                                        <h6 class="text-uppercase text-muted">Postulacion</h6>
+                                                        <div><strong>Estado:</strong> <span
+                                                                th:text="${item.application.status}">Estado</span></div>
+                                                        <div><strong>Precio propuesto:</strong> <span
+                                                                th:text="${item.application.proposedPrice}">Precio</span>
+                                                        </div>
+                                                        <div><strong>Mensaje:</strong> <span
+                                                                th:text="${item.application.message}">Mensaje</span>
+                                                        </div>
+                                                        <div><strong>Fecha postulacion:</strong> <span
+                                                                th:text="${item.application.appliedAt != null ? #temporals.format(item.application.appliedAt, 'dd/MM/yyyy HH:mm') : '-'}">Fecha</span>
+                                                        </div>
+                                                        <div><strong>Fecha respuesta:</strong> <span
+                                                                th:text="${item.application.respondedAt != null ? #temporals.format(item.application.respondedAt, 'dd/MM/yyyy HH:mm') : '-'}">Fecha</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="d-flex flex-wrap gap-2">
+                                                            <form
+                                                                th:if="${item.professional != null and item.professional.professionalId == currentUserId and item.jobStatus == 'CREATED'}"
+                                                                th:action="@{/jobs/applications/iniciar/{jobId}(jobId=${item.jobId},redirect='/shared/history')}"
+                                                                method="post">
+                                                                <button type="submit"
+                                                                    class="btn btn-sm btn-outline-success">Iniciar</button>
+                                                            </form>
+
+                                                            <form
+                                                                th:if="${item.professional != null and item.professional.professionalId == currentUserId and item.jobStatus == 'IN_PROGRESS'}"
+                                                                th:action="@{/jobs/applications/pausar/{jobId}(jobId=${item.jobId},redirect='/shared/history')}"
+                                                                method="post">
+                                                                <button type="submit"
+                                                                    class="btn btn-sm btn-outline-warning">Pausar</button>
+                                                            </form>
+
+                                                            <form
+                                                                th:if="${item.professional != null and item.professional.professionalId == currentUserId and item.jobStatus == 'PAUSED'}"
+                                                                th:action="@{/jobs/applications/reanudar/{jobId}(jobId=${item.jobId},redirect='/shared/history')}"
+                                                                method="post">
+                                                                <button type="submit"
+                                                                    class="btn btn-sm btn-outline-primary">Reanudar</button>
+                                                            </form>
+
+                                                            <form
+                                                                th:if="${item.professional != null and item.professional.professionalId == currentUserId and (item.jobStatus == 'IN_PROGRESS' or item.jobStatus == 'PAUSED')}"
+                                                                th:action="@{/jobs/applications/finalizar/{jobId}(jobId=${item.jobId})}"
+                                                                method="post">
+                                                                <button type="submit"
+                                                                    class="btn btn-sm btn-outline-success">Completar</button>
+                                                            </form>
+
+                                                            <form
+                                                                th:if="${item.jobStatus != 'COMPLETED' and item.jobStatus != 'CANCELLED' and ((item.client != null and item.client.clientId == currentUserId) or (item.professional != null and item.professional.professionalId == currentUserId))}"
+                                                                th:action="@{/jobs/applications/cancelar/{jobId}(jobId=${item.jobId},redirect='/shared/history')}"
+                                                                method="post">
+                                                                <button type="submit"
+                                                                    class="btn btn-sm btn-outline-danger">Cancelar</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <span class="badge bg-secondary" th:text="${item.status}">Estado</span>
                                         </div>
-                                        <p class="mb-1" th:text="${item.description}">Descripción</p>
                                     </div>
                                 </div>
                             </div>

@@ -1,46 +1,31 @@
 package es.duit.app.service;
 
-import es.duit.app.entity.AppUser;
-import es.duit.app.entity.Address;
-import es.duit.app.entity.ProfessionalProfile;
-import es.duit.app.dto.EditProfileDTO;
-import es.duit.app.repository.AppUserRepository;
-import es.duit.app.repository.ProfessionalProfileRepository;
-import es.duit.app.repository.AddressRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import es.duit.app.dto.EditProfileDTO;
+import es.duit.app.entity.Address;
+import es.duit.app.entity.AppUser;
+import es.duit.app.entity.ProfessionalProfile;
+import es.duit.app.repository.AddressRepository;
+import es.duit.app.repository.AppUserRepository;
+import es.duit.app.repository.ProfessionalProfileRepository;
+import lombok.RequiredArgsConstructor;
 
 // ============================================================================
 // SERVICIO PARA GESTIONAR OPERACIONES CON USUARIOS (PERFILES, AUTENTICACIÓN)
 // ============================================================================
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class AppUserService {
 
     private final AppUserRepository appUserRepository;
     private final AddressRepository addressRepository;
     private final ProfessionalProfileRepository professionalProfileRepository;
     private final AuthService authService;
-
-    public AppUserService(AppUserRepository appUserRepository,
-            AddressRepository addressRepository,
-            ProfessionalProfileRepository professionalProfileRepository,
-            AuthService authService) {
-        this.appUserRepository = appUserRepository;
-        this.addressRepository = addressRepository;
-        this.professionalProfileRepository = professionalProfileRepository;
-        this.authService = authService;
-    }
-
-    // ============================================================================
-    // OBTIENE EL USUARIO ACTUALMENTE LOGUEADO
-    // ============================================================================
-    public AppUser getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return authService.getAuthenticatedUser(auth);
-    }
 
     // ============================================================================
     // ACTUALIZA EL PERFIL DEL USUARIO CON NUEVOS DATOS
@@ -137,5 +122,13 @@ public class AppUserService {
 
         // Guardar usuario y retornar
         return appUserRepository.save(userPro);
+    }
+
+    // ============================================================================
+    // OBTIENE EL USUARIO ACTUALMENTE LOGUEADO
+    // ============================================================================
+    public AppUser getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return authService.getAuthenticatedUser(auth);
     }
 }

@@ -1,23 +1,22 @@
 package es.duit.app.service;
 
-import es.duit.app.entity.AppUser;
-import es.duit.app.repository.AppUserRepository;
+import java.util.Optional;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import es.duit.app.entity.AppUser;
+import es.duit.app.repository.AppUserRepository;
+import lombok.RequiredArgsConstructor;
 
 // ============================================================================
 // SERVICIO DE AUTENTICACIÓN - GESTIONA USUARIOS AUTENTICADOS
 // ============================================================================
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final AppUserRepository appUserRepository;
-
-    public AuthService(AppUserRepository appUserRepository) {
-        this.appUserRepository = appUserRepository;
-    }
 
     // ============================================================================
     // OBTIENE EL USUARIO AUTENTICADO DESDE EL CONTEXTO DE SEGURIDAD

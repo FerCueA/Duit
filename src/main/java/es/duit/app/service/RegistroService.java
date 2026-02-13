@@ -1,32 +1,27 @@
 package es.duit.app.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import es.duit.app.dto.RegistroDTO;
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.UserRole;
 import es.duit.app.repository.AppUserRepository;
 import es.duit.app.repository.RoleRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 // ============================================================================
 // SERVICIO DE REGISTRO - GESTIONA EL REGISTRO DE NUEVOS USUARIOS
 // ============================================================================
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class RegistroService {
 
     private final AppUserRepository appUserRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public RegistroService(AppUserRepository appUserRepository,
-            RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder) {
-        this.appUserRepository = appUserRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     // ============================================================================
     // REGISTRA UN NUEVO USUARIO CON VALIDACIONES

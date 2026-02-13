@@ -1,5 +1,12 @@
 package es.duit.app.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import es.duit.app.dto.RequestDTO;
 import es.duit.app.entity.Address;
 import es.duit.app.entity.AppUser;
@@ -7,28 +14,18 @@ import es.duit.app.entity.Category;
 import es.duit.app.entity.ServiceRequest;
 import es.duit.app.repository.CategoryRepository;
 import es.duit.app.repository.ServiceRequestRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 // ============================================================================
 // SERVICIO DE SOLICITUDES - GESTIONA SOLICITUDES DE SERVICIOS
 // ============================================================================
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class RequestService {
 
     private final ServiceRequestRepository serviceRequestRepository;
     private final CategoryRepository categoryRepository;
-
-    public RequestService(ServiceRequestRepository serviceRequestRepository,
-            CategoryRepository categoryRepository) {
-        this.serviceRequestRepository = serviceRequestRepository;
-        this.categoryRepository = categoryRepository;
-    }
 
     // ============================================================================
     // GUARDA UNA SOLICITUD - CREAR O ACTUALIZAR EXISTENTE
@@ -97,100 +94,6 @@ public class RequestService {
         ServiceRequest saved = serviceRequestRepository.save(solicitud);
 
         return saved;
-    }
-
-    // ============================================================================
-    // BUSCA UNA CATEGORÍA POR ID CON VALIDACIONES
-    // ============================================================================
-    private Category findCategoryById(Long categoryId) {
-        // Validar que el ID no sea nulo
-        if (categoryId == null) {
-            throw new IllegalArgumentException("Debes seleccionar una categoría");
-        }
-
-        // Buscar la categoría en la base de datos
-        Category categoria = null;
-        if (categoryRepository.findById(categoryId).isEmpty()) {
-            throw new IllegalArgumentException("Categoría no encontrada");
-        }
-        categoria = categoryRepository.findById(categoryId).get();
-
-        // Verificar que la categoría esté activa
-        boolean estaActiva = categoria.getActive();
-        if (!estaActiva) {
-            throw new IllegalArgumentException("La categoría seleccionada no está disponible");
-        }
-
-        return categoria;
-    }
-
-    // ============================================================================
-    // ASIGNA DIRECCIÓN DEL SERVICIO - HABITUAL O NUEVA
-    // ============================================================================
-    private void assignServiceAddress(ServiceRequest solicitud, RequestDTO form, AppUser usuario) {
-        // Obtener la opción de dirección seleccionada
-        String opcionDireccion = form.getAddressOption();
-
-        // Verificar si es dirección habitual del usuario
-        boolean esHabitual = "habitual".equals(opcionDireccion);
-        if (esHabitual) {
-            Address direccionUsuario = usuario.getAddress();
-            solicitud.setServiceAddress(direccionUsuario);
-            return;
-        }
-
-        // Verificar si es nueva dirección
-        boolean esNueva = "new".equals(opcionDireccion);
-        if (esNueva) {
-            Address nuevaDireccion = buildAddress(form);
-            solicitud.setServiceAddress(nuevaDireccion);
-            return;
-        }
-
-        // Si no es ninguna opción válida, lanzar error
-        throw new IllegalArgumentException("Debes seleccionar una opción de dirección válida");
-    }
-
-    // ============================================================================
-    // OBTIENE SOLICITUD PARA EDITAR CON VALIDACIONES (MÉTODO PÚBLICO)
-    // ============================================================================
-    public ServiceRequest getUserRequestForEditing(Long solicitudId, AppUser usuario) {
-        return getRequestForEditing(solicitudId, usuario);
-    }
-
-    // ============================================================================
-    // OBTIENE SOLICITUD PARA EDITAR CON VALIDACIONES
-    // ============================================================================
-    private ServiceRequest getRequestForEditing(Long solicitudId, AppUser usuario) {
-        // Validar que el ID no sea nulo
-        if (solicitudId == null) {
-            throw new IllegalArgumentException("ID de solicitud no válido");
-        }
-
-        // Buscar la solicitud en la base de datos
-        ServiceRequest solicitud = null;
-        if (serviceRequestRepository.findById(solicitudId).isEmpty()) {
-            throw new IllegalArgumentException("Solicitud no encontrada");
-        }
-        solicitud = serviceRequestRepository.findById(solicitudId).get();
-
-        // Verificar que el usuario sea el dueño de la solicitud
-        Long clienteId = solicitud.getClient().getId();
-        Long usuarioId = usuario.getId();
-        if (!clienteId.equals(usuarioId)) {
-            throw new IllegalArgumentException("No tienes permisos para editar esta solicitud");
-        }
-
-        // Verificar que el estado permita edición (solo DRAFT y CANCELLED)
-        ServiceRequest.Status estado = solicitud.getStatus();
-        boolean esBorrador = estado == ServiceRequest.Status.DRAFT;
-        boolean estaCancelada = estado == ServiceRequest.Status.CANCELLED;
-
-        if (!esBorrador && !estaCancelada) {
-            throw new IllegalArgumentException("Solo se pueden editar solicitudes en borrador o canceladas. Estado actual: " + estado);
-        }
-
-        return solicitud;
     }
 
     // ============================================================================
@@ -311,7 +214,7 @@ public class RequestService {
         if (usuario == null) {
             throw new IllegalArgumentException("Usuario requerido");
         }
-        
+
         // Buscar la solicitud en la base de datos
         ServiceRequest solicitud = serviceRequestRepository.findById(solicitudId)
                 .orElseThrow(() -> new IllegalArgumentException("Solicitud no encontrada"));
@@ -324,6 +227,111 @@ public class RequestService {
         }
 
         return solicitud;
+    }
+
+    // ============================================================================
+    // OBTIENE TODAS LAS CATEGORÍAS ACTIVAS
+    // ============================================================================
+    public List<Category> getActiveCategories() {
+        // Buscar todas las categorías que están activas
+        List<Category> categoriasActivas = categoryRepository.findByActiveTrue();
+
+        return categoriasActivas;
+    }
+
+    // ============================================================================
+    // OBTIENE SOLICITUD PARA EDITAR CON VALIDACIONES (MÉTODO PÚBLICO)
+    // ============================================================================
+    public ServiceRequest getUserRequestForEditing(Long solicitudId, AppUser usuario) {
+        return getRequestForEditing(solicitudId, usuario);
+    }
+
+    // ============================================================================
+    // BUSCA UNA CATEGORÍA POR ID CON VALIDACIONES
+    // ============================================================================
+    private Category findCategoryById(Long categoryId) {
+        // Validar que el ID no sea nulo
+        if (categoryId == null) {
+            throw new IllegalArgumentException("Debes seleccionar una categoría");
+        }
+
+        // Buscar la categoría en la base de datos
+        Category categoria = null;
+        if (categoryRepository.findById(categoryId).isEmpty()) {
+            throw new IllegalArgumentException("Categoría no encontrada");
+        }
+        categoria = categoryRepository.findById(categoryId).get();
+
+        // Verificar que la categoría esté activa
+        boolean estaActiva = categoria.getActive();
+        if (!estaActiva) {
+            throw new IllegalArgumentException("La categoría seleccionada no está disponible");
+        }
+
+        return categoria;
+    }
+
+    // ============================================================================
+    // OBTIENE SOLICITUD PARA EDITAR CON VALIDACIONES
+    // ============================================================================
+    private ServiceRequest getRequestForEditing(Long solicitudId, AppUser usuario) {
+        // Validar que el ID no sea nulo
+        if (solicitudId == null) {
+            throw new IllegalArgumentException("ID de solicitud no válido");
+        }
+
+        // Buscar la solicitud en la base de datos
+        ServiceRequest solicitud = null;
+        if (serviceRequestRepository.findById(solicitudId).isEmpty()) {
+            throw new IllegalArgumentException("Solicitud no encontrada");
+        }
+        solicitud = serviceRequestRepository.findById(solicitudId).get();
+
+        // Verificar que el usuario sea el dueño de la solicitud
+        Long clienteId = solicitud.getClient().getId();
+        Long usuarioId = usuario.getId();
+        if (!clienteId.equals(usuarioId)) {
+            throw new IllegalArgumentException("No tienes permisos para editar esta solicitud");
+        }
+
+        // Verificar que el estado permita edición (solo DRAFT y CANCELLED)
+        ServiceRequest.Status estado = solicitud.getStatus();
+        boolean esBorrador = estado == ServiceRequest.Status.DRAFT;
+        boolean estaCancelada = estado == ServiceRequest.Status.CANCELLED;
+
+        if (!esBorrador && !estaCancelada) {
+            throw new IllegalArgumentException(
+                    "Solo se pueden editar solicitudes en borrador o canceladas. Estado actual: " + estado);
+        }
+
+        return solicitud;
+    }
+
+    // ============================================================================
+    // ASIGNA DIRECCIÓN DEL SERVICIO - HABITUAL O NUEVA
+    // ============================================================================
+    private void assignServiceAddress(ServiceRequest solicitud, RequestDTO form, AppUser usuario) {
+        // Obtener la opción de dirección seleccionada
+        String opcionDireccion = form.getAddressOption();
+
+        // Verificar si es dirección habitual del usuario
+        boolean esHabitual = "habitual".equals(opcionDireccion);
+        if (esHabitual) {
+            Address direccionUsuario = usuario.getAddress();
+            solicitud.setServiceAddress(direccionUsuario);
+            return;
+        }
+
+        // Verificar si es nueva dirección
+        boolean esNueva = "new".equals(opcionDireccion);
+        if (esNueva) {
+            Address nuevaDireccion = buildAddress(form);
+            solicitud.setServiceAddress(nuevaDireccion);
+            return;
+        }
+
+        // Si no es ninguna opción válida, lanzar error
+        throw new IllegalArgumentException("Debes seleccionar una opción de dirección válida");
     }
 
     // ============================================================================
@@ -348,15 +356,4 @@ public class RequestService {
 
         return direccion;
     }
-
-    // ============================================================================
-    // OBTIENE TODAS LAS CATEGORÍAS ACTIVAS
-    // ============================================================================
-    public List<Category> getActiveCategories() {
-        // Buscar todas las categorías que están activas
-        List<Category> categoriasActivas = categoryRepository.findByActiveTrue();
-
-        return categoriasActivas;
-    }
-
 }
