@@ -156,7 +156,8 @@ public class PostulacionesController {
     @PostMapping("/pausar/{jobId}")
     public String pausarTrabajoEnProgreso(@PathVariable Long jobId,
             Authentication auth,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            @RequestParam(required = false) String redirect) {
         try {
             // Obtener usuario logueado
             AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
@@ -167,12 +168,12 @@ public class PostulacionesController {
             // Preparar respuesta exitosa
             String mensajeExito = "Trabajo pausado correctamente.";
             redirectAttributes.addFlashAttribute("success", mensajeExito);
-            return "redirect:/professional/applications";
+            return buildRedirect(redirect, "/professional/applications");
 
         } catch (IllegalArgumentException error) {
             // Manejar error en la pausa de trabajos
             redirectAttributes.addFlashAttribute("error", error.getMessage());
-            return "redirect:/professional/applications";
+            return buildRedirect(redirect, "/professional/applications");
         }
     }
 
@@ -182,7 +183,8 @@ public class PostulacionesController {
     @PostMapping("/reanudar/{jobId}")
     public String reanudarTrabajoPausado(@PathVariable Long jobId,
             Authentication auth,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            @RequestParam(required = false) String redirect) {
         try {
             // Obtener usuario logueado
             AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
@@ -193,12 +195,34 @@ public class PostulacionesController {
             // Preparar respuesta exitosa
             String mensajeExito = "Trabajo reanudado correctamente.";
             redirectAttributes.addFlashAttribute("success", mensajeExito);
-            return "redirect:/professional/applications";
+            return buildRedirect(redirect, "/professional/applications");
 
         } catch (IllegalArgumentException error) {
             // Manejar error en la reanudación de trabajos
             redirectAttributes.addFlashAttribute("error", error.getMessage());
-            return "redirect:/professional/applications";
+            return buildRedirect(redirect, "/professional/applications");
+        }
+    }
+
+    // =========================================================================
+    // INICIA UN TRABAJO CREADO
+    // =========================================================================
+    @PostMapping("/iniciar/{jobId}")
+    public String iniciarTrabajoCreado(@PathVariable Long jobId,
+            Authentication auth,
+            RedirectAttributes redirectAttributes,
+            @RequestParam(required = false) String redirect) {
+        try {
+            AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
+            jobService.startJob(jobId, usuarioLogueado);
+
+            String mensajeExito = "Trabajo iniciado correctamente.";
+            redirectAttributes.addFlashAttribute("success", mensajeExito);
+            return buildRedirect(redirect, "/professional/applications");
+
+        } catch (IllegalArgumentException error) {
+            redirectAttributes.addFlashAttribute("error", error.getMessage());
+            return buildRedirect(redirect, "/professional/applications");
         }
     }
 
@@ -208,7 +232,8 @@ public class PostulacionesController {
     @PostMapping("/cancelar/{jobId}")
     public String cancelarTrabajo(@PathVariable Long jobId,
             Authentication auth,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            @RequestParam(required = false) String redirect) {
         try {
             // Obtener usuario logueado
             AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
@@ -219,13 +244,20 @@ public class PostulacionesController {
             // Preparar respuesta exitosa
             String mensajeExito = "Trabajo cancelado correctamente.";
             redirectAttributes.addFlashAttribute("success", mensajeExito);
-            return "redirect:/professional/applications";
+            return buildRedirect(redirect, "/professional/applications");
 
         } catch (IllegalArgumentException error) {
             // Manejar error en la cancelación de trabajos
             redirectAttributes.addFlashAttribute("error", error.getMessage());
-            return "redirect:/professional/applications";
+            return buildRedirect(redirect, "/professional/applications");
         }
+    }
+
+    private String buildRedirect(String redirect, String fallback) {
+        if (redirect == null || redirect.trim().isEmpty()) {
+            return "redirect:" + fallback;
+        }
+        return "redirect:" + redirect;
     }
 
     // ============================================================================

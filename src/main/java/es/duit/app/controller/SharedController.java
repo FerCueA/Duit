@@ -3,6 +3,7 @@ package es.duit.app.controller;
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.Rating;
 import es.duit.app.entity.ServiceJob;
+import es.duit.app.service.HistoryService;
 import es.duit.app.repository.RatingRepository;
 import es.duit.app.repository.ServiceJobRepository;
 import es.duit.app.service.AuthService;
@@ -27,20 +28,26 @@ public class SharedController {
     private final ServiceJobRepository serviceJobRepository;
     private final RatingRepository ratingRepository;
     private final AuthService authService;
+    private final HistoryService historyService;
 
     public SharedController(ServiceJobRepository serviceJobRepository,
             RatingRepository ratingRepository,
-            AuthService authService) {
+            AuthService authService,
+            HistoryService historyService) {
         this.serviceJobRepository = serviceJobRepository;
         this.ratingRepository = ratingRepository;
         this.authService = authService;
+        this.historyService = historyService;
     }
 
     // ============================================================================
     // PÁGINA DE HISTORIAL DE TRABAJOS
     // ============================================================================
     @GetMapping({ "/history" })
-    public String mostrarHistorial() {
+    public String mostrarHistorial(Authentication auth, Model model) {
+        AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
+        model.addAttribute("historial", historyService.getHistoryForUser(usuarioLogueado));
+        model.addAttribute("currentUserId", usuarioLogueado.getId());
         return "shared/history";
     }
 

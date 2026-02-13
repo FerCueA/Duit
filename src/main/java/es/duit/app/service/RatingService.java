@@ -1,28 +1,25 @@
 package es.duit.app.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.Rating;
 import es.duit.app.entity.ServiceJob;
 import es.duit.app.repository.RatingRepository;
 import es.duit.app.repository.ServiceJobRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 // ============================================================================
 // SERVICIO DE VALORACIONES - GESTIONA VALORACIONES ENTRE USUARIOS
 // ============================================================================
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class RatingService {
 
     private final RatingRepository ratingRepository;
     private final ServiceJobRepository serviceJobRepository;
-
-    public RatingService(RatingRepository ratingRepository,
-            ServiceJobRepository serviceJobRepository) {
-        this.ratingRepository = ratingRepository;
-        this.serviceJobRepository = serviceJobRepository;
-    }
 
     // ============================================================================
     // CREA UNA VALORACIÓN DE UN TRABAJO COMPLETADO CON VALIDACIONES
@@ -41,28 +38,12 @@ public class RatingService {
         validateNoExistingRating(trabajo, type);
 
         Rating nuevaValoracion = buildRating(trabajo, type, score, comment);
-        
+
         if (nuevaValoracion == null) {
             throw new IllegalStateException("Error al crear la valoración");
         }
 
         return ratingRepository.save(nuevaValoracion);
-    }
-
-    // ============================================================================
-    // OBTIENE UN TRABAJO POR ID
-    // ============================================================================
-    private ServiceJob getJobById(Long jobId) {
-        // Validar que el ID no sea nulo
-        if (jobId == null) {
-            throw new IllegalArgumentException("El ID del trabajo es requerido");
-        }
-        
-        // Buscar el trabajo en la base de datos
-        ServiceJob trabajo = serviceJobRepository.findById(jobId)
-                .orElseThrow(() -> new IllegalArgumentException("Trabajo no encontrado"));
-
-        return trabajo;
     }
 
     // ============================================================================
@@ -149,6 +130,22 @@ public class RatingService {
         if (yaExisteValoracion) {
             throw new IllegalArgumentException("Ya has valorado este trabajo");
         }
+    }
+
+    // ============================================================================
+    // OBTIENE UN TRABAJO POR ID
+    // ============================================================================
+    private ServiceJob getJobById(Long jobId) {
+        // Validar que el ID no sea nulo
+        if (jobId == null) {
+            throw new IllegalArgumentException("El ID del trabajo es requerido");
+        }
+
+        // Buscar el trabajo en la base de datos
+        ServiceJob trabajo = serviceJobRepository.findById(jobId)
+                .orElseThrow(() -> new IllegalArgumentException("Trabajo no encontrado"));
+
+        return trabajo;
     }
 
     // ============================================================================

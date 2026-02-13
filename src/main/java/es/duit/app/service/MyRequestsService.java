@@ -1,21 +1,24 @@
 package es.duit.app.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.duit.app.dto.RequestDTO;
-import es.duit.app.entity.JobApplication;
-import es.duit.app.entity.ServiceRequest;
-import es.duit.app.repository.ServiceRequestRepository;
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 
+import es.duit.app.dto.RequestDTO;
+import es.duit.app.entity.AppUser;
+import es.duit.app.entity.JobApplication;
+import es.duit.app.entity.ServiceRequest;
+import es.duit.app.repository.AppUserRepository;
+import es.duit.app.repository.ServiceRequestRepository;
+
 // ============================================================================
-// MOSTRAR SOLICITUDES 
+// MOSTRAR SOLICITUDES DEL USUARIO - GESTIONA LAS SOLICITUDES CREADAS POR EL USUARIO
 // ============================================================================
 @Service
 @Transactional
@@ -23,39 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class MyRequestsService {
 
     private final ServiceRequestRepository serviceRequestRepository;
-
-
-    // ============================================================================
-    // MÉTODO OBTENER EL USUARIO AUTENTICADO
-    // ============================================================================
-    private String getAuthenticatedUsername() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("Usuario no autenticado");
-        }
-
-        return authentication.getName();
-    }
-
-    // ============================================================================
-    // MÉTODO PARA OBTENER LAS SOLICITUDES
-    // ============================================================================
-    public List<ServiceRequest> getMyRequests() {
-        // Obtener el usuario autenticado
-        String username = getAuthenticatedUsername();
-
-        // Buscar todas las solicitudes del usuario en la base de datos
-        List<ServiceRequest> userRequests = serviceRequestRepository.findByClientUsername(username);
-
-        // Verificar si el usuario tiene solicitudes
-        if (userRequests == null) {
-            userRequests = new ArrayList<>();
-        }
-
-        // Retornar la lista de solicitudes del usuario
-        return userRequests;
-    }
+    private final AppUserRepository appUserRepository;
+    private final JobService jobService;
 
     // ============================================================================
     // PUBLICAR UNA SOLICITUD
@@ -110,54 +82,28 @@ public class MyRequestsService {
         // Obtener el usuario autenticado
         String username = getAuthenticatedUsername();
 
-        // Buscar la solicitud
-        ServiceRequest request = serviceRequestRepository.findById(requestId).orElse(null);
+        AppUser usuario = appUserRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        if (request == null) {
-            throw new RuntimeException("Solicitud no encontrada");
-        }
+        ServiceRequest request = serviceRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
 
-        // Verificar que sea del cliente correcto
-        if (!request.getClient().getUsername().equals(username)) {
-            throw new RuntimeException("Solo el cliente puede aceptar su propia solicitud");
-        }
-
-        // Verificar que esté publicada
-        if (request.getStatus() != ServiceRequest.Status.PUBLISHED) {
-            throw new RuntimeException("Solo se pueden aceptar solicitudes publicadas");
-        }
-
-        // Buscar la aplicación específica de manera simple
-        JobApplication selectedApplication = null;
-
+        boolean perteneceALaSolicitud = false;
         for (JobApplication app : request.getApplications()) {
             if (app.getId().equals(applicationId)) {
-                selectedApplication = app;
+                perteneceALaSolicitud = true;
                 break;
             }
         }
 
-        if (selectedApplication == null) {
+        if (!perteneceALaSolicitud) {
             throw new RuntimeException("Aplicación no encontrada en esta solicitud");
         }
 
-        // Cambiar estado a en progreso
-        request.setStatus(ServiceRequest.Status.IN_PROGRESS);
+        // Delegar al servicio de trabajos para crear el job
+        jobService.acceptApplication(applicationId, usuario);
 
-        // Marcar la aplicación seleccionada como aceptada
-        selectedApplication.setStatus(JobApplication.Status.ACCEPTED);
-
-        // Rechazar automáticamente todas las demás aplicaciones
-        for (JobApplication app : request.getApplications()) {
-            if (!app.getId().equals(applicationId)) {
-                app.setStatus(JobApplication.Status.REJECTED);
-            }
-        }
-
-        // Guardar cambios
-        ServiceRequest savedRequest = serviceRequestRepository.save(request);
-
-        return savedRequest;
+        return request;
     }
 
     // ============================================================================
@@ -232,34 +178,6 @@ public class MyRequestsService {
     }
 
     // ============================================================================
-    // OBTENER UNA SOLICITUD
-    // ============================================================================
-    @Transactional(readOnly = true)
-    public ServiceRequest getMyRequestById(Long requestId) {
-
-        if (requestId == null) {
-            throw new IllegalArgumentException("El ID de la solicitud es requerido");
-        }
-
-        // Obtener el usuario autenticado
-        String username = getAuthenticatedUsername();
-
-        // Buscar la solicitud
-        ServiceRequest request = serviceRequestRepository.findById(requestId).orElse(null);
-
-        if (request == null) {
-            throw new RuntimeException("Solicitud no encontrada");
-        }
-
-        // Verificar que sea del cliente correcto
-        if (!request.getClient().getUsername().equals(username)) {
-            throw new RuntimeException("No tienes permisos para ver esta solicitud");
-        }
-
-        return request;
-    }
-
-    // ============================================================================
     // ACTUALIZAR/EDITAR UNA SOLICITUD
     // ============================================================================
     public ServiceRequest updateRequest(Long requestId, RequestDTO updateData) {
@@ -287,10 +205,11 @@ public class MyRequestsService {
         }
 
         // Solo se pueden editar solicitudes en borrador o canceladas
-        if (request.getStatus() != ServiceRequest.Status.DRAFT && 
-            request.getStatus() != ServiceRequest.Status.CANCELLED) {
-                System.out.println("Estado actual de la solicitud: " + request.getStatus());
-            throw new RuntimeException("Solo se pueden editar solicitudes en borrador o canceladas. Estado actual: " + request.getStatus());
+        if (request.getStatus() != ServiceRequest.Status.DRAFT &&
+                request.getStatus() != ServiceRequest.Status.CANCELLED) {
+            System.out.println("Estado actual de la solicitud: " + request.getStatus());
+            throw new RuntimeException("Solo se pueden editar solicitudes en borrador o canceladas. Estado actual: "
+                    + request.getStatus());
         }
 
         // Actualizar solo los campos que vengan en el DTO
@@ -340,6 +259,53 @@ public class MyRequestsService {
     }
 
     // ============================================================================
+    // MÉTODO PARA OBTENER LAS SOLICITUDES
+    // ============================================================================
+    public List<ServiceRequest> getMyRequests() {
+        // Obtener el usuario autenticado
+        String username = getAuthenticatedUsername();
+
+        // Buscar todas las solicitudes del usuario en la base de datos
+        List<ServiceRequest> userRequests = serviceRequestRepository.findByClientUsername(username);
+
+        // Verificar si el usuario tiene solicitudes
+        if (userRequests == null) {
+            userRequests = new ArrayList<>();
+        }
+
+        // Retornar la lista de solicitudes del usuario
+        return userRequests;
+    }
+
+    // ============================================================================
+    // OBTENER UNA SOLICITUD
+    // ============================================================================
+    @Transactional(readOnly = true)
+    public ServiceRequest getMyRequestById(Long requestId) {
+
+        if (requestId == null) {
+            throw new IllegalArgumentException("El ID de la solicitud es requerido");
+        }
+
+        // Obtener el usuario autenticado
+        String username = getAuthenticatedUsername();
+
+        // Buscar la solicitud
+        ServiceRequest request = serviceRequestRepository.findById(requestId).orElse(null);
+
+        if (request == null) {
+            throw new RuntimeException("Solicitud no encontrada");
+        }
+
+        // Verificar que sea del cliente correcto
+        if (!request.getClient().getUsername().equals(username)) {
+            throw new RuntimeException("No tienes permisos para ver esta solicitud");
+        }
+
+        return request;
+    }
+
+    // ============================================================================
     // OBTENER POSTULACIONES RECIBIDAS EN UNA SOLICITUD
     // ============================================================================
     @Transactional(readOnly = true)
@@ -378,4 +344,16 @@ public class MyRequestsService {
         return applications;
     }
 
+    // ============================================================================
+    // MÉTODO OBTENER EL USUARIO AUTENTICADO
+    // ============================================================================
+    private String getAuthenticatedUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Usuario no autenticado");
+        }
+
+        return authentication.getName();
+    }
 }
