@@ -10,6 +10,26 @@ El proyecto sigue una arquitectura MVC (Model-View-Controller) para separar clar
 
 Los objetivos principales del diseno son la claridad estructural, la trazabilidad de decisiones y la facilidad para evolucionar el sistema.
 
+### 1.1 Estructura basica del proyecto
+
+La organizacion se divide en capas y recursos, siguiendo el patron MVC y separando responsabilidades:
+
+```
+src/main/
+├── java/es/duit/app/
+│   ├── controller/   # Controladores y rutas
+│   ├── service/      # Logica de negocio
+│   ├── repository/   # Acceso a datos (JPA)
+│   ├── entity/       # Entidades persistentes
+│   ├── dto/          # Objetos de transferencia de datos
+│   ├── security/     # Seguridad y autenticacion
+│   └── config/       # Configuracion de la aplicacion
+└── resources/
+    ├── templates/    # Vistas Thymeleaf
+    ├── static/       # CSS, JS e imagenes
+    └── application.properties
+```
+
 ## 2. Capa Entity
 
 Las entidades representan el dominio del problema y definen el modelo persistente. Cada entidad se diseno para reflejar conceptos del negocio: solicitudes de servicio, usuarios, roles, postulaciones, trabajos, etc.

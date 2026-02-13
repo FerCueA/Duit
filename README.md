@@ -1,144 +1,89 @@
 # 💼 Duit - Plataforma de Servicios y Trabajo
 
-Duit es una aplicación web completa que conecta personas que buscan servicios con profesionales que los ofrecen. La plataforma permite gestionar ofertas de trabajo, postulaciones, perfiles profesionales y un sistema completo de valoraciones entre usuarios.
+Duit es una aplicacion web completa que conecta personas que buscan servicios con profesionales que los ofrecen. La plataforma permite gestionar ofertas de trabajo, postulaciones, perfiles profesionales y un sistema completo de valoraciones entre usuarios.
 
-## ✨ ¿Qué hace esta aplicación?
+## 📌 Indice
 
-- 🔍 **Buscar servicios**: Los usuarios pueden encontrar profesionales para trabajos específicos
-- 💼 **Ofertar trabajos**: Los profesionales pueden publicar sus servicios disponibles
-- 🤝 **Sistema de postulaciones**: Conexión directa entre clientes y profesionales
-- ⭐ **Valoraciones**: Sistema de reputación basado en experiencias previas
-- 👤 **Perfiles profesionales**: Gestión completa de información profesional
-- 🛡️ **Panel de administración**: Control de usuarios, categorías y estadísticas
+- [Que hace esta aplicacion?](#que-hace-esta-aplicacion)
+- [Demo en produccion](#demo-en-produccion)
+- [Enlaces utiles](#enlaces-utiles)
+- [Documentacion interna](#documentacion-interna)
+- [Funcionalidades principales](#funcionalidades-principales)
+- [Instalacion paso a paso](#instalacion-paso-a-paso)
+- [Tecnologias utilizadas](#tecnologias-utilizadas)
+- [Configuracion rapida](#configuracion-rapida)
+- [Soporte](#soporte)
+
+## Que hace esta aplicacion?
+
+- 🔍 **Buscar servicios**: los usuarios pueden encontrar profesionales para trabajos especificos.
+- 💼 **Ofertar trabajos**: los profesionales pueden publicar sus servicios disponibles.
+- 🤝 **Sistema de postulaciones**: conexion directa entre clientes y profesionales.
+- ⭐ **Valoraciones**: sistema de reputacion basado en experiencias previas.
+- 👤 **Perfiles profesionales**: gestion completa de informacion profesional.
+- 🛡️ **Panel de administracion**: control de usuarios, categorias y estadisticas.
 
 ---
 
-## 🚀 Demo en producción
+## Demo en produccion
 
-- **Aplicación:** [https://duitapp.koyeb.app/](https://duitapp.koyeb.app/)
+- **Aplicacion:** [https://duitapp.koyeb.app/](https://duitapp.koyeb.app/)
 - **Base de datos:** PostgreSQL en [Neon](https://neon.tech/)
 
 ---
 
-## 📚 Enlaces útiles
+## Enlaces utiles
 
-- **Documentación:** [Duit Docs](https://e.pcloud.link/publink/show?code=kZnwjaZ15u7S4qnaebz8Iq21LSKvRrC4nGX)
+- **Documentacion externa:** [Duit Docs](https://e.pcloud.link/publink/show?code=kZnwjaZ15u7S4qnaebz8Iq21LSKvRrC4nGX)
 - **Trello:** [Tablero del proyecto](https://trello.com/b/WuKam2k1/prw)
-- **Diseño:** [Figma](https://www.figma.com/design/y0dsqYgpwDFsx5Hy0YNVtL/PRW?t=IcXPDrcEpCyz3U7G-0)
+- **Diseno:** [Figma](https://www.figma.com/design/y0dsqYgpwDFsx5Hy0YNVtL/PRW?t=IcXPDrcEpCyz3U7G-0)
 
 ---
 
-## 🗺️ Funcionalidades principales
+## Documentacion interna
 
-### 👥 Para usuarios (clientes)
-
-- Buscar profesionales por categoría y ubicación
-- Ver perfiles y valoraciones de profesionales
-- Crear solicitudes de trabajo
-- Gestionar historial de servicios contratados
-
-### 🔧 Para profesionales
-
-- Crear y gestionar perfil profesional
-- Publicar ofertas de servicios
-- Ver y responder a postulaciones
-- Gestionar historial de trabajos realizados
-
-### 🛡️ Para administradores
-
-- Panel de control con estadísticas
-- Gestión de usuarios y categorías
-- Moderación de contenido
-- Análisis de actividad de la plataforma
+- [Plan de proyecto](documentacion/DAW_PRW_R1L2_UT01.0.%20Documento%20de%20plan%20de%20proyecto.md)
+- [Documento de alcance](documentacion/DAW_PRW_R1L2_UT01.1.%20Documento%20de%20alcance.md)
+- [Diagrama de casos de uso](documentacion/DAW_PRW_R1L2_UT01.2.%20Diagrama%20de%20casos%20de%20uso.md)
+- [Diagrama ER](documentacion/DAW_PRW_R1L2_UT01.3.%20Diagrama_ER.md)
+- [Diseno tecnico](documentacion/DAW_PRW_R1L2_UT01.4.%20Diseno%20Tecnico.md)
+- [Justificacion tecnica](documentacion/DAW_PRW_R1L2_UT00.0.%20Justificacion%20tecnica.md)
+- [Documento de despliegue](documentacion/DAW_PRW_R1L2_5.%20Documento%20de%20despliegue.md)
 
 ---
 
-## 🗂️ Rutas del sistema
+## Funcionalidades principales
 
-### Páginas públicas
+### Para usuarios (clientes)
 
-| Ruta           | Descripción                    |
-|----------------|--------------------------------|
-| `/`            | Página de inicio               |
-| `/login`       | Iniciar sesión                 |
-| `/registro`    | Registro de usuarios           |
-| `/terminos`    | Términos y condiciones         |
-| `/privacidad`  | Política de privacidad         |
-| `/ayuda`       | Centro de ayuda                |
+- Buscar profesionales por categoria y ubicacion.
+- Ver perfiles y valoraciones de profesionales.
+- Crear solicitudes de trabajo.
+- Gestionar historial de servicios contratados.
 
-### Área de usuario autenticado
+### Para profesionales
 
-| Ruta                    | Descripción                           |
-|-------------------------|---------------------------------------|
-| `/home`                 | Dashboard principal                   |
-| `/jobs/buscar`          | Buscar trabajos disponibles         |
-| `/jobs/crear`           | Publicar nuevo trabajo               |
-| `/jobs/mis-solicitudes` | Mis solicitudes de trabajo           |
-| `/jobs/postular`        | Ver trabajos para postular          |
-| `/profile/editar`       | Editar perfil personal              |
-| `/profile/profesional`  | Gestionar perfil profesional        |
-| `/valoraciones`         | Ver y gestionar valoraciones         |
-| `/historial`           | Historial de actividades            |
+- Crear y gestionar perfil profesional.
+- Publicar ofertas de servicios.
+- Ver y responder a postulaciones.
+- Gestionar historial de trabajos realizados.
 
-### Panel de administración
+### Para administradores
 
-| Ruta                  | Descripción                    |
-|-----------------------|--------------------------------|
-| `/admin/usuarios`     | Gestión de usuarios            |
-| `/admin/categorias`   | Gestión de categorías          |
-| `/admin/estadisticas` | Panel de estadísticas          |
+- Panel de control con estadisticas.
+- Gestion de usuarios y categorias.
+- Moderacion de contenido.
+- Analisis de actividad de la plataforma.
 
 ---
 
-## 📁 Estructura del proyecto
-
-```
-📦 Duit/
-├── 📁 src/main/
-│   ├── 📁 java/es/duit/app/
-│   │   ├── 📁 controller/           # Controladores (lógica de endpoints)
-│   │   │   ├── PublicController     # Páginas públicas
-│   │   │   ├── DashboardController  # Panel principal
-│   │   │   ├── RequestController    # Gestión de trabajos
-│   │   │   ├── ProfileController    # Perfiles de usuario
-│   │   │   ├── AdminController      # Panel de administración
-│   │   │   └── ...
-│   │   ├── 📁 entity/              # Modelos de datos (base de datos)
-│   │   │   ├── AppUser             # Usuarios del sistema
-│   │   │   ├── ServiceRequest      # Solicitudes de trabajo
-│   │   │   ├── ProfessionalProfile # Perfiles profesionales
-│   │   │   ├── Rating              # Sistema de valoraciones
-│   │   │   └── ...
-│   │   ├── 📁 service/             # Lógica de negocio
-│   │   ├── 📁 repository/          # Acceso a datos
-│   │   ├── 📁 security/            # Configuración de seguridad
-│   │   └── 📁 config/              # Configuración general
-│   └── 📁 resources/
-│       ├── 📁 templates/           # Plantillas HTML (Thymeleaf)
-│       │   ├── 📁 public/          # Vistas públicas
-│       │   ├── 📁 dashboard/       # Panel de usuario
-│       │   ├── 📁 jobs/            # Gestión de trabajos
-│       │   ├── 📁 profile/         # Perfiles
-│       │   ├── 📁 admin/           # Panel de administración
-│       │   └── 📁 components/      # Componentes reutilizables
-│       ├── 📁 static/
-│       │   ├── 📁 css/             # Estilos CSS
-│       │   ├── 📁 js/              # Scripts JavaScript
-│       │   └── 📁 img/             # Imágenes
-│       └── application.properties   # Configuración de la app
-├── pom.xml                         # Dependencias Maven
-└── README.md                       # Este archivo
-```
-
----
-
-## 🚀 Instalación paso a paso
+## Instalacion paso a paso
 
 ### Prerrequisitos
 
-- Java 21 o superior
-- Maven (incluido con el proyecto como `mvnw`)
-- PostgreSQL (local o remoto)
+- Java 21 o superior.
+- Maven (incluido con el proyecto como `mvnw`).
+- PostgreSQL (local o remoto).
 
 ### 1. Clonar el repositorio
 
@@ -153,15 +98,15 @@ Crea una base de datos PostgreSQL y anota las credenciales.
 
 ### 3. Configurar variables de entorno
 
-Crea un archivo `.env` en la raíz del proyecto:
+Crea un archivo `.env` en la raiz del proyecto:
 
 ```env
 DB_URL=jdbc:postgresql://localhost:5432/duit
 DB_USER=tu_usuario
-DB_PASS=tu_contraseña
+DB_PASS=tu_contrasena
 ```
 
-### 4. Ejecutar la aplicación
+### 4. Ejecutar la aplicacion
 
 ```bash
 # En Linux/Mac
@@ -171,119 +116,56 @@ DB_PASS=tu_contraseña
 mvnw.cmd spring-boot:run
 ```
 
-### 5. Acceder a la aplicación
+### 5. Acceder a la aplicacion
 
 Abre tu navegador en: [http://localhost:8080](http://localhost:8080)
 
 ---
 
-## ⚙️ Tecnologías utilizadas
+## Tecnologias utilizadas
 
 ### Backend
 
-- **Java 21** - Lenguaje de programación
-- **Spring Boot 3.5.10** - Framework principal
-- **Spring Security** - Autenticación y autorización
-- **Spring Data JPA** - Acceso a datos
-- **PostgreSQL** - Base de datos
+- **Java 21** - Lenguaje de programacion.
+- **Spring Boot 3.5.10** - Framework principal.
+- **Spring Security** - Autenticacion y autorizacion.
+- **Spring Data JPA** - Acceso a datos.
+- **PostgreSQL** - Base de datos.
 
 ### Frontend
 
-- **Thymeleaf** - Motor de plantillas
-- **HTML5 + CSS3** - Estructura y estilos
-- **JavaScript** - Interactividad
+- **Thymeleaf** - Motor de plantillas.
+- **HTML5 + CSS3** - Estructura y estilos.
+- **JavaScript** - Interactividad.
 
 ### Herramientas
 
-- **Maven** - Gestión de dependencias
-- **Lombok** - Reducir código repetitivo
-- **Spring DotEnv** - Gestión de variables de entorno
+- **Maven** - Gestion de dependencias.
+- **Lombok** - Reducir codigo repetitivo.
+- **Spring DotEnv** - Gestion de variables de entorno.
 
 ---
 
-## 📦 Dependencias principales
+## Configuracion rapida
 
-```xml
-<!-- Núcleo de Spring Boot -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-web</artifactId>
-</dependency>
-
-<!-- Base de datos -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-data-jpa</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.postgresql</groupId>
-    <artifactId>postgresql</artifactId>
-</dependency>
-
-<!-- Seguridad -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-security</artifactId>
-</dependency>
-
-<!-- Plantillas web -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-thymeleaf</artifactId>
-</dependency>
-
-<!-- Utilidades -->
-<dependency>
-    <groupId>org.projectlombok</groupId>
-    <artifactId>lombok</artifactId>
-</dependency>
-```
-
----
-
-## 🔧 Configuración para desarrollo
-
-### Variables de entorno requeridas
+Las variables principales estan en el archivo `application.properties` y, si usas entorno local, puedes definir:
 
 ```env
-# Base de datos
 DB_URL=jdbc:postgresql://localhost:5432/duit
 DB_USER=usuario_postgres
-DB_PASS=contraseña_postgres
-
-# Opcional: Configuración de correo (si se usa)
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=tu-email@gmail.com
-MAIL_PASSWORD=tu-contraseña-app
+DB_PASS=contrasena_postgres
 ```
 
-### Configuración de desarrollo local
-
-El archivo `application.properties` ya está configurado para desarrollo:
-
-- Hot reload de Thymeleaf activado
-- SQL logging habilitado
-- Modo debug para Spring Security
+Para el detalle completo de configuracion y estructura, consulta la documentacion interna.
 
 ---
 
-## 🤝 Contribuir al proyecto
-
-1. Haz fork del repositorio
-2. Crea una rama para tu feature: `git checkout -b feature/nueva-funcionalidad`
-3. Realiza tus cambios y commitea: `git commit -m 'Añadir nueva funcionalidad'`
-4. Push a la rama: `git push origin feature/nueva-funcionalidad`
-5. Abre un Pull Request
-
----
-
-## 📧 Soporte
+## Soporte
 
 ¿Problemas o dudas?
 
-- Crea un issue en el repositorio
+- Crea un issue en el repositorio.
 
 ---
 
-*README actualizado 01/02/2026*
+## README actualizado 13/02/2026
