@@ -69,7 +69,8 @@ public class RequestService {
             // Es nueva: crear solicitud vacía
             solicitud = new ServiceRequest();
             solicitud.setClient(usuario);
-            solicitud.setStatus(ServiceRequest.Status.DRAFT);
+            boolean publishNow = Boolean.TRUE.equals(form.getPublishNow());
+            solicitud.setStatus(publishNow ? ServiceRequest.Status.PUBLISHED : ServiceRequest.Status.DRAFT);
             solicitud.setRequestedAt(LocalDateTime.now());
         }
 
@@ -94,6 +95,13 @@ public class RequestService {
 
         // Asignar dirección del servicio
         assignServiceAddress(solicitud, form, usuario);
+
+        if (editId != null) {
+            boolean publishNow = Boolean.TRUE.equals(form.getPublishNow());
+            if (publishNow && solicitud.getStatus() == ServiceRequest.Status.DRAFT) {
+                solicitud.setStatus(ServiceRequest.Status.PUBLISHED);
+            }
+        }
 
         // Guardar en base de datos y devolver
         ServiceRequest saved = serviceRequestRepository.save(solicitud);
@@ -123,6 +131,8 @@ public class RequestService {
         // Obtener la solicitud del usuario con validaciones
         ServiceRequest solicitud = getUserRequest(solicitudId, usuario);
 
+        validateUserHasAddress(usuario);
+
         // Verificar que esté en borrador
         ServiceRequest.Status estado = solicitud.getStatus();
         boolean esBorrador = estado == ServiceRequest.Status.DRAFT;
@@ -135,6 +145,15 @@ public class RequestService {
         ServiceRequest guardada = serviceRequestRepository.save(solicitud);
 
         return guardada;
+    }
+
+    // =========================================================================
+    // VALIDA QUE EL USUARIO TIENE UNA DIRECCION CONFIGURADA
+    // =========================================================================
+    private void validateUserHasAddress(AppUser usuario) {
+        if (usuario.getAddress() == null) {
+            throw new IllegalArgumentException("Necesitas configurar tu direccion antes de publicar");
+        }
     }
 
     // ============================================================================

@@ -94,6 +94,7 @@ public class RequestFormController {
                 // necesarios
                 model.addAttribute("habitualAddress", usuarioLogueado.getAddress());
                 model.addAttribute("categorias", serviceRequestService.getActiveCategories());
+                model.addAttribute("missingAddress", usuarioLogueado.getAddress() == null);
 
                 boolean esEdicion = form.getEditId() != null;
                 model.addAttribute("modoEdicion", esEdicion);
@@ -117,6 +118,7 @@ public class RequestFormController {
             // Volver al formulario con datos necesarios
             model.addAttribute("habitualAddress", usuarioLogueado.getAddress());
             model.addAttribute("categorias", serviceRequestService.getActiveCategories());
+            model.addAttribute("missingAddress", usuarioLogueado.getAddress() == null);
 
             boolean esEdicion = form.getEditId() != null;
             model.addAttribute("modoEdicion", esEdicion);
@@ -137,10 +139,14 @@ public class RequestFormController {
         // Enviar datos comunes necesarios para el formulario
         model.addAttribute("habitualAddress", usuario.getAddress());
         model.addAttribute("categorias", serviceRequestService.getActiveCategories());
+        model.addAttribute("missingAddress", usuario.getAddress() == null);
 
         // Configurar valores por defecto
         form.setAddressOption("habitual");
         form.setCountry("España");
+        if (form.getPublishNow() == null) {
+            form.setPublishNow(false);
+        }
     }
 
     // ============================================================================
@@ -170,6 +176,7 @@ public class RequestFormController {
         // Establecer valores por defecto para nueva solicitud
         form.setAddressOption("habitual");
         form.setCountry("España");
+        form.setPublishNow(false);
     }
 
     // ============================================================================

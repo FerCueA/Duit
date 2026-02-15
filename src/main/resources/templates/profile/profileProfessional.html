@@ -110,11 +110,11 @@
                                                     <input type="tel" class="form-control border-start-0" id="phone"
                                                         th:field="*{phone}"
                                                         th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''"
-                                                        placeholder="+34612345678" pattern="\+34[0-9]{9}">
+                                                        placeholder="+34612345678" pattern="(\+34)?[0-9]{9}">
                                                 </div>
                                                 <div class="form-text text-muted">
-                                                    <i class="bi bi-info-circle me-1"></i>Formato: +34 seguido de 9
-                                                    dígitos
+                                                    <i class="bi bi-info-circle me-1"></i>Formato: 9 digitos, con +34
+                                                    opcional
                                                 </div>
                                                 <div th:if="${#fields.hasErrors('phone')}"
                                                     class="invalid-feedback d-block">

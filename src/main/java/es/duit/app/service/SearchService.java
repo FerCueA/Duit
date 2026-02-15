@@ -68,6 +68,13 @@ public class SearchService {
         model.addAttribute("codigosPostales", uniquePostalCodes);
         model.addAttribute("totalOfertas", foundJobs.size());
 
+        if (user != null) {
+            boolean missingProfessionalProfile = user.getProfessionalProfile() == null;
+            boolean missingAddress = user.getAddress() == null;
+            model.addAttribute("missingProfessionalProfile", missingProfessionalProfile);
+            model.addAttribute("missingAddress", missingAddress);
+        }
+
         if (filters != null) {
             model.addAttribute("filtrosAplicados", filters);
         }

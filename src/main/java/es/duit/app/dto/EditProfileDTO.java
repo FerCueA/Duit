@@ -32,7 +32,7 @@ public class EditProfileDTO {
                         UserProfileGroup.class, ProfessionalProfileGroup.class })
         private String lastName;
 
-        @Pattern(regexp = "^(\\+34[0-9]{9})?$", message = "El teléfono debe ser español: +34 seguido de 9 dígitos", groups = {
+        @Pattern(regexp = "^((\\+34)?[0-9]{9})?$", message = "El teléfono debe tener 9 dígitos, con +34 opcional", groups = {
                         UserProfileGroup.class, ProfessionalProfileGroup.class })
         private String phone;
 

@@ -40,5 +40,7 @@ public class RequestDTO {
     @Size(max = 100, message = "El país no puede superar los 100 caracteres")
     private String country;
 
+    private Boolean publishNow;
+
     private Long editId;
 }

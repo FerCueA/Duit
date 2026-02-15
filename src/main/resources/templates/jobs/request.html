@@ -36,6 +36,16 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
 
+                    <!-- Aviso de direccion faltante -->
+                    <div th:if="${missingAddress}" class="alert alert-warning alert-dismissible fade show"
+                        role="alert" aria-live="polite">
+                        <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+                        <span class="fw-semibold">Para publicar una solicitud necesitas configurar tu direccion.</span>
+                        <a th:href="@{/profile/edit}" class="ms-1">Ir a Mi perfil</a>.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Cerrar mensaje"></button>
+                    </div>
+
                     <!-- Formulario -->
                     <div class="card shadow border-secondary">
                         <div class="card-header bg-dark text-white">
@@ -100,13 +110,14 @@
 
                                 <!-- Fecha límite -->
                                 <div class="mb-3">
-                                    <label for="deadline" class="form-label fw-bold">¿Cuándo lo necesitas?
+                                    <label for="deadline" class="form-label fw-bold">Fecha limite de publicacion
                                         (opcional)</label>
                                     <input type="date" th:field="*{deadline}" class="form-control"
                                         th:classappend="${#fields.hasErrors('deadline')} ? 'is-invalid' : ''"
                                         id="deadline" aria-describedby="deadlineHelp"
                                         th:min="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
-                                    <div id="deadlineHelp" class="form-text">Si tienes fecha límite específica </div>
+                                    <div id="deadlineHelp" class="form-text">La publicacion caducara en esta fecha
+                                    </div>
                                     <div th:if="${#fields.hasErrors('deadline')}" class="invalid-feedback" role="alert">
                                         <span th:errors="*{deadline}"></span>
                                     </div>
@@ -214,14 +225,26 @@
                                     <a th:href="@{/requests/my-requests}" class="btn btn-outline-secondary">
                                         <i class="bi bi-arrow-left"></i> Volver
                                     </a>
-                                    <button type="submit" class="btn btn-primary btn-lg">
-                                        <span th:if="${modoEdicion}">
-                                            <i class="bi bi-check-lg"></i> Actualizar
-                                        </span>
-                                        <span th:unless="${modoEdicion}">
-                                            <i class="bi bi-plus-lg"></i> Crear Solicitud
-                                        </span>
-                                    </button>
+                                    <div class="d-grid gap-2 d-md-flex">
+                                        <button type="submit" class="btn btn-outline-secondary btn-lg"
+                                            name="publishNow" value="false">
+                                            <span th:if="${modoEdicion}">
+                                                <i class="bi bi-save"></i> Guardar borrador
+                                            </span>
+                                            <span th:unless="${modoEdicion}">
+                                                <i class="bi bi-save"></i> Guardar borrador
+                                            </span>
+                                        </button>
+                                        <button type="submit" class="btn btn-primary btn-lg" name="publishNow"
+                                            value="true">
+                                            <span th:if="${modoEdicion}">
+                                                <i class="bi bi-upload"></i> Guardar y publicar
+                                            </span>
+                                            <span th:unless="${modoEdicion}">
+                                                <i class="bi bi-upload"></i> Publicar ahora
+                                            </span>
+                                        </button>
+                                    </div>
                                 </div>
                             </form>
                         </div>

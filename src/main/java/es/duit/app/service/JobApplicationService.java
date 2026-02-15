@@ -28,6 +28,7 @@ public class JobApplicationService {
     // ============================================================================
     public JobApplication postularseAOferta(Long ofertaId, BigDecimal precio, String mensaje, AppUser usuario) {
         validateUserHasProfessionalProfile(usuario);
+        validateUserHasAddress(usuario);
 
         ServiceRequest oferta = getOfferById(ofertaId);
 
@@ -118,6 +119,15 @@ public class JobApplicationService {
         // Verificar que existe
         if (perfilProfesional == null) {
             throw new IllegalArgumentException("No tienes un perfil profesional configurado");
+        }
+    }
+
+    // =========================================================================
+    // VALIDA QUE EL USUARIO TIENE UNA DIRECCION CONFIGURADA
+    // =========================================================================
+    private void validateUserHasAddress(AppUser usuario) {
+        if (usuario.getAddress() == null) {
+            throw new IllegalArgumentException("No tienes una direccion configurada");
         }
     }
 
