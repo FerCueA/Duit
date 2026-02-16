@@ -11,21 +11,35 @@
 | **Nombre del fichero** | DAW_PRW_R1L2_UT02.0 Guia de API y Estructura del Proyecto |
 | **Fecha de version**   | 16/02/2026                                                |
 | **Autor**              | Aleixo Fdez Cuevas                                        |
-| **Version**            | 1.1                                                       |
+| **Version**            | 1.0                                                     |
 
 ---
 
 ## 📖 Tabla de Contenidos
 
-1. [Introduccion](#1-introduccion)
-2. [Estructura del Proyecto](#2-estructura-del-proyecto)
-3. [Arquitectura MVC](#3-arquitectura-mvc)
-4. [Lista de Endpoints y Controladores](#4-lista-de-endpoints-y-controladores)
-5. [Detalle de Controladores](#5-detalle-de-controladores)
-6. [Modelos de Datos (DTO)](#6-modelos-de-datos-dto)
-7. [Flujo de Autenticacion](#7-flujo-de-autenticacion)
-8. [Codigos de Respuesta HTTP](#8-codigos-de-respuesta-http)
-9. [Consideraciones de Seguridad](#9-consideraciones-de-seguridad)
+- [Guia de API y Estructura del Proyecto - DUIT](#guia-de-api-y-estructura-del-proyecto---duit)
+  - [📋 Metadatos del Documento](#-metadatos-del-documento)
+  - [📖 Tabla de Contenidos](#-tabla-de-contenidos)
+  - [📝 Historial de Revisiones](#-historial-de-revisiones)
+  - [1. Introduccion](#1-introduccion)
+  - [2. Estructura del Proyecto](#2-estructura-del-proyecto)
+    - [2.1 Arbol de directorios](#21-arbol-de-directorios)
+    - [2.2 Descripcion de capas](#22-descripcion-de-capas)
+  - [3. Arquitectura MVC](#3-arquitectura-mvc)
+    - [3.1 Ejemplo de flujo: Crear una solicitud de servicio](#31-ejemplo-de-flujo-crear-una-solicitud-de-servicio)
+  - [4. Lista de Endpoints y Controladores](#4-lista-de-endpoints-y-controladores)
+  - [5. Detalle de Controladores](#5-detalle-de-controladores)
+    - [5.1 PublicController](#51-publiccontroller)
+    - [5.2 DashboardController](#52-dashboardcontroller)
+    - [5.3 AdminController](#53-admincontroller)
+    - [5.4 RequestFormController](#54-requestformcontroller)
+    - [5.5 PostulacionesController](#55-postulacionescontroller)
+    - [5.6 ProfessionalController](#56-professionalcontroller)
+    - [5.7 MyRequestsController](#57-myrequestscontroller)
+    - [5.8 ProfileController](#58-profilecontroller)
+    - [5.9 RatingsController](#59-ratingscontroller)
+    - [5.10 SharedController](#510-sharedcontroller)
+    - [5.11 CategoryController](#511-categorycontroller)
 
 ---
 
@@ -34,7 +48,6 @@
 | Fecha      | Descripcion                                                    | Autor              |
 | ---------- | -------------------------------------------------------------- | ------------------ |
 | 16/02/2026 | Documento inicial. Guia de endpoints y estructura del proyecto | Aleixo Fdez Cuevas |
-| 16/02/2026 | Reformateo con indice interactivo y jerarquia de titulos       | Aleixo Fdez Cuevas |
 
 ---
 
@@ -437,4 +450,4 @@ REQUEST HTTP → CONTROLLER → SERVICE → REPOSITORY → DATABASE
 ---
 
 **Ultima actualizacion:** 16 de febrero de 2026 
-**Version:** 1.1
+**Version:** 1.0
