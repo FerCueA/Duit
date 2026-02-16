@@ -8,6 +8,8 @@ import es.duit.app.entity.Rating;
 import es.duit.app.entity.ServiceJob;
 import es.duit.app.repository.RatingRepository;
 import es.duit.app.repository.ServiceJobRepository;
+import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 // ============================================================================
@@ -20,6 +22,29 @@ public class RatingService {
 
     private final RatingRepository ratingRepository;
     private final ServiceJobRepository serviceJobRepository;
+
+    public List<Rating> getProfessionalRatings(AppUser usuario) {
+        if (usuario == null || usuario.getProfessionalProfile() == null) {
+            return Collections.emptyList();
+        }
+
+        return ratingRepository.findRatingsForProfessional(usuario,
+            Rating.Type.CLIENT_TO_PROFESSIONAL,
+            Rating.Status.PUBLISHED);
+    }
+
+    public double calculateAverageScore(List<Rating> ratings) {
+        if (ratings == null || ratings.isEmpty()) {
+            return 0.0;
+        }
+
+        double sum = 0.0;
+        for (Rating rating : ratings) {
+            sum += rating.getScore();
+        }
+
+        return sum / ratings.size();
+    }
 
     // ============================================================================
     // CREA UNA VALORACIÓN DE UN TRABAJO COMPLETADO CON VALIDACIONES

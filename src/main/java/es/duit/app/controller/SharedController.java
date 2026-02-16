@@ -3,10 +3,12 @@ package es.duit.app.controller;
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.Rating;
 import es.duit.app.entity.ServiceJob;
+import es.duit.app.dto.RatingDTO;
 import es.duit.app.service.HistoryService;
 import es.duit.app.repository.RatingRepository;
 import es.duit.app.repository.ServiceJobRepository;
 import es.duit.app.service.AuthService;
+import es.duit.app.service.RatingService;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -29,15 +31,18 @@ public class SharedController {
     private final RatingRepository ratingRepository;
     private final AuthService authService;
     private final HistoryService historyService;
+    private final RatingService ratingService;
 
     public SharedController(ServiceJobRepository serviceJobRepository,
             RatingRepository ratingRepository,
             AuthService authService,
-            HistoryService historyService) {
+            HistoryService historyService,
+            RatingService ratingService) {
         this.serviceJobRepository = serviceJobRepository;
         this.ratingRepository = ratingRepository;
         this.authService = authService;
         this.historyService = historyService;
+        this.ratingService = ratingService;
     }
 
     // ============================================================================
@@ -102,9 +107,22 @@ public class SharedController {
             }
         }
 
+                boolean esProfesional = usuarioLogueado.getProfessionalProfile() != null;
+                model.addAttribute("esProfesional", esProfesional);
+
+                if (esProfesional) {
+                    List<Rating> valoracionesProfesional = ratingService.getProfessionalRatings(usuarioLogueado);
+                    double notaMedia = ratingService.calculateAverageScore(valoracionesProfesional);
+
+                    model.addAttribute("valoracionesProfesional", valoracionesProfesional);
+                    model.addAttribute("notaMediaProfesional", notaMedia);
+                    model.addAttribute("totalValoracionesProfesional", valoracionesProfesional.size());
+                }
+
         // Agregar listas al modelo para la vista
         model.addAttribute("trabajosPendientes", trabajosPendientes);
         model.addAttribute("trabajosFinalizadas", trabajosFinalizadas);
+        model.addAttribute("ratingForm", new RatingDTO());
 
         // Cargar trabajo específico si se proporciona ID
         cargarTrabajoEspecifico(jobId, model);

@@ -16,23 +16,76 @@
             <div class="row">
                 <div class="col-12">
                     <h1 class="mb-4 text-dark"><i class="bi bi-star"></i> Valoraciones</h1>
-                    
+
+                    <!-- Valoraciones recibidas (solo profesional) -->
+                    <div class="card shadow border-secondary mb-4" th:if="${esProfesional}">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0"><i class="bi bi-star-fill"></i> Mis valoraciones recibidas</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+                                <span class="badge bg-dark fs-6">
+                                    Nota media:
+                                    <span th:text="${#numbers.formatDecimal(notaMediaProfesional, 1, 1)}">0.0</span>
+                                </span>
+                                <span class="text-muted"
+                                    th:text="'Total: ' + ${totalValoracionesProfesional} + ' valoraciones'">Total: 0
+                                    valoraciones</span>
+                            </div>
+
+                            <div th:if="${valoracionesProfesional == null or #lists.isEmpty(valoracionesProfesional)}"
+                                class="text-muted">
+                                Aun no tienes valoraciones.
+                            </div>
+
+                            <div class="list-group"
+                                th:if="${valoracionesProfesional != null and !#lists.isEmpty(valoracionesProfesional)}">
+                                <div class="list-group-item d-flex justify-content-between align-items-start"
+                                    th:each="rating : ${valoracionesProfesional}">
+                                    <div class="me-3">
+                                        <div class="fw-semibold" th:text="${rating.job.request.title}">Trabajo</div>
+                                        <div class="small text-muted">
+                                            Cliente: <span
+                                                th:text="${rating.job.request.client.fullName}">Cliente</span>
+                                        </div>
+                                        <div class="small text-muted" th:if="${rating.comment}">
+                                            "<span th:text="${rating.comment}">Comentario</span>"
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="bi bi-star-fill"></i>
+                                            <span th:text="${rating.score}">0</span>/5
+                                        </span>
+                                        <div class="small text-muted"
+                                            th:text="${#temporals.format(rating.ratedAt, 'dd/MM/yyyy')}">
+                                            01/01/2024
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Trabajos pendientes de valoración -->
                     <div class="card shadow border-secondary mb-4" th:if="${!trabajosPendientes.isEmpty()}">
                         <div class="card-header bg-dark text-white">
-                            <h5 class="mb-0"><i class="bi bi-exclamation-circle"></i> Trabajos Pendientes de Valorar</h5>
+                            <h5 class="mb-0"><i class="bi bi-exclamation-circle"></i> Trabajos Pendientes de Valorar
+                            </h5>
                         </div>
                         <div class="card-body">
                             <div class="row" th:each="trabajo : ${trabajosPendientes}">
                                 <div class="col-md-12 mb-3">
-                                    <div class="card border-secondary" th:classappend="${trabajo.id} == ${trabajoSeleccionado?.id} ? 'border-dark border-2' : ''">>
+                                    <div class="card border-secondary"
+                                        th:classappend="${trabajo.id} == ${trabajoSeleccionado?.id} ? 'border-dark border-2' : ''">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <h6 class="card-title" th:text="${trabajo.request.title}"></h6>
                                                     <p class="text-muted small mb-2">
                                                         <i class="bi bi-person"></i>
-                                                        <span th:text="${trabajo.application.professional.user.fullName}"></span>
+                                                        <span
+                                                            th:text="${trabajo.application.professional.user.fullName}"></span>
                                                     </p>
                                                     <p class="text-muted small mb-0">
                                                         <i class="bi bi-tag"></i>
@@ -42,13 +95,16 @@
                                                 <div class="col-md-6">
                                                     <p class="text-muted small mb-2">
                                                         <i class="bi bi-calendar"></i>
-                                                        Inicio: <span th:text="${#temporals.format(trabajo.startDate, 'dd/MM/yyyy')}"></span>
+                                                        Inicio: <span
+                                                            th:text="${#temporals.format(trabajo.startDate, 'dd/MM/yyyy')}"></span>
                                                     </p>
                                                     <p class="text-muted small mb-2">
                                                         <i class="bi bi-calendar-check"></i>
-                                                        Fin: <span th:text="${#temporals.format(trabajo.endDate, 'dd/MM/yyyy')}"></span>
+                                                        Fin: <span
+                                                            th:text="${#temporals.format(trabajo.endDate, 'dd/MM/yyyy')}"></span>
                                                     </p>
-                                                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalValoracion" th:data-job-id="${trabajo.id}">
+                                                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                                        th:data-bs-target="'#modalValoracion_' + ${trabajo.id}">
                                                         <i class="bi bi-star"></i> Valorar
                                                     </button>
                                                 </div>
@@ -61,17 +117,18 @@
                     </div>
 
                     <!-- Mensaje si no hay trabajos pendientes -->
-                    <div class="card shadow border-secondary mb-4" th:if="${trabajosPendientes.isEmpty() && trabajosFinalizadas.isEmpty()}">
+                    <div class="card shadow border-secondary mb-4"
+                        th:if="${trabajosPendientes.isEmpty() && trabajosFinalizadas.isEmpty()}">
                         <div class="card-body">
                             <div class="text-center py-5">
-                                <i class="bi bi-check-circle fs-1 text-muted"></i></i>
+                                <i class="bi bi-check-circle fs-1 text-muted"></i>
                                 <p class="mt-3 text-muted">No tienes trabajos completados aún</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Trabajos Finalizadas (ambas partes han valorado) -->
-                    <div class="card shadow border-secondary mb-4" th:if="${!trabajosFinalizadas.isEmpty()}">>
+                    <div class="card shadow border-secondary mb-4" th:if="${!trabajosFinalizadas.isEmpty()}">
                         <div class="card-header bg-secondary text-white">
                             <h5 class="mb-0"><i class="bi bi-check-circle"></i> Valoraciones Finalizadas</h5>
                         </div>
@@ -85,7 +142,8 @@
                                                     <h6 class="card-title" th:text="${trabajo.request.title}"></h6>
                                                     <p class="text-muted small mb-2">
                                                         <i class="bi bi-person"></i>
-                                                        <span th:text="${trabajo.application.professional.user.fullName}"></span>
+                                                        <span
+                                                            th:text="${trabajo.application.professional.user.fullName}"></span>
                                                     </p>
                                                     <p class="text-muted small mb-0">
                                                         <i class="bi bi-tag"></i>
@@ -95,13 +153,16 @@
                                                 <div class="col-md-6">
                                                     <p class="text-muted small mb-2">
                                                         <i class="bi bi-calendar"></i>
-                                                        Inicio: <span th:text="${#temporals.format(trabajo.startDate, 'dd/MM/yyyy')}"></span>
+                                                        Inicio: <span
+                                                            th:text="${#temporals.format(trabajo.startDate, 'dd/MM/yyyy')}"></span>
                                                     </p>
                                                     <p class="text-muted small mb-2">
                                                         <i class="bi bi-calendar-check"></i>
-                                                        Fin: <span th:text="${#temporals.format(trabajo.endDate, 'dd/MM/yyyy')}"></span>
+                                                        Fin: <span
+                                                            th:text="${#temporals.format(trabajo.endDate, 'dd/MM/yyyy')}"></span>
                                                     </p>
-                                                    <span class="badge bg-secondary"><i class="bi bi-check-circle"></i> Valoraciones Completadas</span>
+                                                    <span class="badge bg-secondary"><i class="bi bi-check-circle"></i>
+                                                        Valoraciones Completadas</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -115,154 +176,70 @@
         </div>
     </main>
 
-    <!-- Modal para valoración -->
-    <div class="modal fade" id="modalValoracion" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-star"></i> Valorar Trabajo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formValoracion">
-                        <div class="mb-3">
-                            <label for="puntuacion" class="form-label">Puntuación (1-5)</label>
-                            <div class="rating-stars" id="ratingStars">
-                                <i class="bi bi-star-fill rating-star" data-value="1"></i>
-                                <i class="bi bi-star-fill rating-star" data-value="2"></i>
-                                <i class="bi bi-star-fill rating-star" data-value="3"></i>
-                                <i class="bi bi-star-fill rating-star" data-value="4"></i>
-                                <i class="bi bi-star-fill rating-star" data-value="5"></i>
+    <!-- Modales para valoración -->
+    <div th:each="trabajo : ${trabajosPendientes}">
+        <div class="modal fade" th:id="'modalValoracion_' + ${trabajo.id}" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="bi bi-star"></i> Valorar Trabajo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form th:action="@{/ratings/crear}" method="post">
+                        <div class="modal-body">
+                            <input type="hidden" name="jobId" th:value="${trabajo.id}">
+                            <div class="mb-3">
+                                <label class="form-label">Puntuacion (1-5)</label>
+                                <div class="btn-group" role="group"
+                                    th:attr="aria-label='Puntuacion para ' + ${trabajo.request.title}">
+                                    <input type="radio" class="btn-check" name="score" th:id="'score1_' + ${trabajo.id}"
+                                        value="1" required>
+                                    <label class="btn btn-outline-warning" th:for="'score1_' + ${trabajo.id}" title="1">
+                                        <i class="bi bi-star-fill"></i> 1
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="score" th:id="'score2_' + ${trabajo.id}"
+                                        value="2">
+                                    <label class="btn btn-outline-warning" th:for="'score2_' + ${trabajo.id}" title="2">
+                                        <i class="bi bi-star-fill"></i> 2
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="score" th:id="'score3_' + ${trabajo.id}"
+                                        value="3">
+                                    <label class="btn btn-outline-warning" th:for="'score3_' + ${trabajo.id}" title="3">
+                                        <i class="bi bi-star-fill"></i> 3
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="score" th:id="'score4_' + ${trabajo.id}"
+                                        value="4">
+                                    <label class="btn btn-outline-warning" th:for="'score4_' + ${trabajo.id}" title="4">
+                                        <i class="bi bi-star-fill"></i> 4
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="score" th:id="'score5_' + ${trabajo.id}"
+                                        value="5">
+                                    <label class="btn btn-outline-warning" th:for="'score5_' + ${trabajo.id}" title="5">
+                                        <i class="bi bi-star-fill"></i> 5
+                                    </label>
+                                </div>
                             </div>
-                            <input type="hidden" id="puntuacion" name="puntuacion" value="0">
+                            <div class="mb-3">
+                                <label th:for="'comentario_' + ${trabajo.id}" class="form-label">Comentario
+                                    (opcional)</label>
+                                <textarea class="form-control" th:id="'comentario_' + ${trabajo.id}" name="comment"
+                                    rows="3" placeholder="Comparte tu experiencia..."></textarea>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="comentario" class="form-label">Comentario (opcional)</label>
-                            <textarea class="form-control" id="comentario" name="comentario" rows="3" placeholder="Comparte tu experiencia..."></textarea>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-warning">Enviar Valoracion</button>
                         </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-warning" id="btnEnviarValoracion">Enviar Valoración</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <style>
-        .rating-stars {
-            display: flex;
-            gap: 10px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .rating-star {
-            color: #ddd;
-            transition: color 0.3s;
-        }
-
-        .rating-star:hover,
-        .rating-star.active {
-            color: #ffc107;
-        }
-    </style>
     <div th:replace="~{components/footerPublic::footerPublic}"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        let currentJobId = null;
-
-        // Sistema de calificación por estrellas
-        const ratingStars = document.querySelectorAll('.rating-star');
-        const puntuacionInput = document.getElementById('puntuacion');
-
-        ratingStars.forEach(star => {
-            star.addEventListener('click', () => {
-                const value = star.getAttribute('data-value');
-                puntuacionInput.value = value;
-                
-                ratingStars.forEach(s => {
-                    const sValue = s.getAttribute('data-value');
-                    if (sValue <= value) {
-                        s.classList.add('active');
-                    } else {
-                        s.classList.remove('active');
-                    }
-                });
-            });
-
-            star.addEventListener('mouseover', () => {
-                const value = star.getAttribute('data-value');
-                ratingStars.forEach(s => {
-                    const sValue = s.getAttribute('data-value');
-                    if (sValue <= value) {
-                        s.style.color = '#ffc107';
-                    } else {
-                        s.style.color = '#ddd';
-                    }
-                });
-            });
-        });
-
-        document.getElementById('ratingStars').addEventListener('mouseleave', () => {
-            const currentValue = puntuacionInput.value;
-            ratingStars.forEach(s => {
-                const sValue = s.getAttribute('data-value');
-                if (sValue <= currentValue && currentValue > 0) {
-                    s.style.color = '#ffc107';
-                } else {
-                    s.style.color = '#ddd';
-                }
-            });
-        });
-
-        // Manejar el clic en los botones "Valorar"
-        document.querySelectorAll('[data-bs-target="#modalValoracion"]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentJobId = btn.getAttribute('data-job-id');
-                puntuacionInput.value = 0;
-                document.getElementById('comentario').value = '';
-                ratingStars.forEach(s => s.classList.remove('active'));
-            });
-        });
-
-        // Enviar valoración
-        document.getElementById('btnEnviarValoracion').addEventListener('click', () => {
-            const puntuacion = puntuacionInput.value;
-            const comentario = document.getElementById('comentario').value;
-
-            if (puntuacion === '0' || puntuacion === '') {
-                alert('Por favor, selecciona una puntuación');
-                return;
-            }
-
-            // Enviar al servidor
-            fetch('/ratings/crear', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    jobId: currentJobId,
-                    score: puntuacion,
-                    comment: comentario
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Valoración enviada correctamente');
-                    bootstrap.Modal.getInstance(document.getElementById('modalValoracion')).hide();
-                    // Recargar la página para actualizar los trabajos pendientes
-                    location.reload();
-                } else {
-                    alert('Error al enviar la valoración');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error al enviar la valoración');
-            });
-        });
-    </script>
+</body>
