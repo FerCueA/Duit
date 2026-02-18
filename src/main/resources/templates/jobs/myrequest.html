@@ -7,6 +7,7 @@
     <title>Mis Solicitudes - Duit</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/flatly/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -22,12 +23,12 @@
             <!-- Header -->
             <div class="row mb-4">
                 <div class="col">
-                    <div class="card border-secondary shadow-sm bg-dark text-white">
+                    <div class="card border-secondary shadow-sm bg-primary text-white">
                         <div class="card-body py-4">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <h2 class="mb-1"><i class="bi bi-list-check"></i> Mis Solicitudes</h2>
-                                    <p class="mb-0 opacity-75">Gestiona todas tus solicitudes de servicio</p>
+                                    <p class="mb-0 opacity-65">Gestiona todas tus solicitudes de servicio</p>
                                 </div>
                                 <a th:href="@{/requests/request}" class="btn btn-light btn-lg shadow">
                                     <i class="bi bi-plus-circle"></i> Nueva Solicitud
@@ -71,7 +72,7 @@
 
                             <input type="radio" class="btn-check" name="filterStatus" id="filterDraft"
                                 autocomplete="off" onclick="filterSolicitudes('DRAFT')">
-                            <label class="btn btn-outline-secondary" for="filterDraft">
+                            <label class="btn btn-outline-dark" for="filterDraft">
                                 <i class="bi bi-file-earmark"></i> Borradores
                             </label>
 
@@ -123,12 +124,12 @@
                                     <tr th:each="solicitud : ${solicitudesExistentes}" class="solicitud-item"
                                         th:attr="data-status=${solicitud.status.name()}">
                                         <td class="ps-4">
-                                            <div class="fw-bold text-dark" th:text="${solicitud.title}">Título</div>
+                                            <div class="fw-bold text-primary" th:text="${solicitud.title}">Título</div>
                                             <small class="text-muted d-block mt-1"
                                                 th:text="${#strings.abbreviate(solicitud.description, 80)}">Descripción</small>
                                         </td>
                                         <td>
-                                            <span class="badge bg-light text-dark border"
+                                            <span class="badge bg-light text-primary border"
                                                 th:text="${solicitud.category.name}">Categoría</span>
                                         </td>
                                         <td>
@@ -136,16 +137,16 @@
                                                 <span th:case="'DRAFT'" class="badge bg-secondary">
                                                     <i class="bi bi-file-earmark"></i> Borrador
                                                 </span>
-                                                <span th:case="'PUBLISHED'" class="badge bg-secondary">
+                                                <span th:case="'PUBLISHED'" class="badge bg-primary">
                                                     <i class="bi bi-send-check"></i> Publicada
                                                 </span>
-                                                <span th:case="'IN_PROGRESS'" class="badge bg-dark">
+                                                <span th:case="'IN_PROGRESS'" class="badge bg-warning">
                                                     <i class="bi bi-hourglass-split"></i> En progreso
                                                 </span>
-                                                <span th:case="'COMPLETED'" class="badge bg-secondary">
+                                                <span th:case="'COMPLETED'" class="badge bg-success">
                                                     <i class="bi bi-check-circle"></i> Completada
                                                 </span>
-                                                <span th:case="'CANCELLED'" class="badge bg-light text-dark">
+                                                <span th:case="'CANCELLED'" class="badge bg-danger text-white">
                                                     <i class="bi bi-x-circle"></i> Cancelada
                                                 </span>
                                             </span>
@@ -153,7 +154,7 @@
                                         <td class="text-center">
                                             <span th:if="${solicitud.applicationCount == 0}" class="text-muted">—</span>
                                             <span th:if="${solicitud.applicationCount > 0}"
-                                                class="badge bg-secondary rounded-pill fs-6"
+                                                class="badge bg-info rounded-pill fs-6 text-white"
                                                 th:text="${solicitud.applicationCount}">0</span>
                                         </td>
                                         <td>
@@ -194,7 +195,7 @@
                                                 <form th:if="${solicitud.status.name() == 'PUBLISHED'}"
                                                     th:action="@{/requests/unpublish/{id}(id=${solicitud.id})}"
                                                     method="POST">
-                                                    <button type="submit" class="btn btn-sm btn-outline-secondary w-100"
+                                                    <button type="submit" class="btn btn-sm btn-outline-primary w-100"
                                                         onclick="return confirm('¿Despublicar? Volverá a borrador.')">
                                                         <i class="bi bi-download"></i> Despublicar
                                                     </button>
@@ -204,7 +205,7 @@
                                                 <form th:if="${solicitud.status.name() == 'PUBLISHED'}"
                                                     th:action="@{/requests/cancel/{id}(id=${solicitud.id})}"
                                                     method="POST">
-                                                    <button type="submit" class="btn btn-sm btn-outline-warning w-100"
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger w-100"
                                                         onclick="return confirm('¿Cancelar esta solicitud?')">
                                                         <i class="bi bi-x-circle"></i> Cancelar
                                                     </button>
