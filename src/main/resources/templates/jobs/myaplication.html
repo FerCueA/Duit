@@ -7,6 +7,7 @@
     <title>Mis Postulaciones - Duit</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/flatly/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -54,22 +55,26 @@
                     <div class="d-flex align-items-center gap-3 flex-wrap">
                         <label class="fw-bold mb-0"><i class="bi bi-funnel"></i> Filtrar por estado:</label>
                         <div class="btn-group" role="group">
-                            <input type="radio" class="btn-check" name="statusFilter" id="filterPending" value="PENDING" checked>
+                            <input type="radio" class="btn-check" name="statusFilter" id="filterPending" value="PENDING"
+                                checked>
                             <label class="btn btn-outline-warning btn-sm active" for="filterPending">
                                 <i class="bi bi-hourglass-split"></i> Pendientes
                             </label>
 
-                            <input type="radio" class="btn-check" name="statusFilter" id="filterAccepted" value="ACCEPTED">
+                            <input type="radio" class="btn-check" name="statusFilter" id="filterAccepted"
+                                value="ACCEPTED">
                             <label class="btn btn-outline-success btn-sm" for="filterAccepted">
                                 <i class="bi bi-check-circle"></i> Aceptadas
                             </label>
 
-                            <input type="radio" class="btn-check" name="statusFilter" id="filterRejected" value="REJECTED">
+                            <input type="radio" class="btn-check" name="statusFilter" id="filterRejected"
+                                value="REJECTED">
                             <label class="btn btn-outline-danger btn-sm" for="filterRejected">
                                 <i class="bi bi-x-circle"></i> Rechazadas
                             </label>
 
-                            <input type="radio" class="btn-check" name="statusFilter" id="filterWithdrawn" value="WITHDRAWN">
+                            <input type="radio" class="btn-check" name="statusFilter" id="filterWithdrawn"
+                                value="WITHDRAWN">
                             <label class="btn btn-outline-secondary btn-sm" for="filterWithdrawn">
                                 <i class="bi bi-arrow-return-left"></i> Retiradas
                             </label>
@@ -90,24 +95,29 @@
             <!-- Lista de postulaciones -->
             <div th:if="${postulaciones != null and !postulaciones.isEmpty()}">
                 <div class="row g-3">
-                    <div th:each="postulacion : ${postulaciones}" class="col-12 application-card" th:attr="data-status=${postulacion.status.name()}">
+                    <div th:each="postulacion : ${postulaciones}" class="col-12 application-card"
+                        th:attr="data-status=${postulacion.status.name()}">
                         <div class="card border-secondary shadow-sm h-100">
                             <div class="card-body p-3">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <div class="flex-grow-1">
-                                        <h6 class="mb-1 text-dark fw-bold" th:text="${postulacion.request.title}">Titulo</h6>
+                                        <h6 class="mb-1 text-dark fw-bold" th:text="${postulacion.request.title}">Titulo
+                                        </h6>
                                         <div class="d-flex flex-wrap gap-2 align-items-center text-muted small">
                                             <span>
                                                 <i class="bi bi-folder2"></i>
                                                 <span th:text="${postulacion.request.category.name}">Categoria</span>
                                             </span>
-                                            <span th:if="${postulacion.request.effectiveServiceAddress != null and postulacion.request.effectiveServiceAddress.postalCode != null}">
+                                            <span
+                                                th:if="${postulacion.request.effectiveServiceAddress != null and postulacion.request.effectiveServiceAddress.postalCode != null}">
                                                 <i class="bi bi-geo-alt-fill"></i>
-                                                <span th:text="${postulacion.request.effectiveServiceAddress.postalCode}">CP</span>
+                                                <span
+                                                    th:text="${postulacion.request.effectiveServiceAddress.postalCode}">CP</span>
                                             </span>
                                             <span>
                                                 <i class="bi bi-calendar-event"></i>
-                                                <span th:text="${#temporals.format(postulacion.appliedAt, 'dd/MM/yyyy')}">Fecha</span>
+                                                <span
+                                                    th:text="${#temporals.format(postulacion.appliedAt, 'dd/MM/yyyy')}">Fecha</span>
                                             </span>
                                         </div>
                                     </div>
@@ -132,8 +142,8 @@
                                 <!-- Descripción del trabajo -->
                                 <div th:if="${postulacion.request.description != null and !#strings.isEmpty(postulacion.request.description)}"
                                     class="bg-light rounded p-2 mb-2">
-                                    <p class="mb-0 small text-muted" 
-                                       th:text="${#strings.length(postulacion.request.description) > 150 ? #strings.substring(postulacion.request.description, 0, 150) + '...' : postulacion.request.description}">
+                                    <p class="mb-0 small text-muted"
+                                        th:text="${#strings.length(postulacion.request.description) > 150 ? #strings.substring(postulacion.request.description, 0, 150) + '...' : postulacion.request.description}">
                                         Descripción
                                     </p>
                                 </div>
@@ -142,7 +152,8 @@
                                 <div class="mb-2">
                                     <span class="badge bg-secondary">
                                         <i class="bi bi-currency-euro me-1"></i>
-                                        <span th:text="${postulacion.proposedPrice != null ? #numbers.formatDecimal(postulacion.proposedPrice, 0, 2) : 'A negociar'}">0.00</span>
+                                        <span
+                                            th:text="${postulacion.proposedPrice != null ? #numbers.formatDecimal(postulacion.proposedPrice, 0, 2) : 'A negociar'}">0.00</span>
                                     </span>
                                 </div>
 
@@ -162,7 +173,8 @@
                                         <div class="col-md-3">
                                             <label class="form-label small mb-1">Precio</label>
                                             <input type="text" name="precio" class="form-control form-control-sm"
-                                                th:value="${postulacion.proposedPrice != null ? postulacion.proposedPrice : ''}" placeholder="Ej: 120">
+                                                th:value="${postulacion.proposedPrice != null ? postulacion.proposedPrice : ''}"
+                                                placeholder="Ej: 120">
                                         </div>
                                         <div class="col-md-7">
                                             <label class="form-label small mb-1">Mensaje</label>
@@ -197,10 +209,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Filtro de estado para postulaciones - Por defecto muestra solo PENDING
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const filterButtons = document.querySelectorAll('input[name="statusFilter"]');
             const applicationCards = document.querySelectorAll('.application-card');
-            
+
             // Mostrar/ocultar cards según filtro seleccionado
             function applyFilter(selectedStatus) {
                 applicationCards.forEach(card => {
@@ -208,14 +220,14 @@
                     card.style.display = (cardStatus === selectedStatus) ? 'block' : 'none';
                 });
             }
-            
+
             // Al cambiar el filtro
             filterButtons.forEach(button => {
-                button.addEventListener('change', function() {
+                button.addEventListener('change', function () {
                     applyFilter(this.value);
                 });
             });
-            
+
             // Por defecto, mostrar solo PENDING
             applyFilter('PENDING');
         });

@@ -4,7 +4,7 @@
 
 ---
 
-## 📋 Tabla de Metadatos
+##  Tabla de Metadatos
 
 | Propiedad                  | Valor                                                  |
 | -------------------------- | ------------------------------------------------------ |
@@ -17,7 +17,7 @@
 
 ---
 
-## 📖 Tabla de Contenidos
+##  Tabla de Contenidos
 
 1. [Introducción](#1-introducción)
 2. [Detalle de las Mejoras](#2-detalle-de-las-mejoras)
