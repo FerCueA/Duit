@@ -30,7 +30,7 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers(
                                                                 "/", "/index", "/public/**", "/login", "/signup",
-                                                                "/register",
+                                                                "/register", "/error", "/error/**",
                                                                 "/css/**", "/js/**", "/img/**", "/static/**",
                                                                 "/privacy", "/terms", "/help")
                                                 .permitAll()
@@ -38,6 +38,8 @@ public class SecurityConfig {
                                                 .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                                                 .requestMatchers("/professional/**").hasAnyRole("PROFESSIONAL", "ADMIN")
                                                 .anyRequest().authenticated())
+                                .exceptionHandling(ex -> ex
+                                                .accessDeniedPage("/error/403"))
                                 .formLogin(form -> form
                                                 .loginPage("/login")
                                                 .loginProcessingUrl("/login")

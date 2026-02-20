@@ -3,12 +3,15 @@
   <header class="navbar bg-dark bg-dark text-white border-bottom px-4 py-3 shadow-lg ">
     <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center gap-4">
       <!-- Información del usuario -->
+      <div>
+        <img th:src="@{/img/Logorm.png}" class="rounded mx-auto d-block" alt="Logo de Duit" style="height: 3em" />
+      </div>
       <div class="d-flex align-items-center gap-3">
         <img th:src="@{/img/avatarPlaceholder.png}" class="rounded-circle border border-3 shadow-sm" width="64"
           height="64" alt="Avatar" />
         <div class="d-flex flex-column justify-content-center gap-2">
           <div class="fw-bold d-flex align-items-center gap-2 fs-4 text-white">
-            <span th:text="${usuario.username}">Usuario Ejemplo</span>
+            <span th:text="${usuario.firstName + ' ' + usuario.lastName}">Usuario Ejemplo</span>
           </div>
           <div class="d-flex align-items-center gap-2">
             <i class="bi bi-envelope text-white fs-6"></i>
@@ -28,14 +31,14 @@
           class="btn btn-outline-light fw-bold d-inline-flex align-items-center justify-content-center gap-2 rounded-2">
           <i class="bi bi-house-door fs-5"></i> <span class="d-none d-md-inline">Menú Principal</span>
         </a>
-        <a th:href="@{/logout}" class="btn btn-light fw-bold text-danger d-flex align-items-center gap-2 rounded-2">
+        <a th:href="@{/logout}" class="btn btn-danger fw-bold text-light d-flex align-items-center gap-2 rounded-2">
           <i class="bi bi-box-arrow-right fs-5"></i> <span class="d-none d-md-inline">Cerrar sesión</span>
         </a>
       </div>
     </div>
   </header>
   <!-- NAV HORIZONTAL GLOBAL -->
-  <nav class="navbar navbar-expand-lg bg-primary shadow-sm mt-2 mb-3 px-3" data-bs-theme="dark">
+  <nav class="navbar navbar-expand-lg bg-primary shadow-sm mt-2 mb-3 px-3 " data-bs-theme="dark">
     <div class="container-fluid">
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
@@ -44,10 +47,10 @@
       </button>
 
       <div class="collapse navbar-collapse" id="mainNavbar">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
 
           <!-- Enlaces directos -->
-          <li class="nav-item">
+          <li class="nav-item" sec:authorize="hasAnyRole('USER','ADMIN')">
             <a class="nav-link" th:href="@{/profile/edit}">
               <i class="bi bi-person-circle"></i> Editar Perfil
             </a>
@@ -59,25 +62,25 @@
             </a>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item" sec:authorize="hasAnyRole('PROFESSIONAL','ADMIN')">
             <a class="nav-link" th:href="@{/professional/search}">
               <i class="bi bi-search"></i> Buscar Trabajos
             </a>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item" sec:authorize="hasAnyRole('USER','ADMIN')">
             <a class="nav-link" th:href="@{/requests/my-requests}">
               <i class="bi bi-list-ul"></i> Mis Solicitudes
             </a>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item" sec:authorize="hasAnyRole('USER','ADMIN')">
             <a class="nav-link" th:href="@{/requests/request}">
               <i class="bi bi-plus-circle"></i> Crear Solicitud
             </a>
           </li>
 
-          <li class="nav-item">
+          <li class="nav-item" sec:authorize="hasAnyRole('PROFESSIONAL','ADMIN')">
             <a class="nav-link" th:href="@{/professional/applications}">
               <i class="bi bi-send"></i> Mis Postulaciones
             </a>
@@ -96,20 +99,20 @@
           </li>
 
           <!-- Enlaces de administración (solo para admins) -->
-          <li class="nav-item">
-            <a class="nav-link text-white-50" th:href="@{/admin/users}">
+          <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+            <a class="nav-link " th:href="@{/admin/users}">
               <i class="bi bi-people"></i> Usuarios
             </a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link text-white-50" th:href="@{/admin/stats}">
+          <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+            <a class="nav-link " th:href="@{/admin/stats}">
               <i class="bi bi-bar-chart-line"></i> Estadísticas
             </a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link text-white-50" th:href="@{/admin/categories}">
+          <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+            <a class="nav-link " th:href="@{/admin/categories}">
               <i class="bi bi-tags"></i> Categorías
             </a>
           </li>
