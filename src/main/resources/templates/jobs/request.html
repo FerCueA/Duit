@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Solicitud - Duit</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/flatly/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -99,7 +98,7 @@
                                     <textarea th:field="*{description}" class="form-control"
                                         th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
                                         id="description" rows="5" maxlength="2000" minlength="20"
-                                        placeholder="Describe qué necesitas..." required
+                                        placeholder="Describe que necesitas..." required
                                         aria-describedby="descriptionHelp"></textarea>
                                     <div id="descriptionHelp" class="form-text">Entre 20 y 2000 caracteres. Sé
                                         específico</div>
