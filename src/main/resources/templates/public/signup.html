@@ -166,7 +166,8 @@
                                             minlength="6" maxlength="100" placeholder="Mínimo 6 caracteres" required
                                             title="La contraseña debe tener al menos 6 caracteres">
                                         <button type="button" class="btn btn-outline-secondary rounded-end-3"
-                                            id="togglePasswordRegister">
+                                            id="togglePasswordRegister" aria-label="Mostrar contraseña"
+                                            title="Mostrar contraseña" aria-controls="password">
                                             <i class="bi bi-eye" id="toggleIconRegister"></i>
                                         </button>
                                     </div>
@@ -210,13 +211,18 @@
         document.getElementById('togglePasswordRegister').addEventListener('click', function () {
             const passwordInput = document.getElementById('password');
             const toggleIcon = document.getElementById('toggleIconRegister');
+            const toggleButton = document.getElementById('togglePasswordRegister');
 
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleIcon.className = 'bi bi-eye-slash';
+                toggleButton.setAttribute('aria-label', 'Ocultar contraseña');
+                toggleButton.setAttribute('title', 'Ocultar contraseña');
             } else {
                 passwordInput.type = 'password';
                 toggleIcon.className = 'bi bi-eye';
+                toggleButton.setAttribute('aria-label', 'Mostrar contraseña');
+                toggleButton.setAttribute('title', 'Mostrar contraseña');
             }
         });
     </script>

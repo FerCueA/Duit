@@ -63,41 +63,41 @@
                 <div class="card-body">
                     <div class="d-flex flex-wrap align-items-center gap-2">
                         <h6 class="mb-0 text-muted me-3"><i class="bi bi-funnel"></i> Filtrar:</h6>
-                        <div class="btn-group btn-group-sm flex-wrap" role="group">
+                        <div class="d-flex flex-wrap gap-1" role="group" aria-label="Filtrar solicitudes por estado">
                             <input type="radio" class="btn-check" name="filterStatus" id="filterAll" checked
                                 autocomplete="off" onclick="filterSolicitudes('all')">
-                            <label class="btn btn-outline-primary" for="filterAll">
-                                <i class="bi bi-stack"></i> Todas
+                            <label class="btn btn-outline-primary btn-sm" for="filterAll">
+                                <i class="bi bi-stack"></i><span class="d-none d-sm-inline ms-1">Todas</span>
                             </label>
 
                             <input type="radio" class="btn-check" name="filterStatus" id="filterDraft"
                                 autocomplete="off" onclick="filterSolicitudes('DRAFT')">
-                            <label class="btn btn-outline-dark" for="filterDraft">
-                                <i class="bi bi-file-earmark"></i> Borradores
+                            <label class="btn btn-outline-dark btn-sm" for="filterDraft">
+                                <i class="bi bi-file-earmark"></i><span class="d-none d-sm-inline ms-1">Borradores</span>
                             </label>
 
                             <input type="radio" class="btn-check" name="filterStatus" id="filterPublished"
                                 autocomplete="off" onclick="filterSolicitudes('PUBLISHED')">
-                            <label class="btn btn-outline-success" for="filterPublished">
-                                <i class="bi bi-send-check"></i> Publicadas
+                            <label class="btn btn-outline-success btn-sm" for="filterPublished">
+                                <i class="bi bi-send-check"></i><span class="d-none d-sm-inline ms-1">Publicadas</span>
                             </label>
 
                             <input type="radio" class="btn-check" name="filterStatus" id="filterInProgress"
                                 autocomplete="off" onclick="filterSolicitudes('IN_PROGRESS')">
-                            <label class="btn btn-outline-info" for="filterInProgress">
-                                <i class="bi bi-hourglass-split"></i> En progreso
+                            <label class="btn btn-outline-info btn-sm" for="filterInProgress">
+                                <i class="bi bi-hourglass-split"></i><span class="d-none d-sm-inline ms-1">En progreso</span>
                             </label>
 
                             <input type="radio" class="btn-check" name="filterStatus" id="filterCompleted"
                                 autocomplete="off" onclick="filterSolicitudes('COMPLETED')">
-                            <label class="btn btn-outline-primary" for="filterCompleted">
-                                <i class="bi bi-check-circle"></i> Completadas
+                            <label class="btn btn-outline-primary btn-sm" for="filterCompleted">
+                                <i class="bi bi-check-circle"></i><span class="d-none d-sm-inline ms-1">Completadas</span>
                             </label>
 
                             <input type="radio" class="btn-check" name="filterStatus" id="filterCancelled"
                                 autocomplete="off" onclick="filterSolicitudes('CANCELLED')">
-                            <label class="btn btn-outline-danger" for="filterCancelled">
-                                <i class="bi bi-x-circle"></i> Canceladas
+                            <label class="btn btn-outline-danger btn-sm" for="filterCancelled">
+                                <i class="bi bi-x-circle"></i><span class="d-none d-sm-inline ms-1">Canceladas</span>
                             </label>
                         </div>
                     </div>
@@ -109,14 +109,14 @@
                 <div class="card-body p-0">
                     <div th:if="${solicitudesExistentes != null and !solicitudesExistentes.isEmpty()}">
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
+                            <table class="table table-hover table-sm align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
                                         <th scope="col" class="border-0 ps-4">Solicitud</th>
-                                        <th scope="col" class="border-0">Categoría</th>
+                                        <th scope="col" class="border-0 d-none d-md-table-cell">Categoría</th>
                                         <th scope="col" class="border-0">Estado</th>
-                                        <th scope="col" class="border-0 text-center">Postulaciones</th>
-                                        <th scope="col" class="border-0">Fecha</th>
+                                        <th scope="col" class="border-0 text-center d-none d-sm-table-cell">Postulaciones</th>
+                                        <th scope="col" class="border-0 d-none d-md-table-cell">Fecha</th>
                                         <th scope="col" class="border-0 pe-4">Acciones</th>
                                     </tr>
                                 </thead>
@@ -124,11 +124,11 @@
                                     <tr th:each="solicitud : ${solicitudesExistentes}" class="solicitud-item"
                                         th:attr="data-status=${solicitud.status.name()}">
                                         <td class="ps-4">
-                                            <div class="fw-bold text-primary" th:text="${solicitud.title}">Título</div>
-                                            <small class="text-muted d-block mt-1"
+                                            <div class="fw-bold text-primary text-break" th:text="${solicitud.title}">Título</div>
+                                            <small class="text-muted d-block mt-1 text-break"
                                                 th:text="${#strings.abbreviate(solicitud.description, 80)}">Descripción</small>
                                         </td>
-                                        <td>
+                                        <td class="d-none d-md-table-cell">
                                             <span class="badge bg-light text-primary border"
                                                 th:text="${solicitud.category.name}">Categoría</span>
                                         </td>
@@ -151,13 +151,13 @@
                                                 </span>
                                             </span>
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center d-none d-sm-table-cell">
                                             <span th:if="${solicitud.applicationCount == 0}" class="text-muted">—</span>
                                             <span th:if="${solicitud.applicationCount > 0}"
                                                 class="badge bg-info rounded-pill fs-6 text-white"
                                                 th:text="${solicitud.applicationCount}">0</span>
                                         </td>
-                                        <td>
+                                        <td class="d-none d-md-table-cell">
                                             <small class="text-muted">
                                                 <i class="bi bi-calendar3"></i>
                                                 <span th:text="${#temporals.format(solicitud.createdAt, 'dd/MM/yyyy')}">
@@ -171,14 +171,14 @@
                                                 <a th:if="${solicitud.status.name() == 'DRAFT' or solicitud.status.name() == 'CANCELLED'}"
                                                     th:href="@{/requests/request(edit=${solicitud.id})}"
                                                     class="btn btn-sm btn-outline-primary">
-                                                    <i class="bi bi-pencil"></i> Editar
+                                                    <i class="bi bi-pencil"></i><span class="d-none d-sm-inline ms-1">Editar</span>
                                                 </a>
 
                                                 <!-- Ver postulaciones -->
                                                 <a th:if="${solicitud.status.name() == 'PUBLISHED' and solicitud.applicationCount > 0}"
                                                     th:href="@{/requests/applications/{id}(id=${solicitud.id})}"
                                                     class="btn btn-sm btn-outline-info">
-                                                    <i class="bi bi-envelope"></i> Ver Postulaciones
+                                                    <i class="bi bi-envelope"></i><span class="d-none d-sm-inline ms-1">Ver Postulaciones</span>
                                                 </a>
 
                                                 <!-- Publicar -->
@@ -187,7 +187,7 @@
                                                     method="POST">
                                                     <button type="submit" class="btn btn-sm btn-outline-success w-100"
                                                         onclick="return confirm('¿Publicar esta solicitud?')">
-                                                        <i class="bi bi-upload"></i> Publicar
+                                                        <i class="bi bi-upload"></i><span class="d-none d-sm-inline ms-1">Publicar</span>
                                                     </button>
                                                 </form>
 
@@ -197,7 +197,7 @@
                                                     method="POST">
                                                     <button type="submit" class="btn btn-sm btn-outline-primary w-100"
                                                         onclick="return confirm('¿Despublicar? Volverá a borrador.')">
-                                                        <i class="bi bi-download"></i> Despublicar
+                                                        <i class="bi bi-download"></i><span class="d-none d-sm-inline ms-1">Despublicar</span>
                                                     </button>
                                                 </form>
 
@@ -207,7 +207,7 @@
                                                     method="POST">
                                                     <button type="submit" class="btn btn-sm btn-outline-danger w-100"
                                                         onclick="return confirm('¿Cancelar esta solicitud?')">
-                                                        <i class="bi bi-x-circle"></i> Cancelar
+                                                        <i class="bi bi-x-circle"></i><span class="d-none d-sm-inline ms-1">Cancelar</span>
                                                     </button>
                                                 </form>
 
@@ -217,7 +217,7 @@
                                                     method="POST">
                                                     <button type="submit" class="btn btn-sm btn-outline-success w-100"
                                                         onclick="return confirm('¿Reactivar? Volverá a borrador.')">
-                                                        <i class="bi bi-arrow-clockwise"></i> Reactivar
+                                                        <i class="bi bi-arrow-clockwise"></i><span class="d-none d-sm-inline ms-1">Reactivar</span>
                                                     </button>
                                                 </form>
 
@@ -228,7 +228,7 @@
                                                     method="POST">
                                                     <button type="submit" class="btn btn-sm btn-outline-danger w-100"
                                                         onclick="return confirm('¿Eliminar? No se puede deshacer.')">
-                                                        <i class="bi bi-trash"></i> Eliminar
+                                                        <i class="bi bi-trash"></i><span class="d-none d-sm-inline ms-1">Eliminar</span>
                                                     </button>
                                                 </form>
                                             </div>

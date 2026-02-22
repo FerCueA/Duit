@@ -191,7 +191,7 @@
                             <input type="hidden" name="jobId" th:value="${trabajo.id}">
                             <div class="mb-3">
                                 <label class="form-label">Puntuacion (1-5)</label>
-                                <div class="btn-group" role="group"
+                                <div class="d-flex flex-wrap gap-1" role="group"
                                     th:attr="aria-label='Puntuacion para ' + ${trabajo.request.title}">
                                     <input type="radio" class="btn-check" name="score" th:id="'score1_' + ${trabajo.id}"
                                         value="1" required>

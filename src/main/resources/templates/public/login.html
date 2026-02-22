@@ -66,7 +66,8 @@
                                             placeholder="Tu contraseña" minlength="6" maxlength="100" required
                                             autocomplete="current-password">
                                         <button type="button" class="btn btn-outline-secondary rounded-end-3"
-                                            id="togglePassword">
+                                            id="togglePassword" aria-label="Mostrar contraseña"
+                                            title="Mostrar contraseña" aria-controls="password">
                                             <i class="bi bi-eye" id="toggleIcon"></i>
                                         </button>
                                     </div>
@@ -85,7 +86,7 @@
                                                 style="width: 3rem; height: 1.5rem;">
                                             <label class="form-check-label fw-medium fs-6" for="remember-me">
                                                 <i class="bi bi-clock text-primary me-2 fs-5"></i>
-                                                <span class="text-dark">Mantenerme conectado</span>
+                                                <span class="text-body-emphasis">Mantenerme conectado</span>
                                                 <small
                                                     class="badge bg-primary text-white ms-2 rounded-pill px-2 py-1">24h</small>
                                             </label>
@@ -111,9 +112,9 @@
 
                             <!-- Cuentas de prueba -->
                             <div class="mt-4 p-4 bg-light rounded-3">
-                                <h6 class="text-muted mb-2 fst-italic fs-5"><i
+                                <h2 class="text-muted mb-2 fst-italic fs-5"><i
                                         class="bi bi-info-circle me-1"></i>Cuentas de prueba:
-                                </h6>
+                                </h2>
                                 <div class="small fs-5">
                                     <p class="mb-1"><strong>Cliente:</strong> ana.gonzalez@example.com</p>
 
@@ -121,7 +122,8 @@
 
                                     <p class="mb-1"><strong>Admin:</strong> admin@duit.es</p>
 
-                                    <p class="mb-1 bg-success text-white rounded-3 px-2 py-1">
+                                    <p
+                                        class="mb-1 bg-success-subtle text-success-emphasis border border-success-subtle rounded-3 px-2 py-1">
                                         <strong>Contraseña:</strong> 123456
                                     </p>
 
@@ -141,13 +143,18 @@
         document.getElementById('togglePassword').addEventListener('click', function () {
             const passwordInput = document.getElementById('password');
             const toggleIcon = document.getElementById('toggleIcon');
+            const toggleButton = document.getElementById('togglePassword');
 
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleIcon.className = 'bi bi-eye-slash';
+                toggleButton.setAttribute('aria-label', 'Ocultar contraseña');
+                toggleButton.setAttribute('title', 'Ocultar contraseña');
             } else {
                 passwordInput.type = 'password';
                 toggleIcon.className = 'bi bi-eye';
+                toggleButton.setAttribute('aria-label', 'Mostrar contraseña');
+                toggleButton.setAttribute('title', 'Mostrar contraseña');
             }
         });
 

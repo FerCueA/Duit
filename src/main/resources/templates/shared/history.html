@@ -23,40 +23,45 @@
 
                             <div th:if="${historial != null and !historial.isEmpty()}">
                                 <!-- Filtros -->
-                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div
+                                    class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2 mb-3">
                                     <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtrar por estado:</h5>
-                                    <div class="btn-group btn-group-sm" role="group">
+                                    <div class="d-flex flex-wrap gap-1" role="group"
+                                        aria-label="Filtrar historial por estado">
                                         <input type="radio" class="btn-check" name="filterHistorial"
                                             id="filterHistorialAll" checked autocomplete="off"
                                             onclick="filterHistorial('all')">
-                                        <label class="btn btn-outline-secondary" for="filterHistorialAll">Todos</label>
+                                        <label class="btn btn-outline-secondary btn-sm"
+                                            for="filterHistorialAll">Todos</label>
 
                                         <input type="radio" class="btn-check" name="filterHistorial"
                                             id="filterHistorialCreated" autocomplete="off"
                                             onclick="filterHistorial('CREATED')">
-                                        <label class="btn btn-outline-info" for="filterHistorialCreated">Creados</label>
+                                        <label class="btn btn-outline-info btn-sm"
+                                            for="filterHistorialCreated">Creados</label>
 
                                         <input type="radio" class="btn-check" name="filterHistorial"
                                             id="filterHistorialInProgress" autocomplete="off"
                                             onclick="filterHistorial('IN_PROGRESS')">
-                                        <label class="btn btn-outline-warning" for="filterHistorialInProgress">En
+                                        <label class="btn btn-outline-warning btn-sm" for="filterHistorialInProgress">En
                                             progreso</label>
 
                                         <input type="radio" class="btn-check" name="filterHistorial"
                                             id="filterHistorialPaused" autocomplete="off"
                                             onclick="filterHistorial('PAUSED')">
-                                        <label class="btn btn-outline-dark" for="filterHistorialPaused">Pausados</label>
+                                        <label class="btn btn-outline-dark btn-sm"
+                                            for="filterHistorialPaused">Pausados</label>
 
                                         <input type="radio" class="btn-check" name="filterHistorial"
                                             id="filterHistorialCompleted" autocomplete="off"
                                             onclick="filterHistorial('COMPLETED')">
-                                        <label class="btn btn-outline-primary"
+                                        <label class="btn btn-outline-primary btn-sm"
                                             for="filterHistorialCompleted">Completados</label>
 
                                         <input type="radio" class="btn-check" name="filterHistorial"
                                             id="filterHistorialCancelled" autocomplete="off"
                                             onclick="filterHistorial('CANCELLED')">
-                                        <label class="btn btn-outline-danger"
+                                        <label class="btn btn-outline-danger btn-sm"
                                             for="filterHistorialCancelled">Cancelados</label>
                                     </div>
                                 </div>
@@ -70,11 +75,12 @@
                                                 data-bs-toggle="collapse"
                                                 th:attr="data-bs-target=${'#collapse-' + item.jobId},aria-controls=${'collapse-' + item.jobId}">
                                                 <div class="w-100">
-                                                    <div class="d-flex justify-content-between align-items-start">
+                                                    <div
+                                                        class="d-flex justify-content-between align-items-start gap-2 flex-wrap">
                                                         <div>
                                                             <div class="fw-semibold">
                                                                 <i class="bi bi-briefcase"></i>
-                                                                <span
+                                                                <span class="text-break"
                                                                     th:text="${item.request != null ? item.request.title : 'Sin título'}">Título</span>
                                                             </div>
                                                             <div class="text-muted small">

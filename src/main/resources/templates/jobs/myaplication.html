@@ -52,31 +52,31 @@
             <!-- Filtro de estado -->
             <div th:if="${postulaciones != null and !postulaciones.isEmpty()}" class="card border-0 shadow-sm mb-3">
                 <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
                         <label class="fw-bold mb-0"><i class="bi bi-funnel"></i> Filtrar por estado:</label>
-                        <div class="btn-group" role="group">
+                        <div class="d-flex flex-wrap gap-1" role="group" aria-label="Filtrar postulaciones por estado">
                             <input type="radio" class="btn-check" name="statusFilter" id="filterPending" value="PENDING"
                                 checked>
                             <label class="btn btn-outline-warning btn-sm active" for="filterPending">
-                                <i class="bi bi-hourglass-split"></i> Pendientes
+                                <i class="bi bi-hourglass-split"></i><span class="d-none d-sm-inline ms-1">Pendientes</span>
                             </label>
 
                             <input type="radio" class="btn-check" name="statusFilter" id="filterAccepted"
                                 value="ACCEPTED">
                             <label class="btn btn-outline-success btn-sm" for="filterAccepted">
-                                <i class="bi bi-check-circle"></i> Aceptadas
+                                <i class="bi bi-check-circle"></i><span class="d-none d-sm-inline ms-1">Aceptadas</span>
                             </label>
 
                             <input type="radio" class="btn-check" name="statusFilter" id="filterRejected"
                                 value="REJECTED">
                             <label class="btn btn-outline-danger btn-sm" for="filterRejected">
-                                <i class="bi bi-x-circle"></i> Rechazadas
+                                <i class="bi bi-x-circle"></i><span class="d-none d-sm-inline ms-1">Rechazadas</span>
                             </label>
 
                             <input type="radio" class="btn-check" name="statusFilter" id="filterWithdrawn"
                                 value="WITHDRAWN">
                             <label class="btn btn-outline-secondary btn-sm" for="filterWithdrawn">
-                                <i class="bi bi-arrow-return-left"></i> Retiradas
+                                <i class="bi bi-arrow-return-left"></i><span class="d-none d-sm-inline ms-1">Retiradas</span>
                             </label>
                         </div>
                     </div>
