@@ -7,8 +7,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import es.duit.app.dto.EditProfileDTO;
 import es.duit.app.entity.AppUser;
@@ -54,7 +60,7 @@ public class ProfileController {
     // PROCESA LA ACTUALIZACIÓN DEL PERFIL DE USUARIO
     // ============================================================================
     @PostMapping("/edit")
-        public String updateProfile(
+    public String updateProfile(
             @Validated(EditProfileDTO.UserProfileGroup.class) @ModelAttribute("editProfileDTO") EditProfileDTO editProfileDTO,
             BindingResult errors,
             Model model,
@@ -101,7 +107,7 @@ public class ProfileController {
     // PROCESA LA ACTUALIZACIÓN DEL PERFIL PROFESIONAL
     // ============================================================================
     @PostMapping({ "/professional", "/profesional" })
-        public String updateProfessionalProfile(
+    public String updateProfessionalProfile(
             @Validated(EditProfileDTO.ProfessionalProfileGroup.class) @ModelAttribute("editProfileDTO") EditProfileDTO editProfileDTO,
             BindingResult errors,
             Model model,
@@ -128,5 +134,36 @@ public class ProfileController {
         }
 
         return "redirect:/profile/professional";
+    }
+
+    // ============================================================================
+    // ELIMINA LA CUENTA DEL USUARIO AUTENTICADO (DESACTIVACIÓN)
+    // ============================================================================
+    @PostMapping("/delete-account")
+    public String deleteAccount(
+            @RequestParam(value = "from", required = false, defaultValue = "user") String from,
+            Authentication authentication,
+            HttpServletRequest request,
+            HttpServletResponse response,
+            RedirectAttributes flash) {
+
+        String backTo = "professional".equalsIgnoreCase(from)
+                ? "redirect:/profile/professional"
+                : "redirect:/profile/edit";
+
+        try {
+            appUserService.deactivateCurrentUser();
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+            flash.addFlashAttribute("success", "Tu cuenta se eliminó correctamente.");
+            return "redirect:/login";
+
+        } catch (IllegalArgumentException error) {
+            flash.addFlashAttribute("errors", error.getMessage());
+            return backTo;
+
+        } catch (Exception error) {
+            flash.addFlashAttribute("errors", "No se pudo eliminar la cuenta. Inténtalo de nuevo.");
+            return backTo;
+        }
     }
 }

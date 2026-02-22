@@ -333,6 +333,22 @@ public class MyRequestsController {
         }
     }
 
+    @PostMapping("/reject-application")
+    public String rejectApplicationWithParams(@RequestParam Long requestId,
+            @RequestParam Long applicationId,
+            RedirectAttributes redirectAttributes) {
+        try {
+            serviceRequestService.rejectRequest(requestId, applicationId);
+
+            redirectAttributes.addFlashAttribute("success", "Aplicación rechazada correctamente.");
+            return "redirect:/requests/applications/" + requestId;
+
+        } catch (RuntimeException error) {
+            redirectAttributes.addFlashAttribute("error", error.getMessage());
+            return "redirect:/requests/applications/" + requestId;
+        }
+    }
+
     // ============================================================================
     // VER APLICACIONES RECIBIDAS PARA UNA SOLICITUD
     // ============================================================================

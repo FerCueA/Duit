@@ -433,6 +433,40 @@ public class RequestService {
         return request;
     }
 
+    public ServiceRequest rejectRequest(Long requestId, Long applicationId) {
+
+        if (requestId == null) {
+            throw new IllegalArgumentException("El ID de la solicitud es requerido");
+        }
+        if (applicationId == null) {
+            throw new IllegalArgumentException("El ID de la aplicación es requerido");
+        }
+
+        String username = getAuthenticatedUsername();
+
+        AppUser usuario = appUserRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        ServiceRequest request = serviceRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
+
+        boolean perteneceALaSolicitud = false;
+        for (JobApplication app : request.getApplications()) {
+            if (app.getId().equals(applicationId)) {
+                perteneceALaSolicitud = true;
+                break;
+            }
+        }
+
+        if (!perteneceALaSolicitud) {
+            throw new RuntimeException("Aplicación no encontrada en esta solicitud");
+        }
+
+        jobService.rejectApplication(applicationId, usuario);
+
+        return request;
+    }
+
     // ============================================================================
     // VALIDACION de que la solicitud pertenece al usuario autenticado y que existe
     // ============================================================================

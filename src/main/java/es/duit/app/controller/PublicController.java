@@ -28,7 +28,7 @@ public class PublicController {
     // ============================================================================
     // PÁGINA PRINCIPAL DE LA APLICACIÓN
     // ============================================================================
-    @GetMapping({"/", "/index"})
+    @GetMapping({ "/", "/index" })
     public String showMainPage() {
         return "public/index";
     }
