@@ -364,8 +364,8 @@ A partir de ella, define las siguientes variables:
 - `DB_PASS=contraseña`
 - Es el valor que aparece después de `:` y antes de `@`
 
-**Host**: `ep-sparkling-mud-ag8gop19-pooler.c-2.eu-central-1.aws.neon.tech`
-- `DB_URL=ep-sparkling-mud-ag8gop19-pooler.c-2.eu-central-1.aws.neon.tech`
+**Host**: `ep-sparkling-mud-ag8gop19-****************`
+- `DB_URL=ep-sparkling-mud-ag8gop19-****************`
 - Es la dirección del servidor entre `@` y `/`
 
 #### Configuración en Entorno Local
@@ -373,7 +373,7 @@ A partir de ella, define las siguientes variables:
 Crea un archivo `.env` en la raíz del proyecto:
 
 ```
-DB_URL=ep-sparkling-mud-ag8gop19-pooler.c-2.eu-central-1.aws.neon.tech
+DB_URL=ep-sparkling-mud-ag8gop19-****************
 DB_USER=neondb_owner
 DB_PASS=contraseña
 ```
