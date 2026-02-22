@@ -131,4 +131,18 @@ public class AppUserService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return authService.getAuthenticatedUser(auth);
     }
+
+    // ============================================================================
+    // DESACTIVA LA CUENTA DEL USUARIO ACTUAL
+    // ============================================================================
+    public void deactivateCurrentUser() {
+        AppUser user = getCurrentUser();
+
+        if (user == null || user.getId() == null) {
+            throw new IllegalArgumentException("No se pudo identificar la cuenta a eliminar");
+        }
+
+        user.setActive(false);
+        appUserRepository.save(user);
+    }
 }

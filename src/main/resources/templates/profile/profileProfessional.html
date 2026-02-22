@@ -31,7 +31,7 @@
                             </div>
 
                             <!-- Formulario de edición de perfil -->
-                            <form th:action="@{/profile/professional}" method="post" th:object="${editProfileDTO}">`
+                            <form th:action="@{/profile/professional}" method="post" th:object="${editProfileDTO}">
                                 <!-- Errores globales -->
                                 <div th:if="${#fields.hasGlobalErrors()}"
                                     class="alert alert-danger d-flex align-items-center" role="alert">
@@ -335,6 +335,24 @@
                                     </div>
                                 </div>
                             </form>
+
+                            <div class="card border-danger mt-4">
+                                <div class="card-header bg-danger text-white">
+                                    <h5 class="mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>Zona de peligro
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-3 text-muted">Esta acción desactivará tu cuenta y cerrará tu sesión
+                                        actual.</p>
+                                    <form th:action="@{/profile/delete-account}" method="post" class="d-inline">
+                                        <input type="hidden" name="from" value="professional">
+                                        <button type="submit" class="btn btn-outline-danger"
+                                            onclick="return confirm('¿Seguro que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')">
+                                            <i class="bi bi-trash me-2"></i>Eliminar cuenta
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -31,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // Buscar usuario
         AppUser user = appUserRepository.findByUsername(emailNormalizado)
-            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + emailNormalizado));
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + emailNormalizado));
 
         // Verificar usuario activo
         if (user.getActive() == null || !user.getActive()) {

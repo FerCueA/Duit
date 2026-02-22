@@ -107,17 +107,17 @@ public class SharedController {
             }
         }
 
-                boolean esProfesional = usuarioLogueado.getProfessionalProfile() != null;
-                model.addAttribute("esProfesional", esProfesional);
+        boolean esProfesional = usuarioLogueado.getProfessionalProfile() != null;
+        model.addAttribute("esProfesional", esProfesional);
 
-                if (esProfesional) {
-                    List<Rating> valoracionesProfesional = ratingService.getProfessionalRatings(usuarioLogueado);
-                    double notaMedia = ratingService.calculateAverageScore(valoracionesProfesional);
+        if (esProfesional) {
+            List<Rating> valoracionesProfesional = ratingService.getProfessionalRatings(usuarioLogueado);
+            double notaMedia = ratingService.calculateAverageScore(valoracionesProfesional);
 
-                    model.addAttribute("valoracionesProfesional", valoracionesProfesional);
-                    model.addAttribute("notaMediaProfesional", notaMedia);
-                    model.addAttribute("totalValoracionesProfesional", valoracionesProfesional.size());
-                }
+            model.addAttribute("valoracionesProfesional", valoracionesProfesional);
+            model.addAttribute("notaMediaProfesional", notaMedia);
+            model.addAttribute("totalValoracionesProfesional", valoracionesProfesional.size());
+        }
 
         // Agregar listas al modelo para la vista
         model.addAttribute("trabajosPendientes", trabajosPendientes);

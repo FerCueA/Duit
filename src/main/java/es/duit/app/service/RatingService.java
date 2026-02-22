@@ -29,8 +29,8 @@ public class RatingService {
         }
 
         return ratingRepository.findRatingsForProfessional(usuario,
-            Rating.Type.CLIENT_TO_PROFESSIONAL,
-            Rating.Status.PUBLISHED);
+                Rating.Type.CLIENT_TO_PROFESSIONAL,
+                Rating.Status.PUBLISHED);
     }
 
     public double calculateAverageScore(List<Rating> ratings) {

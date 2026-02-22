@@ -14,7 +14,7 @@ public class AdminController {
     // ============================================================================
     // PÁGINA DE GESTIÓN DE USUARIOS
     // ============================================================================
-    @GetMapping({"/users"})
+    @GetMapping({ "/users" })
     public String mostrarGestionUsuarios() {
         return "admin/users";
     }
@@ -22,7 +22,7 @@ public class AdminController {
     // ============================================================================
     // PÁGINA DE ESTADÍSTICAS Y MÉTRICAS
     // ============================================================================
-    @GetMapping({"/stats"})
+    @GetMapping({ "/stats" })
     public String mostrarEstadisticas() {
         return "admin/stats";
     }

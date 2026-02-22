@@ -203,6 +203,17 @@
                                                             <i class="bi bi-check-circle"></i> Aceptar
                                                         </button>
                                                     </form>
+                                                    <form action="/requests/reject-application" method="POST"
+                                                        class="d-inline ms-1">
+                                                        <input type="hidden" name="requestId"
+                                                            th:value="${solicitud.id}">
+                                                        <input type="hidden" name="applicationId"
+                                                            th:value="${aplicacion.id}">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                            onclick="return confirm('¿Rechazar esta postulación?')">
+                                                            <i class="bi bi-x-circle"></i> Rechazar
+                                                        </button>
+                                                    </form>
                                                 </div>
                                                 <div
                                                     th:if="${solicitud.status.name() != 'PUBLISHED' or aplicacion.status.name() != 'PENDING'}">
