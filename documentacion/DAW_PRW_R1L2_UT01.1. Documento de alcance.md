@@ -4,7 +4,7 @@
 
 ---
 
-## 📋 Metadatos del Documento
+##  Metadatos del Documento
 
 | Dato                  | Valor                                                  |
 | --------------------- | ------------------------------------------------------ |
@@ -17,7 +17,7 @@
 
 ---
 
-## 📖 Tabla de Contenidos
+##  Tabla de Contenidos
 
 1. [Introducción](#1-introducción)
 2. [Justificación y Necesidades del Negocio](#2-justificación-y-necesidades-del-negocio)
@@ -30,7 +30,7 @@
 
 ---
 
-## 📝 Historial de Revisiones
+##  Historial de Revisiones
 
 | Fecha      | Descripción                              | Autores                             |
 | ---------- | ---------------------------------------- | ----------------------------------- |

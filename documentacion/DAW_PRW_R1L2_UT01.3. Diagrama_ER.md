@@ -4,7 +4,7 @@
 
 ---
 
-## 📋 Metadatos del Documento
+##  Metadatos del Documento
 
 | Campo               | Valor                                                  |
 | ------------------- | ------------------------------------------------------ |
@@ -12,13 +12,13 @@
 | **Ciclo Formativo** | Desarrollo de Aplicaciones Web - Semipresencial (DAWN) |
 | **Módulo**          | Proyecto de Desarrollo de Aplicaciones Web (PRW)       |
 | **Autores**         | Aleixo Fernández Cuevas, Cristo Manuel Navarro Martín  |
-| **Fecha Actual**    | 16/02/2026                                             |
+| **Fecha Actual**    | 23/02/2026                                             |
 | **Versión**         | 3.0                                                    |
-| **Estado**          | Fase de Análisis - Tercera Corrección                  |
+| **Estado**          | Fase de Implementación - Esquema Validado              |
 
 ---
 
-## 📖 Tabla de Contenidos
+##  Tabla de Contenidos
 
 1. [Introducción Ejecutiva](#1-introducción-ejecutiva)
 2. [Objetivo del Modelo de Datos](#2-objetivo-del-modelo-de-datos)
@@ -37,14 +37,15 @@
 
 ---
 
-## 📝 Tabla de Historial de Revisiones
+##  Tabla de Historial de Revisiones
 
-| Fecha      | Descripción                              | Autores                            |
-| ---------- | ---------------------------------------- | ---------------------------------- |
-| 21/12/2025 | Fase de análisis. Versión inicial        | Aleixo F. Cuevas, Cristo N. Martín |
-| 10/01/2026 | Primera corrección                       | Aleixo F. Cuevas, Cristo N. Martín |
-| 01/02/2026 | Segunda corrección                       | Aleixo F. Cuevas, Cristo N. Martín |
-| 16/02/2026 | Tercera corrección y reformateo completo | Aleixo F. Cuevas                   |
+| Fecha      | Descripción                                      | Autores                            |
+| ---------- | ------------------------------------------------ | ---------------------------------- |
+| 21/12/2025 | Fase de análisis. Versión inicial                | Aleixo F. Cuevas, Cristo N. Martín |
+| 10/01/2026 | Primera corrección                               | Aleixo F. Cuevas, Cristo N. Martín |
+| 01/02/2026 | Segunda corrección                               | Aleixo F. Cuevas, Cristo N. Martín |
+| 16/02/2026 | Tercera corrección y reformateo completo         | Aleixo F. Cuevas                   |
+| 23/02/2026 | Verificación de esquema vs implementación actual | Aleixo F. Cuevas, Cristo N. Martín |
 
 ---
 
@@ -692,7 +693,7 @@ PUBLISHED
 ### 10.1. Seguridad
 
 - **Autenticación:** Implementada mediante Spring Security, utilizando BCrypt para el cifrado de contraseñas
-- **Autorización:** Autenticación global; el control de acceso por roles está planificado a corto plazo
+- **Autorización:** Control de acceso basado en roles (RBAC) implementado y funcional mediante Spring Security
 - **Auditoría:** Uso de JPA Auditing con `@EntityListeners` y anotaciones (`@CreatedBy`, `@CreatedDate`, `@LastModifiedBy`, `@LastModifiedDate`)
 - **Validación:** Validaciones a nivel de entidad mediante Jakarta Validation (`@NotNull`, `@Size`, `@Email`, etc.)
 
@@ -889,5 +890,5 @@ Las decisiones finales relativas a la estructura del modelo, las relaciones entr
 
 ---
 
-**Última actualización:** 16 de febrero de 2026 
+**Última actualización:** 23 de febrero de 2026  
 **Versión:** 3.0

@@ -4,20 +4,20 @@
 
 ---
 
-## 📋 Metadatos del Documento
+##  Metadatos del Documento
 
 | Dato                  | Valor                                                  |
 | --------------------- | ------------------------------------------------------ |
 | **Autores**           | Aleixo Fernández Cuevas, Cristo Manuel Navarro Martín  |
 | **Nombre de archivo** | DAW_PRW_R1L2_UT01.2 Diagrama de casos de uso           |
-| **Fecha de versión**  | 16/02/2026                                             |
+| **Fecha de versión**  | 23/02/2026                                             |
 | **Ciclo Formativo**   | Desarrollo de Aplicaciones Web - Semipresencial (DAWN) |
 | **Módulo**            | Proyecto de Desarrollo de Aplicaciones Web (PRW)       |
 | **Versión**           | 3.0                                                    |
 
 ---
 
-## 📖 Tabla de Contenidos
+##  Tabla de Contenidos
 
 1. [Introducción y Contexto del Proyecto](#1-introducción-y-contexto-del-proyecto)
 2. [Historias de Usuario](#2-historias-de-usuario)
@@ -32,7 +32,7 @@
 
 ---
 
-## 📝 Historial de Revisiones
+##  Historial de Revisiones
 
 | Fecha      | Descripción                              | Autores                             |
 | ---------- | ---------------------------------------- | ----------------------------------- |
@@ -40,6 +40,7 @@
 | 10/01/2026 | Primera corrección                       | Aleixo F. Cuevas / Cristo N. Martín |
 | 01/02/2026 | Segunda corrección                       | Aleixo F. Cuevas / Cristo N. Martín |
 | 16/02/2026 | Tercera corrección y reformateo completo | Aleixo F. Cuevas                    |
+| 23/02/2026 | Actualización final                      | Aleixo F. Cuevas, Cristo N. Martín  |
 
 ---
 
@@ -49,7 +50,6 @@ El presente documento describe el diagrama de casos de uso correspondiente al pr
 
 ---
 
-## 2. Historias de Usuario
 
 ### Usuario No Registrado
 
@@ -356,15 +356,16 @@ sequenceDiagram
 | RF-02: Autenticación         | CU-03               | PublicController        | AppUser, AccessLog         |
 | RF-03: Crear solicitud       | CU-07, CU-08, CU-09 | RequestFormController   | ServiceRequest             |
 | RF-04: Gestionar solicitudes | CU-10 a 13          | RequestFormController   | ServiceRequest             |
-| RF-05: Ver postulaciones     | CU-14               | RequestFormController   | JobApplication             |
+| RF-05: Ver postulaciones     | CU-14               | PostulacionesController | JobApplication             |
 | RF-06: Aceptar postulación   | CU-15               | PostulacionesController | ServiceJob, JobApplication |
 | RF-07: Buscar solicitudes    | CU-20, CU-21        | ProfessionalController  | ServiceRequest, Category   |
 | RF-08: Postularse            | CU-22, CU-23, CU-24 | PostulacionesController | JobApplication             |
 | RF-09: Actualizar trabajo    | CU-17, CU-25        | MyRequestsController    | ServiceJob                 |
 | RF-10: Valorar               | CU-18, CU-26        | RatingsController       | Rating                     |
-| RF-11: Gestionar categorías  | CU-27 a 29          | AdminController         | Category                   |
-| RF-12: Ver estadísticas      | CU-30               | AdminController         | Estadísticas               |
-| RF-13: Gestionar usuarios    | CU-31               | AdminController         | AppUser                    |
+| RF-11: Perfil profesional    | CU-19               | ProfileController       | ProfessionalProfile        |
+| RF-12: Gestionar categorías  | CU-27 a 29          | AdminController         | Category                   |
+| RF-13: Ver estadísticas      | CU-30               | AdminController         | Estadísticas               |
+| RF-14: Gestionar usuarios    | CU-31               | AdminController         | AppUser                    |
 
 ---
 
@@ -388,5 +389,5 @@ La elaboración del presente Documento de Casos de Uso se ha realizado de forma 
 
 ---
 
-**Última actualización:** 16 de febrero de 2026 
+**Última actualización:** 23 de febrero de 2026 
 **Versión:** 3.0
