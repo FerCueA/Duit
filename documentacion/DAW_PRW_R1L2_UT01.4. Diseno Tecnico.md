@@ -10,7 +10,7 @@
 | -------------------------- | ------------------------------------------------------ |
 | **Nombre del Fichero**     | DAW_PRW_R1L2_UT01.4 - Diseño Técnico                   |
 | **Versión**                | 3.0                                                    |
-| **Fecha de Actualización** | 16 de febrero de 2026                                  |
+| **Fecha de Actualización** | 23 de febrero de 2026                                  |
 | **Ciclo Formativo**        | Desarrollo de Aplicaciones Web - Semipresencial (DAWN) |
 | **Módulo**                 | Proyecto de Desarrollo de Aplicaciones Web (PRW)       |
 | **Autores**                | Aleixo Fernández Cuevas, Cristo Manuel Navarro Martín  |
@@ -24,6 +24,7 @@
   - [Tabla de Contenidos](#tabla-de-contenidos)
   - [Tabla de Historial de Revisiones](#tabla-de-historial-de-revisiones)
   - [1. Introducción](#1-introducción)
+    - [Estado Actual del Proyecto (23 de febrero de 2026)](#estado-actual-del-proyecto-23-de-febrero-de-2026)
     - [Propósito](#propósito)
   - [2. Información del Proyecto](#2-información-del-proyecto)
   - [3. Requisitos Técnicos](#3-requisitos-técnicos)
@@ -105,12 +106,35 @@
 | 10/01/2026 | Primera corrección                       | Aleixo F. Cuevas, Cristo N. Martín |
 | 16/02/2026 | Segunda corrección                       | Aleixo F. Cuevas, Cristo N. Martín |
 | 16/02/2026 | Tercera corrección y reformateo completo | Aleixo F. Cuevas                   |
+| 23/02/2026 | Cuarta corrección                        | Aleixo F. Cuevas, Cristo N. Martín |
 
 ---
 
 ## 1. Introducción
 
 El presente documento describe el diseño técnico de la aplicación **Duit**, una plataforma web desarrollada utilizando **Spring Boot 3.5.10** y **Java 21**, siguiendo una arquitectura **MVC** (Modelo-Vista-Controlador) y empleando **PostgreSQL** como sistema de gestión de bases de datos.
+
+### Estado Actual del Proyecto (23 de febrero de 2026)
+
+**Fase de Desarrollo**: Pruebas y Refinamiento
+
+**Componentes Completados**:
+- ✅ Arquitectura MVC y estructura del proyecto
+- ✅ Base de datos con 11 entidades principales
+- ✅ 10 servicios de lógica de negocio (~2300 LOC)
+- ✅ 13 controladores implementados
+- ✅ Sistema de autenticación con Spring Security
+- ✅ Control de acceso basado en roles (RBAC)
+- ✅ Auditoría automática de entidades
+- ✅ Sistema de registro de accesos (AccessLog)
+- ✅ 8 DTOs para transferencia de datos
+- ✅ Plantillas Thymeleaf con Bootstrap responsive
+
+**En Planificación**:
+- 📋 Configuración e implementación de email (SMTP)
+- 📋 Tests unitarios e integración completos (actualmente solo test de contexto)
+- 📋 Integraciones con servicios externos (S3/Cloudinary, Maps, Stripe)
+- 📋 Optimización de consultas y análisis de rendimiento
 
 ### Propósito
 
@@ -279,23 +303,34 @@ HikariCP es un pool de alto rendimiento que gestiona reutilización de conexione
 
 ### 3.7. Validación y Email
 
-| Tecnología         | Versión | Tipo           | Propósito           |
-| ------------------ | ------- | -------------- | ------------------- |
-| Spring Validation  | 3.5.x   | Framework      | Validación de datos |
-| Jakarta Validation | 3.0.2   | Especificación | Bean Validation     |
-| Spring Mail        | 3.5.x   | Framework      | Envío de correos    |
-| Jakarta Mail       | 2.0.x   | API            | JavaMail API        |
+| Tecnología         | Versión | Tipo           | Propósito           | Estado              |
+| ------------------ | ------- | -------------- | ------------------- | ------------------- |
+| Spring Validation  | 3.5.x   | Framework      | Validación de datos | ✅ Implementado     |
+| Jakarta Validation | 3.0.2   | Especificación | Bean Validation     | ✅ Implementado     |
+| Spring Mail        | 3.5.x   | Framework      | Envío de correos    | 📋 Planificado      |
+| Jakarta Mail       | 2.0.x   | API            | JavaMail API        | 📋 Planificado      |
+
+**Nota sobre Email**: La dependencia `spring-boot-starter-mail` está incluida en `pom.xml`, pero la configuración SMTP (host, puerto, credenciales) no está configurada en `application.properties`. Requiere:
+- Proveedor SMTP elegido (Gmail, SendGrid, etc.)
+- Credenciales configuradas en variables de entorno
+- Implementación de servicios de email en los casos de uso requeridos
 
 ### 3.8. Testing (scope: test)
 
-| Tecnología           | Versión | Tipo      | Propósito              |
-| -------------------- | ------- | --------- | ---------------------- |
-| JUnit Jupiter        | 5.11.x  | Framework | Testing unitario       |
-| Mockito              | 5.14.x  | Framework | Mocking                |
-| AssertJ              | 3.26.x  | Librería  | Assertions fluidas     |
-| Spring Boot Test     | 3.5.10  | Framework | Testing de integración |
-| Spring Security Test | 6.4.x   | Framework | Testing de seguridad   |
-| Hamcrest             | 3.0.x   | Librería  | Matchers               |
+| Tecnología           | Versión | Tipo      | Propósito              | Estado              |
+| -------------------- | ------- | --------- | ---------------------- | ------------------- |
+| JUnit Jupiter        | 5.11.x  | Framework | Testing unitario       | Configurado         |
+| Mockito              | 5.14.x  | Framework | Mocking                | Configurado         |
+| AssertJ              | 3.26.x  | Librería  | Assertions fluidas     | Configurado         |
+| Spring Boot Test     | 3.5.10  | Framework | Testing de integración | Configurado         |
+| Spring Security Test | 6.4.x   | Framework | Testing de seguridad   | Configurado         |
+| Hamcrest             | 3.0.x   | Librería  | Matchers               | Configurado         |
+
+**Estado Actual del Testing**:
+
+- ✅ **Dependencias**: Todas las librerías de testing están configuradas en `pom.xml`
+- 📋 **Cobertura**: Actualmente solo existe 1 test básico (`DuitApplicationTests.java`) que verifica que el contexto carga correctamente
+- 🎯 **Próximos pasos**: Implementar tests unitarios para servicios y tests de integración para controladores y flujos críticos
 
 ---
 
@@ -467,6 +502,8 @@ Cuando se despliega en Koyeb:
 
 Durante el desarrollo de la aplicación Duit se han aplicado patrones de diseño y principios arquitectónicos ampliamente utilizados en el ecosistema Spring, con el objetivo de garantizar un sistema modular, mantenible y escalable.
 
+**Decisión Arquitectónica Fundamental**: Monolito MVC bien estructurado en lugar de microservicios, apropiado para la fase actual de desarrollo de la aplicación.
+
 ### Estructura General del Sistema
 
 ```mermaid
@@ -567,9 +604,27 @@ La aplicación sigue el patrón **MVC** (Modelo-Vista-Controlador), separando cl
 
 | Componente      | Descripción                                                                                                                              |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| **Modelo**      | Entidades JPA y lógica de dominio. Representa la estructura de datos y las reglas de negocio.                                            |
-| **Vista**       | Plantillas Thymeleaf encargadas de la presentación. Renderiza HTML dinámico para el usuario.                                             |
-| **Controlador** | Componentes responsables de gestionar las peticiones HTTP y coordinar la lógica de negocio. Orquesta interacciones entre Modelo y Vista. |
+| **Modelo**      | Entidades JPA y lógica de dominio. Representa la estructura de datos y las reglas de negocio (11 entidades implementadas).               |
+| **Vista**       | Plantillas Thymeleaf encargadas de la presentación. Renderiza HTML dinámico para el usuario (8+ plantillas con Bootstrap).                |
+| **Controlador** | Componentes responsables de gestionar las peticiones HTTP y coordinar la lógica de negocio. Orquesta interacciones entre Modelo y Vista (13 controladores). |
+
+**Controladores Implementados**:
+
+| Controlador                | Propósito                                          |
+| -------------------------- | -------------------------------------------------- |
+| `AdminController`          | Gestión administrativa (usuarios, estadísticas)   |
+| `CategoryController`       | Gestión de categorías de servicios                 |
+| `DashboardController`      | Panel de control principal del usuario             |
+| `MyRequestsController`     | Gestión de solicitudes propias del usuario         |
+| `PostulacionesController`  | Gestión de candidaturas/postulaciones              |
+| `ProfessionalController`   | Gestión de perfiles profesionales                  |
+| `ProfileController`        | Edición de perfiles de usuario                     |
+| `PublicController`         | Páginas públicas (índice, ayuda, términos)         |
+| `RatingsController`        | Gestión de valoraciones y reseñas                  |
+| `RequestFormController`    | Formularios de creación de solicitudes             |
+| `SharedController`         | Funcionalidades compartidas entre tipos de usuario |
+| `CustomErrorController`    | Manejo de errores HTTP                             |
+| `UserControllerAdvice`     | Manejo centralizado de excepciones                 |
 
 Esta separación mejora la mantenibilidad del código y facilita la evolución independiente de cada capa.
 
@@ -639,10 +694,10 @@ El sistema implementa mecanismos de autenticación y autorización mediante **Sp
 
 #### Protección CSRF
 
-| Estado            | Entorno                    |
-| ----------------- | -------------------------- |
-| **Deshabilitado** | Desarrollo                 |
-| **Previsto**      | Habilitación en producción |
+| Estado            | Entorno                    | Razón                                      |
+| ----------------- | -------------------------- | ------------------------------------------ |
+| **Deshabilitado** | Desarrollo (actual)        | Forma-based authentication, simplificar testing |
+| **Recomendado**   | Producción (futuro)        | Protección contra ataques cross-site      |
 
 ### 6.2. CustomUserDetailsService
 
@@ -676,7 +731,35 @@ public PasswordEncoder passwordEncoder() {
 
 ### 6.4. Control de Acceso Basado en Roles
 
-La versión actual solo aplica autenticación global. La restricción por roles está planificada a corto plazo (1 semana, en desarrollo).
+El sistema implementa control de acceso basado en roles (RBAC) en la configuración de Spring Security.
+
+**Roles Implementados:**
+
+| Rol           | Descripción                                    | Rutas Protegidas              |
+| ------------- | ---------------------------------------------- | ----------------------------- |
+| **ADMIN**     | Administrador del sistema                      | /admin/**, /user/**, /professional/** |
+| **USER**      | Usuario estándar (demandante de servicios)     | /user/**, rutas genéricas     |
+| **PROFESSIONAL** | Profesional oferente de servicios             | /professional/**, /user/**    |
+
+**Configuración en SecurityConfig:**
+
+```java
+.authorizeHttpRequests(auth -> auth
+    .requestMatchers("/admin/**").hasRole("ADMIN")
+    .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+    .requestMatchers("/professional/**").hasAnyRole("PROFESSIONAL", "ADMIN")
+    .anyRequest().authenticated())
+```
+
+**Control de Acceso en Vistas:**
+
+Las plantillas Thymeleaf utilizan `sec:authorize` para mostrar/ocultar contenido basado en roles:
+
+```html
+<div sec:authorize="hasRole('ADMIN')">
+    <!-- Contenido solo visible para administradores -->
+</div>
+```
 
 ### 6.5. Auditoría de Seguridad
 
@@ -772,17 +855,30 @@ spring.datasource.password=${DB_PASS}
 </dependency>
 ```
 
-**Configuración requerida** (application.properties):
+**Estado Actual**:
+- ✅ Dependencia incluida en `pom.xml`
+- 📋 Configuración SMTP NO implementada
+- 📋 Servicios de email NO desarrollados
+
+**Configuración requerida** (próximas fases):
+
+Para habilitar envío de emails, es necesario configurar en `application.properties` o variables de entorno:
+
 ```properties
-spring.mail.host=smtp.example.com
-spring.mail.port=587
-spring.mail.username=${MAIL_USER}
-spring.mail.password=${MAIL_PASS}
+spring.mail.host=${MAIL_HOST}       # smtp.gmail.com, etc.
+spring.mail.port=${MAIL_PORT}       # 587 o 465
+spring.mail.username=${MAIL_USER}   # usuario@example.com
+spring.mail.password=${MAIL_PASS}   # contraseña o API key
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
 ```
 
-**Estado**: Dependencia incluida, configuración SMTP pendiente según proveedor elegido.
+**Proveedores Recomendados**:
+- Gmail SMTP
+- SendGrid
+- Mailgun
+- AWS SES
 
 ### 7.4. Bitwarden (GitHub Integration)
 
@@ -822,13 +918,14 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 
 ### Integraciones Futuras Planificadas
 
-| Servicio              | Tipo                    | Propósito                       | Prioridad |
-| --------------------- | ----------------------- | ------------------------------- | --------- |
-| Cloudinary / AWS S3   | Almacenamiento de files | Imágenes de perfil y archivos   | Media     |
-| Stripe / PayPal       | Pasarela de pago        | Procesamiento de pagos          | Baja      |
-| Google Maps API       | Geolocalización         | Mapas de ubicación de servicios | Media     |
-| Twilio / SendGrid     | Notificaciones          | SMS y emails transaccionales    | Baja      |
-| OAuth2 (Google/GitHub)| Autenticación           | Login social                    | Baja      |
+| Servicio              | Tipo                    | Propósito                       | Prioridad | Estado              |
+| --------------------- | ----------------------- | ------------------------------- | --------- | ------------------- |
+| Email (SMTP)          | Correo electrónico      | Notificaciones transaccionales  | Alta      | 📋 En planificación |
+| Cloudinary / AWS S3   | Almacenamiento de files | Imágenes de perfil y archivos   | Media     | 📋 En planificación |
+| Google Maps API       | Geolocalización         | Mapas de ubicación de servicios | Media     | 📋 En planificación |
+| Stripe / PayPal       | Pasarela de pago        | Procesamiento de pagos          | Baja      | 📋 En planificación |
+| Twilio / SendGrid     | SMS y notificaciones    | SMS y emails transaccionales    | Baja      | 📋 Futura           |
+| OAuth2 (Google/GitHub)| Autenticación           | Login social                    | Baja      | 📋 Futura           |
 
 ---
 
@@ -994,5 +1091,6 @@ Ambos integrantes han participado conjuntamente en:
 
 ---
 
-**Última actualización:** 16 de febrero de 2026 
-**Versión:** 2.0
+**Última actualización:** 23 de febrero de 2026  
+**Versión:** 3.0  
+**Estado del Proyecto:** En desarrollo - Fase 2 (Pruebas y Refinamiento)
