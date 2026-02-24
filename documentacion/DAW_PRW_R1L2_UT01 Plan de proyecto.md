@@ -10,7 +10,7 @@
 | --------------------- | ------------------------------------------------------ |
 | **Autores**           | Aleixo Fernández Cuevas, Cristo Manuel Navarro Martín  |
 | **Nombre de archivo** | DAW_PRW_R1L2_UT01 Plan de proyecto                     |
-| **Fecha de versión**  | 16/02/2026                                             |
+| **Fecha de versión**  | 24/02/2026                                             |
 | **Ciclo Formativo**   | Desarrollo de Aplicaciones Web - Semipresencial (DAWN) |
 | **Módulo**            | Proyecto de Desarrollo de Aplicaciones Web (PRW)       |
 | **Versión**           | 3.0                                                    |
@@ -42,9 +42,6 @@
     - [3.3 Requisitos Técnicos](#33-requisitos-técnicos)
   - [4. Estructura de Trabajo y Cronograma](#4-estructura-de-trabajo-y-cronograma)
     - [4.1 Fases del Proyecto](#41-fases-del-proyecto)
-    - [4.2 Roadmap Técnico](#42-roadmap-técnico)
-      - [FASE 1: MVP (Minimum Viable Product) - COMPLETADA](#fase-1-mvp-minimum-viable-product---completada)
-      - [FASE 2: Mejoras y Seguridad Integral - PLANIFICADA](#fase-2-mejoras-y-seguridad-integral---planificada)
       - [Futuras Ampliaciones (No en Scope Actual)](#futuras-ampliaciones-no-en-scope-actual)
   - [5. Recursos y Roles del Equipo](#5-recursos-y-roles-del-equipo)
     - [5.1 Recursos Humanos](#51-recursos-humanos)
@@ -77,6 +74,7 @@
 | 10/01/2026 | Primera corrección                          | Aleixo F. Cuevas / Cristo N. Martín |
 | 01/02/2026 | Segunda corrección                          | Aleixo F. Cuevas / Cristo N. Martín |
 | 16/02/2026 | Tercera corrección y reformateo estructural | Aleixo F. Cuevas                    |
+| 24/02/2026 | Cuarta corrección                           | Aleixo F. Cuevas / Cristo N. Martín |
 
 ---
 
@@ -97,9 +95,9 @@ Desarrollar una plataforma web funcional, segura y escalable que facilite la con
 ### 2.2 Objetivos Específicos
 
 1. **Objetivo Técnico:** Implementar una arquitectura MVC robusta con Spring Boot, JPA/Hibernate y PostgreSQL, siguiendo buenas prácticas de desarrollo.
-2. **Objetivo Funcional:** Desarrollar las funcionalidades core del sistema (registro y autenticación de usuarios, solicitudes, postulaciones, trabajos y valoraciones).
-3. **Objetivo de Seguridad:** Garantizar la protección de datos mediante Spring Security, encriptación BCrypt y control de acceso basado en roles.
-4. **Objetivo de Usabilidad:** Crear una interfaz responsive e intuitiva con Thymeleaf y Bootstrap que funcione en todos los dispositivos.
+2. **Objetivo Funcional:** Desarrollar las funcionalidades principales del sistema (registro y autenticación de usuarios, solicitudes, postulaciones, trabajos y valoraciones).
+3. **Objetivo de Seguridad:** Garantizar la protección de datos mediante Spring Security, cifrado de contraseñas con BCrypt y control de acceso basado en roles.
+4. **Objetivo de Usabilidad:** Crear una interfaz adaptable e intuitiva con Thymeleaf y Bootstrap que funcione en todos los dispositivos.
 5. **Objetivo Académico:** Aplicar los conocimientos adquiridos en el ciclo formativo en un proyecto integral y profesional.
 6. **Objetivo de Despliegue:** Publicar la aplicación en producción con infraestructura cloud (Koyeb + Neon) accesible públicamente.
 
@@ -109,7 +107,8 @@ Desarrollar una plataforma web funcional, segura y escalable que facilite la con
 
 - Registro y autenticación
 - Perfiles de usuario y profesional
-- Sistema de roles (Cliente, Profesional, Administrador)
+- Sistema de roles (USER/cliente, PROFESSIONAL/profesional, ADMIN/administrador)
+- Rol MODERATOR reservado para evolución futura (no operativo en rutas actuales)
 - Gestión de direcciones
 
 #### Módulo de Solicitudes
@@ -145,25 +144,29 @@ Desarrollar una plataforma web funcional, segura y escalable que facilite la con
 
 #### Panel de Administración
 
-- Gestión de usuarios (CRUD)
 - Gestión de categorías (CRUD)
-- Panel de estadísticas
+- Acceso a vistas base de usuarios y estadísticas (sin CRUD ni métricas cargadas)
 
 #### Seguridad y Auditoría
 
 - Control de acceso basado en roles (RBAC)
-- Auditoría automática de cambios (created_by, created_date, last_modified_by, last_modified_date)
+- Auditoría automática de cambios (created_by, created_at, updated_by, updated_at)
 - Registro de accesos al sistema
-- Encriptación de contraseñas con BCrypt
+- Cifrado de contraseñas con BCrypt
+- Gestión de errores con páginas personalizadas (403, 404 y 500)
 
 ### 2.4 Alcance Excluido
 
 - Sistema de pagos integrado (Stripe, PayPal)
 - Chat en tiempo real o mensajería instantánea
 - Aplicación móvil nativa (iOS/Android)
-- Geolocalización con mapas interactivos
 - Notificaciones push
 - Monetización (panel de administrador)
+- Panel de administración avanzado (CRUD de usuarios, bloqueos, roles y métricas reales)
+- Integración de APIs externas (Google Maps, servicios de terceros)
+- Revisión de valoraciones de los clientes/profesionales en las ofertas de servicios
+- Sistema de verificación de cuentas por email
+- Sistema de premium o suscripciones
 
 ---
 
@@ -209,82 +212,7 @@ El proyecto DUIT se ha desarrollado siguiendo la metodología Kanban, basada en 
 | 5    | Pruebas y Validación       | Verificación funcional                      | Pruebas manuales | Feb 2026            |
 | 6    | Documentación y Entrega    | Memoria y entrega final                     | Markdown         | Feb 2026            |
 
-### 4.2 Roadmap Técnico
 
-El proyecto DUIT está estructurado en dos fases principales de implementación:
-
-#### FASE 1: MVP (Minimum Viable Product) - COMPLETADA
-
-**Período:** Dic 2025 - Feb 16 2026 
-**Status:** 100% Implementada en producción
-
-**Entregables:**
-
-- ✅ Autenticación y registro de usuarios (Spring Security + BCrypt)
-- ✅ CRUD de solicitudes de servicio (create, publish, edit, cancel)
-- ✅ Sistema de postulaciones bidireccional
-- ✅ Gestión del ciclo de vida del trabajo
-- ✅ Sistema de valoraciones (1-5 estrellas, bidireccional)
-- ✅ Panel básico de administrador (gestión de categorías)
-- ✅ Base de datos PostgreSQL (Neon) con 11 entidades
-- ✅ Despliegue en producción (Koyeb)
-- ✅ Interfaz responsive (Thymeleaf + Bootstrap)
-
-**Tech Stack:**
-
-- Backend: Spring Boot 3.5.10, Java 21 LTS
-- Frontend: Thymeleaf, Bootstrap 5.3.8, HTML5/CSS3
-- BD: PostgreSQL 15.x
-- Deploy: Koyeb + Neon
-
----
-
-#### FASE 2: Mejoras y Seguridad Integral - PLANIFICADA
-
-**Período:** Feb 17 - Feb 23 2026 (estimado - 1 semana) 
-**Status:** PLANIFICADA
-
-**Entregables Previstos:**
-
-- **RBAC Completo**
-  - Integración en todos los controladores
-  - Vistas condicionales según permisos
-  - Acceso granular a recursos
-
-- **Gestión Completa de Usuarios (Admin)**
-  - CRUD de usuarios
-  - Cambio de roles
-  - Bloqueo/desbloqueo de usuarios
-  - Auditoría de cambios
-
-- **Panel de Estadísticas**
-  - Métricas de actividad
-  - Gráficos de tendencias
-  - Reportes de ingresos
-
-- **Mejoras de Seguridad**
-  - CSRF token habilitado en producción
-  - HTTPS obligatorio
-  - Validaciones avanzadas
-  - Rate limiting en login
-
-- **Testing Manual Documentado**
-  - Plan de pruebas por CU
-  - Casos de éxito/fallo
-  - Escenarios edge
-
-**Dependencias de Fase 2:**
-
-- Finalización de testing funcional de Fase 1
-- Recolección de feedback de usuarios
-- Estabilidad del deployment en producción
-
-**Criterios de Éxito Fase 2:**
-
-- RBAC implementado en 100% de endpoints
-- Zero vulnerabilidades conocidas (OWASP top 10)
-- 100% de usuarios pueden usar admin panel
-- Testing plan documentado
 
 ---
 
@@ -298,7 +226,8 @@ El proyecto DUIT está estructurado en dos fases principales de implementación:
 - Analytics predictivo
 - API REST pública
 - Sistemas de recomendación (ML)
-
+- Sistema de verificación de cuentas por email
+- Panel de control para profesionales (estadísticas, gestión de usuarios)
 ---
 
 ## 5. Recursos y Roles del Equipo
@@ -436,5 +365,5 @@ La elaboración del presente Documento de Plan de Proyecto se ha realizado de fo
 
 ---
 
-**Última actualización:** 16 de febrero de 2026 
+**Última actualización:** 24 de febrero de 2026 
 **Versión:** 3.0

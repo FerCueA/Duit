@@ -25,7 +25,7 @@
 4. [Casos de Uso por Actor](#4-casos-de-uso-por-actor)
 5. [Diagrama General de Casos de Uso](#5-diagrama-general-de-casos-de-uso)
 6. [Relaciones entre Casos de Uso](#6-relaciones-entre-casos-de-uso)
-7. [Reglas de Negocio Aplicadas](#7-reglas-de-negocio-aplicadas)
+7. [Reglas de Negocio Aplicadas](#7-reglas-de-negocio-aplicadas-en-casos-de-uso)
 8. [Diagrama de Secuencia del Flujo Principal](#8-diagrama-de-secuencia-del-flujo-principal)
 9. [Tabla de Trazabilidad](#9-tabla-de-trazabilidad)
 10. [Reparto de Tareas y Responsabilidades](#10-reparto-de-tareas-y-responsabilidades)
@@ -40,7 +40,8 @@
 | 10/01/2026 | Primera corrección                       | Aleixo F. Cuevas / Cristo N. Martín |
 | 01/02/2026 | Segunda corrección                       | Aleixo F. Cuevas / Cristo N. Martín |
 | 16/02/2026 | Tercera corrección y reformateo completo | Aleixo F. Cuevas                    |
-| 23/02/2026 | Actualización final                      | Aleixo F. Cuevas, Cristo N. Martín  |
+| 23/02/2026 | Cuarta corrección                        | Aleixo F. Cuevas, Cristo N. Martín  |
+| 24/02/2026 | Quinta corrección y revisión final       | Aleixo F. Cuevas, Cristo N. Martín  |
 
 ---
 
@@ -50,6 +51,7 @@ El presente documento describe el diagrama de casos de uso correspondiente al pr
 
 ---
 
+## 2. Historias de Usuario
 
 ### Usuario No Registrado
 
@@ -79,8 +81,8 @@ El presente documento describe el diagrama de casos de uso correspondiente al pr
 ### Administrador
 
 - Como administrador, quiero gestionar las categorías de servicios para mantener un catálogo actualizado
-- Como administrador, quiero ver estadísticas del sistema para monitorear su funcionamiento
-- Como administrador, quiero gestionar usuarios para mantener la integridad del sistema
+- Como administrador, quiero acceder a la vista base de estadísticas para verificar el estado general del sistema
+- Como administrador, quiero acceder a la vista base de usuarios para preparar su gestión en futuras versiones
 
 ---
 
@@ -134,8 +136,8 @@ El presente documento describe el diagrama de casos de uso correspondiente al pr
 
 - Acceso a panel administrativo
 - Puede gestionar categorías
-- Puede ver estadísticas (futuro)
-- Puede gestionar usuarios (futuro)
+- Puede acceder a la vista base de estadísticas (sin métricas cargadas)
+- Puede acceder a la vista base de usuarios (sin operaciones CRUD)
 
 ---
 
@@ -146,11 +148,11 @@ El presente documento describe el diagrama de casos de uso correspondiente al pr
 ```mermaid
 flowchart TB
   V[Visitante]
-  V --> CU01["CU-01 Ver pagina principal"]
+  V --> CU01["CU-01 Ver página principal"]
   V --> CU02["CU-02 Registrarse"]
-  V --> CU03["CU-03 Iniciar sesion"]
+  V --> CU03["CU-03 Iniciar sesión"]
   V --> CU04["CU-04 Ver ayuda"]
-  V --> CU05["CU-05 Ver terminos"]
+  V --> CU05["CU-05 Ver términos"]
   V --> CU06["CU-06 Ver privacidad"]
 ```
 
@@ -178,8 +180,8 @@ flowchart TB
   C --> CU12["CU-12 Reactivar"]
   C --> CU13["CU-13 Eliminar"]
   C --> CU14["CU-14 Ver postulaciones"]
-  C --> CU15["CU-15 Aceptar postulacion"]
-  C --> CU16["CU-16 Rechazar postulacion"]
+  C --> CU15["CU-15 Aceptar postulación"]
+  C --> CU16["CU-16 Rechazar postulación"]
   C --> CU17["CU-17 Actualizar trabajo"]
   C --> CU18["CU-18 Valorar profesional"]
 ```
@@ -210,8 +212,8 @@ flowchart TB
   P --> CU20["CU-20 Buscar solicitudes"]
   P --> CU21["CU-21 Filtrar solicitudes"]
   P --> CU22["CU-22 Postularse a solicitud"]
-  P --> CU23["CU-23 Editar postulacion"]
-  P --> CU24["CU-24 Retirar postulacion"]
+  P --> CU23["CU-23 Editar postulación"]
+  P --> CU24["CU-24 Retirar postulación"]
   P --> CU25["CU-25 Actualizar estado trabajo"]
   P --> CU26["CU-26 Valorar cliente"]
 ```
@@ -234,10 +236,10 @@ flowchart TB
 ```mermaid
 flowchart TB
   A[Administrador]
-  A --> CU27["CU-27 Crear categoria"]
-  A --> CU28["CU-28 Editar categoria"]
-  A --> CU29["CU-29 Eliminar categoria"]
-  A --> CU30["CU-30 Ver estadisticas"]
+  A --> CU27["CU-27 Crear categoría"]
+  A --> CU28["CU-28 Editar categoría"]
+  A --> CU29["CU-29 Eliminar categoría"]
+  A --> CU30["CU-30 Ver estadísticas"]
   A --> CU31["CU-31 Gestionar usuarios"]
 ```
 
@@ -246,8 +248,8 @@ flowchart TB
 | CU-27 | Crear categoría    | Añadir nueva categoría de servicios    |
 | CU-28 | Editar categoría   | Modificar categoría existente          |
 | CU-29 | Eliminar categoría | Borrar categoría de servicios          |
-| CU-30 | Ver estadísticas   | Consultar métricas del sistema         |
-| CU-31 | Gestionar usuarios | Ver y administrar usuarios del sistema |
+| CU-30 | Ver estadísticas   | Acceder a la vista base de estadísticas |
+| CU-31 | Gestionar usuarios | Acceder a la vista base de usuarios     |
 
 
 
@@ -263,8 +265,8 @@ flowchart TB
   A[Administrador]
 
   subgraph Plataforma[DUIT Platform]
-    Auth["Autenticacion CU-01 a 03"]
-    PublicPages["Paginas publicas CU-04 a 06"]
+    Auth["Autenticación CU-01 a 03"]
+    PublicPages["Páginas públicas CU-04 a 06"]
     Requests["Solicitudes CU-07 a 13"]
     Apps["Postulaciones CU-14 a 16 y CU-22 a 24"]
     Jobs["Trabajos CU-17 y CU-25"]
@@ -337,7 +339,7 @@ sequenceDiagram
   Profesional-->>Sistema: CU-20 Buscar solicitudes
   Profesional->>Sistema: CU-22 Postularse
   Cliente->>Sistema: CU-14 Ver postulaciones
-  Cliente->>Sistema: CU-15 Aceptar postulacion
+  Cliente->>Sistema: CU-15 Aceptar postulación
   Note over Sistema: Crea trabajo (IN_PROGRESS)
   Note over Sistema: Solicitud pasa a COMPLETED
   Profesional->>Sistema: CU-25 Actualizar estado (pausar/reanudar/completar)
@@ -363,9 +365,9 @@ sequenceDiagram
 | RF-09: Actualizar trabajo    | CU-17, CU-25        | MyRequestsController    | ServiceJob                 |
 | RF-10: Valorar               | CU-18, CU-26        | RatingsController       | Rating                     |
 | RF-11: Perfil profesional    | CU-19               | ProfileController       | ProfessionalProfile        |
-| RF-12: Gestionar categorías  | CU-27 a 29          | AdminController         | Category                   |
-| RF-13: Ver estadísticas      | CU-30               | AdminController         | Estadísticas               |
-| RF-14: Gestionar usuarios    | CU-31               | AdminController         | AppUser                    |
+| RF-12: Gestionar categorías  | CU-27 a 29          | CategoryController      | Category                   |
+| RF-13: Ver estadísticas      | CU-30               | AdminController         | N/A (vista base)           |
+| RF-14: Gestionar usuarios    | CU-31               | AdminController         | N/A (vista base)           |
 
 ---
 
@@ -389,5 +391,5 @@ La elaboración del presente Documento de Casos de Uso se ha realizado de forma 
 
 ---
 
-**Última actualización:** 23 de febrero de 2026 
+**Última actualización:** 24 de febrero de 2026 
 **Versión:** 3.0

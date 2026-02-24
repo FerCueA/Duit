@@ -45,7 +45,7 @@
 | 10/01/2026 | Primera corrección                               | Aleixo F. Cuevas, Cristo N. Martín |
 | 01/02/2026 | Segunda corrección                               | Aleixo F. Cuevas, Cristo N. Martín |
 | 16/02/2026 | Tercera corrección y reformateo completo         | Aleixo F. Cuevas                   |
-| 23/02/2026 | Verificación de esquema vs implementación actual | Aleixo F. Cuevas, Cristo N. Martín |
+| 24/02/2026 | Cuarta corrección                                | Aleixo F. Cuevas, Cristo N. Martín |
 
 ---
 
@@ -810,7 +810,7 @@ Los índices han sido diseñados siguiendo un enfoque estratégico:
 
 #### Credenciales
 
-- Variables de entorno (`DATABASE_URL` en Koyeb, `.env.local` en desarrollo)
+- Variables de entorno (`DB_URL`, `DB_USER`, `DB_PASS`; tanto en Koyeb como en `.env` local)
 - Nunca en código fuente
 
 #### Encriptación
@@ -890,5 +890,5 @@ Las decisiones finales relativas a la estructura del modelo, las relaciones entr
 
 ---
 
-**Última actualización:** 23 de febrero de 2026  
+**Última actualización:** 24 de febrero de 2026  
 **Versión:** 3.0

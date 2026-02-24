@@ -70,6 +70,7 @@
     - [6.4. Control de Acceso Basado en Roles](#64-control-de-acceso-basado-en-roles)
     - [6.5. Auditoría de Seguridad](#65-auditoría-de-seguridad)
     - [6.6. Auditoría Automática de Entidades (BaseEntity)](#66-auditoría-automática-de-entidades-baseentity)
+    - [6.7. Gestión de Errores HTTP Personalizada](#67-gestión-de-errores-http-personalizada)
   - [7. Integraciones Externas](#7-integraciones-externas)
     - [7.1. Neon PostgreSQL Cloud](#71-neon-postgresql-cloud)
     - [7.2. Koyeb PaaS](#72-koyeb-paas)
@@ -83,7 +84,7 @@
       - [Índices Estratégicos en Base de Datos](#índices-estratégicos-en-base-de-datos)
       - [Validación en Backend (no solo Frontend)](#validación-en-backend-no-solo-frontend)
       - [Lazy Loading para Relaciones](#lazy-loading-para-relaciones)
-      - [Separación de Tablas Professional\_Category](#separación-de-tablas-professional_category)
+      - [Separación de Tablas Professional\_Category](#separación-de-tablas-professionalcategory)
       - [Spring Security Configuration sin CSRF en Desarrollo](#spring-security-configuration-sin-csrf-en-desarrollo)
       - [No Usar Microservicios (Monolito MVC)](#no-usar-microservicios-monolito-mvc)
     - [8.1. Frontend](#81-frontend)
@@ -106,6 +107,7 @@
 | 16/02/2026 | Segunda corrección                       | Aleixo F. Cuevas, Cristo N. Martín |
 | 16/02/2026 | Tercera corrección y reformateo completo | Aleixo F. Cuevas                   |
 | 23/02/2026 | Cuarta corrección                        | Aleixo F. Cuevas, Cristo N. Martín |
+| 24/02/2026 | Quinta corrección y revisión final       | Aleixo F. Cuevas, Cristo N. Martín |
 
 ---
 
@@ -177,9 +179,9 @@ La aplicación Duit se desarrolla utilizando tecnologías modernas ampliamente a
 | Thymeleaf       | 3.1.x   | Template Engine     | Renderizado dinámico de vistas          |
 | Bootstrap       | 5.3.8   | CSS Framework       | Diseño responsive y componentes UI      |
 | Bootstrap Icons | 1.13.1  | Iconos              | Conjunto de iconos vectoriales          |
-| Bootswatch      | Fluffy  | Tema Bootstrap      | Tema personalizado para Bootstrap 5.3.8 |
+| Bootswatch      | Flatly  | Tema Bootstrap      | Tema aplicado sobre Bootstrap 5.3.8     |
 
-**Nota sobre Temas**: La aplicación utiliza el tema **Fluffy** de [Bootswatch](https://bootswatch.com/fluffy/), que proporciona una paleta de colores moderna y profesional sin necesidad de personalización CSS adicional. Este tema se integra de forma transparente con Bootstrap y mejora significativamente la experiencia visual de la interfaz.
+**Nota sobre Temas**: La aplicación utiliza el tema **Flatly** de [Bootswatch](https://bootswatch.com/flatly/). La referencia general de la librería se encuentra en [https://bootswatch.com/](https://bootswatch.com/). Este tema se integra de forma transparente con Bootstrap y mejora la consistencia visual de la interfaz.
 
 ### 3.4. Plataforma de Desarrollo
 
@@ -309,9 +311,9 @@ HikariCP es un pool de alto rendimiento que gestiona reutilización de conexione
 
 **Estado Actual del Testing**:
 
--  **Dependencias**: Todas las librerías de testing están configuradas en `pom.xml`
--  **Cobertura**: Actualmente solo existe 1 test básico (`DuitApplicationTests.java`) que verifica que el contexto carga correctamente
--  **Próximos pasos**: Implementar tests unitarios para servicios y tests de integración para controladores y flujos críticos
+- **Dependencias**: Todas las librerías de testing están configuradas en `pom.xml`
+- **Cobertura**: Actualmente solo existe 1 test básico (`DuitApplicationTests.java`) que verifica que el contexto carga correctamente
+- **Próximos pasos**: Implementar tests unitarios para servicios y tests de integración para controladores y flujos críticos
 
 ---
 
@@ -591,21 +593,21 @@ La aplicación sigue el patrón **MVC** (Modelo-Vista-Controlador), separando cl
 
 **Controladores Implementados**:
 
-| Controlador               | Propósito                                          |
-| ------------------------- | -------------------------------------------------- |
-| `AdminController`         | Gestión administrativa (usuarios, estadísticas)    |
-| `CategoryController`      | Gestión de categorías de servicios                 |
-| `DashboardController`     | Panel de control principal del usuario             |
-| `MyRequestsController`    | Gestión de solicitudes propias del usuario         |
-| `PostulacionesController` | Gestión de candidaturas/postulaciones              |
-| `ProfessionalController`  | Gestión de perfiles profesionales                  |
-| `ProfileController`       | Edición de perfiles de usuario                     |
-| `PublicController`        | Páginas públicas (índice, ayuda, términos)         |
-| `RatingsController`       | Gestión de valoraciones y reseñas                  |
-| `RequestFormController`   | Formularios de creación de solicitudes             |
-| `SharedController`        | Funcionalidades compartidas entre tipos de usuario |
-| `CustomErrorController`   | Manejo de errores HTTP                             |
-| `UserControllerAdvice`    | Manejo centralizado de excepciones                 |
+| Controlador               | Propósito                                                     |
+| ------------------------- | ------------------------------------------------------------- |
+| `AdminController`         | Acceso a vistas base administrativas (usuarios, estadísticas) |
+| `CategoryController`      | Gestión de categorías de servicios                            |
+| `DashboardController`     | Panel de control principal del usuario                        |
+| `MyRequestsController`    | Gestión de solicitudes propias del usuario                    |
+| `PostulacionesController` | Gestión de candidaturas/postulaciones                         |
+| `ProfessionalController`  | Gestión de perfiles profesionales                             |
+| `ProfileController`       | Edición de perfiles de usuario                                |
+| `PublicController`        | Páginas públicas (índice, ayuda, términos)                    |
+| `RatingsController`       | Gestión de valoraciones y reseñas                             |
+| `RequestFormController`   | Formularios de creación de solicitudes                        |
+| `SharedController`        | Funcionalidades compartidas entre tipos de usuario            |
+| `CustomErrorController`   | Manejo de errores HTTP                                        |
+| `UserControllerAdvice`    | Manejo centralizado de excepciones                            |
 
 Esta separación mejora la mantenibilidad del código y facilita la evolución independiente de cada capa.
 
@@ -714,13 +716,15 @@ public PasswordEncoder passwordEncoder() {
 
 El sistema implementa control de acceso basado en roles (RBAC) en la configuración de Spring Security.
 
-**Roles Implementados:**
+**Roles activos en autorización de rutas:**
 
 | Rol              | Descripción                                | Rutas Protegidas                      |
 | ---------------- | ------------------------------------------ | ------------------------------------- |
 | **ADMIN**        | Administrador del sistema                  | /admin/**, /user/**, /professional/** |
 | **USER**         | Usuario estándar (demandante de servicios) | /user/**, rutas genéricas             |
 | **PROFESSIONAL** | Profesional oferente de servicios          | /professional/**, /user/**            |
+
+**Nota:** El modelo de datos incluye también el rol `MODERATOR` para ampliaciones futuras, pero no tiene rutas específicas activas en la versión actual.
 
 **Configuración en SecurityConfig:**
 
@@ -744,7 +748,7 @@ Las plantillas Thymeleaf utilizan `sec:authorize` para mostrar/ocultar contenido
 
 ### 6.5. Auditoría de Seguridad
 
-El sistema incorpora mecanismos de auditoría para el seguimiento de accesos mediante un **Access Log**.
+El sistema incorpora mecanismos de auditoría para el seguimiento de accesos mediante un **registro de accesos (Access Log)**.
 
 **Información registrada:**
 
@@ -752,7 +756,7 @@ El sistema incorpora mecanismos de auditoría para el seguimiento de accesos med
 | -------------------------- | ------------------------------------------ |
 | **Intentos de acceso**     | Registro de intentos de entrada al sistema |
 | **Dirección IP de origen** | IP desde la que se realiza el acceso       |
-| **Marca temporal**         | Timestamp del evento                       |
+| **Marca temporal**         | Fecha y hora del evento                    |
 | **Resultado del acceso**   | Éxito o fallo de la autenticación          |
 
 ### 6.6. Auditoría Automática de Entidades (BaseEntity)
@@ -765,6 +769,29 @@ La aplicación implementa una clase base común `BaseEntity` que proporciona aud
 - `updatedAt`: Timestamp de última actualización
 - `createdBy`: Usuario que creó el registro
 - `updatedBy`: Usuario que realizó la última modificación
+
+### 6.7. Gestión de Errores HTTP Personalizada
+
+El sistema implementa una gestión explícita de errores HTTP mediante controlador dedicado y vistas personalizadas en Thymeleaf.
+
+**Componentes involucrados:**
+
+- `CustomErrorController` para centralizar resolución de errores
+- Plantilla `templates/error/403.html` para accesos denegados
+- Plantilla `templates/error/404.html` para recursos no encontrados
+- Plantilla `templates/error/500.html` para errores internos
+
+**Comportamiento de seguridad asociado:**
+
+- Redirección a `/error/403` cuando Spring Security detecta falta de permisos
+- Desactivación de la página Whitelabel por defecto (`server.error.whitelabel.enabled=false`)
+- Ocultación de detalles técnicos en producción mediante `server.error.include-* = never`
+
+**Objetivo técnico:**
+
+- Mejorar la experiencia de usuario ante fallos
+- Mantener consistencia visual con el resto de la aplicación
+- Reducir exposición de información sensible en respuestas de error
 
 ---
 
@@ -1072,6 +1099,6 @@ Ambos integrantes han participado conjuntamente en:
 
 ---
 
-**Última actualización:** 23 de febrero de 2026  
+**Última actualización:** 24 de febrero de 2026  
 **Versión:** 3.0  
 **Estado del Proyecto:** En desarrollo - Fase 2 (Pruebas y Refinamiento)

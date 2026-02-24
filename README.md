@@ -1,46 +1,50 @@
-# 💼 Duit - Plataforma de Servicios y Trabajo
+# Duit - Plataforma de Servicios y Trabajo
 
-Duit es una aplicacion web que conecta personas que buscan servicios con profesionales que los ofrecen. La plataforma permite gestionar ofertas de trabajo, postulaciones, perfiles profesionales y valoraciones.
+Duit es una aplicación web que conecta personas que buscan servicios con profesionales que los ofrecen. La plataforma permite gestionar ofertas de trabajo, postulaciones, perfiles profesionales y valoraciones.
 
-## Indice
+## Índice
 
-- [💼 Duit - Plataforma de Servicios y Trabajo](#-duit---plataforma-de-servicios-y-trabajo)
-  - [Indice](#indice)
-  - [Descripcion general](#descripcion-general)
-  - [Accesos rapidos](#accesos-rapidos)
-  - [Documentacion propia](#documentacion-propia)
+- [Duit - Plataforma de Servicios y Trabajo](#duit---plataforma-de-servicios-y-trabajo)
+  - [Índice](#índice)
+  - [Descripción general](#descripción-general)
+  - [Accesos rápidos](#accesos-rápidos)
+  - [Documentación propia](#documentación-propia)
   - [Funcionalidades](#funcionalidades)
     - [Usuarios (clientes)](#usuarios-clientes)
     - [Profesionales](#profesionales)
-    - [Administracion](#administracion)
-  - [Instalacion y ejecucion](#instalacion-y-ejecucion)
+    - [Administración](#administración)
+  - [Instalación y ejecución](#instalación-y-ejecución)
     - [Requisitos](#requisitos)
     - [Clonar](#clonar)
     - [Base de datos](#base-de-datos)
     - [Variables de entorno](#variables-de-entorno)
-    - [Run local](#run-local)
-  - [Tecnologias](#tecnologias)
-  - [Configuracion rapida](#configuracion-rapida)
+    - [Ejecución local](#ejecución-local)
+  - [Tecnologías](#tecnologías)
+  - [Seguridad y gestión de errores](#seguridad-y-gestión-de-errores)
+  - [Fuera de scope actual](#fuera-de-scope-actual)
+  - [Configuración rápida](#configuración-rápida)
   - [Soporte](#soporte)
-  - [README actualizado 16/02/2026](#readme-actualizado-16022026)
+  - [README actualizado 24/02/2026](#readme-actualizado-24022026)
 
-## Descripcion general
+## Descripción general
 
-- Buscar profesionales por categoria y ubicacion.
+- Buscar profesionales por categoría y ubicación.
 - Publicar y gestionar servicios y solicitudes.
 - Postular y gestionar acuerdos entre usuarios.
-- Valorar experiencias y reputacion.
-- Administrar usuarios, categorias y estadisticas.
+- Valorar experiencias y reputación.
+- Administrar categorías y consultar vistas base de usuarios/estadísticas.
 
-## Accesos rapidos
+## Accesos rápidos
 
-- Aplicacion: [https://duitapp.koyeb.app/](https://duitapp.koyeb.app/)
+- Aplicación: [https://duitapp.koyeb.app/](https://duitapp.koyeb.app/)
 - Base de datos: PostgreSQL en [Neon](https://neon.tech/)
 - Trello: [Tablero del proyecto](https://trello.com/b/WuKam2k1/prw)
-- Diseno: [Figma](https://www.figma.com/design/y0dsqYgpwDFsx5Hy0YNVtL/PRW?t=IcXPDrcEpCyz3U7G-0)
-- Documentacion externa: [Duit Docs](https://e.pcloud.link/publink/show?code=kZnwjaZ15u7S4qnaebz8Iq21LSKvRrC4nGX)
+- Diseño: [Figma](https://www.figma.com/design/y0dsqYgpwDFsx5Hy0YNVtL/PRW?t=IcXPDrcEpCyz3U7G-0)
+- Documentación externa: [Duit Docs](https://e.pcloud.link/publink/show?code=kZnwjaZ15u7S4qnaebz8Iq21LSKvRrC4nGX)
 
-## Documentacion propia
+> **Aviso de vigencia (24/02/2026):** El diseño en Figma y la documentación externa pueden estar desactualizados (referencia de estado al 01/02/2026). La fuente de verdad del proyecto es la documentación interna en archivos `.md` dentro de la carpeta `documentacion/` de este repositorio.
+
+## Documentación propia
 
 Requisitos y diseño:
 
@@ -48,11 +52,8 @@ Requisitos y diseño:
 - [Documento de alcance](documentacion/DAW_PRW_R1L2_UT01.1.%20Documento%20de%20alcance.md)
 - [Diagrama de casos de uso](documentacion/DAW_PRW_R1L2_UT01.2.%20Diagrama%20de%20casos%20de%20uso.md)
 - [Diagrama ER](documentacion/DAW_PRW_R1L2_UT01.3.%20Diagrama_ER.md)
-- [Diseno tecnico](documentacion/DAW_PRW_R1L2_UT01.4.%20Diseno%20Tecnico.md)
+- [Diseño técnico](documentacion/DAW_PRW_R1L2_UT01.4.%20Diseno%20Tecnico.md)
 
-Desarrollo:
-
-- [Guia de API y Estructura del Proyecto](documentacion/DAW_PRW_R1L2_UT02.0.%20Guia%20de%20API%20y%20Estructura%20del%20Proyecto.md)
 
 Despliegue:
 
@@ -62,7 +63,7 @@ Despliegue:
 
 ### Usuarios (clientes)
 
-- Buscar profesionales por categoria y ubicacion.
+- Buscar profesionales por categoría y ubicación.
 - Ver perfiles y valoraciones.
 - Crear solicitudes de trabajo.
 - Gestionar historial de servicios contratados.
@@ -74,13 +75,12 @@ Despliegue:
 - Ver y responder a postulaciones.
 - Gestionar historial de trabajos realizados.
 
-### Administracion
+### Administración
 
-- Panel de control con estadisticas.
-- Gestion de usuarios y categorias.
-- Analisis de actividad de la plataforma.
+- Gestión de categorías (CRUD).
+- Vistas base de usuarios y estadísticas (sin CRUD ni métricas reales).
 
-## Instalacion y ejecucion
+## Instalación y ejecución
 
 ### Requisitos
 
@@ -101,15 +101,15 @@ Crea una base de datos PostgreSQL y anota las credenciales.
 
 ### Variables de entorno
 
-Crea un archivo `.env` en la raiz del proyecto:
+Crea un archivo `.env` en la raíz del proyecto:
 
 ```env
 DB_URL=jdbc:postgresql://localhost:5432/duit
 DB_USER=tu_usuario
-DB_PASS=tu_contrasena
+DB_PASS=tu_contraseña
 ```
 
-### Run local
+### Ejecución local
 
 ```bash
 # En Linux/Mac
@@ -121,7 +121,7 @@ mvnw.cmd spring-boot:run
 
 Abre tu navegador en: [http://localhost:8080](http://localhost:8080)
 
-## Tecnologias
+## Tecnologías
 
 - Java 21
 - Spring Boot 3.5.10
@@ -129,23 +129,41 @@ Abre tu navegador en: [http://localhost:8080](http://localhost:8080)
 - Spring Data JPA
 - PostgreSQL
 - Thymeleaf
+- Bootswatch (tema Flatly)
 - HTML5 + CSS3
 - JavaScript
 - Maven
 - Lombok
 - Spring DotEnv
 
-## Configuracion rapida
+## Seguridad y gestión de errores
 
-Las variables principales estan en `application.properties` y, si usas entorno local, puedes definir:
+- Autenticación y autorización con Spring Security.
+- Control de acceso por roles en rutas `/admin/**`, `/user/**` y `/professional/**`.
+- Cifrado de contraseñas con BCrypt.
+- Páginas de error personalizadas en `403`, `404` y `500`.
+- Configuración para evitar exposición de detalles internos de error en producción.
+
+## Fuera de scope actual
+
+- Gestión completa de usuarios desde administración (altas, bajas, bloqueos y roles).
+- Métricas y analítica administrativas completas.
+- Sistema de pagos integrado (Stripe/PayPal).
+- Chat en tiempo real o mensajería instantánea.
+- Aplicación móvil nativa (iOS/Android).
+- Notificaciones push y verificación de cuenta por email.
+
+## Configuración rápida
+
+Las variables principales están en `application.properties` y, si usas entorno local, puedes definir:
 
 ```env
 DB_URL=jdbc:postgresql://localhost:5432/duit
 DB_USER=usuario_postgres
-DB_PASS=contrasena_postgres
+DB_PASS=contraseña_postgres
 ```
 
-Para el detalle completo de configuracion y estructura, consulta la documentacion propia.
+Para el detalle completo de configuración y estructura, consulta la documentación propia.
 
 ## Soporte
 
@@ -153,4 +171,4 @@ Para el detalle completo de configuracion y estructura, consulta la documentacio
 
 - Crea un issue en el repositorio.
 
-## README actualizado 16/02/2026
+## README actualizado 24/02/2026

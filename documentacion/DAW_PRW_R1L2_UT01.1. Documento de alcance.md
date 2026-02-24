@@ -10,7 +10,7 @@
 | --------------------- | ------------------------------------------------------ |
 | **Autores**           | Aleixo Fernández Cuevas, Cristo Manuel Navarro Martín  |
 | **Nombre de archivo** | DAW_PRW_R1L2_UT01.1 Documento de alcance               |
-| **Fecha de versión**  | 16/02/2026                                             |
+| **Fecha de versión**  | 24/02/2026                                             |
 | **Ciclo Formativo**   | Desarrollo de Aplicaciones Web - Semipresencial (DAWN) |
 | **Módulo**            | Proyecto de Desarrollo de Aplicaciones Web (PRW)       |
 | **Versión**           | 3.0                                                    |
@@ -38,6 +38,7 @@
 | 10/01/2026 | Primera corrección                       | Aleixo F. Cuevas / Cristo N. Martín |
 | 01/02/2026 | Segunda corrección                       | Aleixo F. Cuevas / Cristo N. Martín |
 | 16/02/2026 | Tercera corrección y reformateo completo | Aleixo F. Cuevas                    |
+| 24/02/2026 | Cuarta corrección                        | Aleixo F. Cuevas / Cristo N. Martín |
 
 ---
 
@@ -152,7 +153,7 @@ Desarrollar e implementar una plataforma web integral que facilite la conexión 
 
 ## 4. Roles de Usuario
 
-El sistema modela distintos roles de usuario. El control de acceso granular por rol está parcialmente implementado.
+El sistema modela distintos roles de usuario. El control de acceso granular por rol está implementado para las rutas protegidas actuales.
 
 ### 4.1 Administrador
 
@@ -165,9 +166,9 @@ El sistema modela distintos roles de usuario. El control de acceso granular por 
 - Eliminar categorías
 - Activar o desactivar categorías según su estado operativo
 
-**Acceso a Vistas Administrativas:**
+**Panel Administrativo Base:**
 
-- Acceder a la pantalla de usuarios (vista base, sin operaciones CRUD).
+- Acceder a la pantalla de usuarios (vista base, sin operaciones CRUD)
 - Acceder a la pantalla de estadísticas (vista base, sin métricas cargadas)
 
 #### Funcionalidades Previstas para Futuras Versiones
@@ -192,7 +193,7 @@ El sistema modela distintos roles de usuario. El control de acceso granular por 
 
 **Búsqueda y Participación en Solicitudes:**
 
-- Consultar solicitudes publicadas mediante filtros (texto libre, categoría,código postal)
+- Consultar solicitudes publicadas mediante filtros (texto libre, categoría, código postal)
 - Postularse a una solicitud enviando mensaje y presupuesto
 - Editar o retirar postulaciones mientras estén en estado pendiente
 
@@ -251,10 +252,10 @@ El sistema modela distintos roles de usuario. El control de acceso granular por 
 **Control de Acceso:**
 
 - La versión actual protege rutas por autenticación
-- Control de acceso basado en roles planificado a corto plazo
+- Control de acceso basado en roles implementado para rutas `/admin/**`, `/user/**` y `/professional/**`
 - Auditoría de accesos disponible mediante registro de logs de login
 
-**Nota sobre Roles:** 
+**Nota sobre Roles:**
 El modelo incluye el rol MODERATOR para futuras funciones, pero no se utiliza en la versión actual.
 
 ---
@@ -267,13 +268,13 @@ DUIT es una aplicación web orientada a la gestión integral de trabajos y servi
 
 - **Capa Pública de Acceso (Index):** Punto de entrada accesible sin autenticación donde se presenta la plataforma y se permite acceso a registro e inicio de sesión.
 
-- **Sistema de Autenticación:** Gestiona el registro de usuarios e inicio de sesión. Control de acceso basado en roles planificado a corto plazo.
+- **Sistema de Autenticación:** Gestiona el registro de usuarios e inicio de sesión. Incluye control de acceso por roles (ADMIN, USER, PROFESSIONAL).
 
 - **Área Privada del Sistema (Home):** Entorno restringido a usuarios autenticados con funcionalidades dinámicas según perfil.
 
 - **Gestión de Trabajos y Servicios:** Permite creación, visualización, seguimiento y control de solicitudes, postulaciones y trabajos.
 
-- **Control de Accesos y Permisos:** Autenticación global implementada; segmentación por rol planificada a corto plazo.
+- **Control de Accesos y Permisos:** Autenticación global implementada y segmentación por rol activa en las rutas protegidas.
 
 ### 5.1 Flujos de Trabajo Principales
 
@@ -308,13 +309,13 @@ DUIT es una aplicación web orientada a la gestión integral de trabajos y servi
 **Registro de Usuarios:**
 
 - El sistema debe permitir el registro de nuevos usuarios con email
-- Debe validar unicidad de username, email y DNI
+- Debe validar unicidad de correo electrónico (username) y DNI
 
 **Autenticación y Autorización:**
 
-- Debe implementar login seguro con Spring Security
+- Debe implementar inicio de sesión seguro con Spring Security
 - Remember-me disponible para sesiones persistentes
-- Diferenciación de acceso según roles planificada a corto plazo
+- Diferenciación de acceso según roles implementada en el enrutado del sistema
 
 **Gestión de Perfiles:**
 
@@ -378,6 +379,13 @@ DUIT es una aplicación web orientada a la gestión integral de trabajos y servi
 - Debe implementar políticas de contraseñas seguras
 - Debe proporcionar logout seguro con limpieza de sesión
 
+**Gestión de Errores y Respuesta Segura:**
+
+- Debe mostrar página personalizada **403** ante accesos no autorizados
+- Debe mostrar página personalizada **404** cuando un recurso no existe
+- Debe mostrar página personalizada **500** ante errores internos no controlados
+- Debe evitar exposición de trazas técnicas sensibles en entorno de producción
+
 #### Compatibilidad
 
 **Navegadores:**
@@ -412,6 +420,8 @@ Los criterios de aceptación definen las condiciones que debe cumplir DUIT para 
 -  El cliente debe poder seleccionar un profesional
 -  El profesional debe poder actualizar el estado del trabajo
 -  Ambas partes deben poder emitir una valoración tras la finalización
+-  Un usuario sin permisos debe recibir respuesta 403 al intentar acceder a una ruta restringida
+-  El sistema debe mostrar páginas de error personalizadas para 404 y 500
 
 ### 7.2 Criterios de Calidad
 
@@ -457,5 +467,5 @@ La elaboración del presente Documento de Alcance se ha realizado de forma colab
 
 ---
 
-**Última actualización:** 16 de febrero de 2026 
+**Última actualización:** 24 de febrero de 2026 
 **Versión:** 3.0

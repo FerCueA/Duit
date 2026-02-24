@@ -10,7 +10,7 @@
 | -------------------------- | ------------------------------------------------------ |
 | **Nombre del Fichero**     | DAW_PRW_R1L2_5 – Documento de Despliegue               |
 | **Versión**                | 2.0                                                    |
-| **Fecha de Actualización** | 22 de febrero de 2026                                  |
+| **Fecha de Actualización** | 24 de febrero de 2026                                  |
 | **Ciclo Formativo**        | Desarrollo de Aplicaciones Web - Semipresencial (DAWN) |
 | **Módulo**                 | Proyecto de Desarrollo de Aplicaciones Web (PRW)       |
 | **Autores**                | Aleixo Fernández Cuevas, Cristo Manuel Navarro Martín  |
@@ -51,6 +51,7 @@
 | ---------- | --------------------------------------------- | ------------------------------------------------- |
 | 16/02/2026 | Primera redacción                             | Aleixo Fernández Cuevas                           |
 | 22/02/2026 | Correcciones finales y revisión de estructura | Aleixo Fernández Cuevas, Cristo M. Navarro Martín |
+| 24/02/2026 | Revisión de coherencia y ortografía           | Aleixo Fernández Cuevas, Cristo M. Navarro Martín |
 
 ---
 
@@ -87,16 +88,16 @@ La versión desplegada corresponde a la **release 0.0.1-SNAPSHOT** e incorpora l
 
 ### Mejoras Técnicas
 
-| Mejora                | Descripción                                                                    |
-| --------------------- | ------------------------------------------------------------------------------ |
-| Patrón MVC            | Desarrollo siguiendo el patrón MVC con Spring Boot 3.5.10                      |
-| Base de Datos Cloud   | Integración con PostgreSQL 15.x alojada en entorno cloud (Neon)                |
-| Spring Security       | Configuración completa incluyendo login, remember-me y control de roles (RBAC) |
-| Encriptación          | Cifrado seguro de contraseñas utilizando BCrypt                                |
-| Auditoría Automática  | Sistema de auditoría mediante clase base BaseEntity                            |
-| Access Log            | Registro de accesos y acciones relevantes del sistema                          |
-| Gestión de Conexiones | Uso de HikariCP para manejo eficiente de conexiones a base de datos            |
-| Despliegue Cloud      | Implementación en entorno cloud usando Koyeb                                   |
+| Mejora                 | Descripción                                                                    |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| Patrón MVC             | Desarrollo siguiendo el patrón MVC con Spring Boot 3.5.10                      |
+| Base de Datos Cloud    | Integración con PostgreSQL 15.x alojada en entorno cloud (Neon)                |
+| Spring Security        | Configuración completa incluyendo login, remember-me y control de roles (RBAC) |
+| Cifrado de contraseñas | Cifrado seguro de contraseñas utilizando BCrypt                                |
+| Auditoría Automática   | Sistema de auditoría mediante clase base BaseEntity                            |
+| Access Log             | Registro de accesos y acciones relevantes del sistema                          |
+| Gestión de Conexiones  | Uso de HikariCP para manejo eficiente de conexiones a base de datos            |
+| Despliegue Cloud       | Implementación en entorno cloud usando Koyeb                                   |
 
 ### Mejoras Funcionales
 
@@ -433,7 +434,7 @@ La aplicación puede desplegarse en Koyeb mediante dos métodos: despliegue auto
 
 Este método vincula el repositorio de GitHub con Koyeb, permitiendo despliegues automáticos con cada actualización en la rama `main`.
 
-Acceder a https://www.koyeb.com e iniciar sesión.
+Accede a https://www.koyeb.com e inicia sesión.
 
 **Paso 1: Acceder a Koyeb**
 
@@ -509,6 +510,12 @@ Una vez finalizado el despliegue, el operador deberá realizar las siguientes ve
 - Iniciar sesión con un usuario válido.
 - Verificar que la sesión se mantiene activa.
 
+#### 5.1. Prueba de Autorización por Rol
+
+- Intentar acceder con usuario no administrador a una ruta `/admin/**`.
+- Verificar que el sistema bloquea el acceso y devuelve la pantalla de error 403.
+- Confirmar que un usuario ADMIN sí puede acceder a la misma ruta.
+
 #### 6. Prueba Básica de Funcionalidad
 
 - Crear una solicitud de servicio.
@@ -519,6 +526,12 @@ Una vez finalizado el despliegue, el operador deberá realizar las siguientes ve
 
 - Reiniciar el servicio desde Koyeb.
 - Comprobar que los datos previamente creados siguen existiendo.
+
+#### 8. Verificación de Páginas de Error Personalizadas
+
+- Forzar una URL inexistente y comprobar renderizado de la página 404.
+- Validar que la aplicación utiliza plantillas personalizadas para 403/404/500.
+- Confirmar que no se muestran trazas internas en el navegador.
 
 ---
 
@@ -575,5 +588,5 @@ El proceso de despliegue de la aplicación Duit fue coordinado principalmente po
 
 ---
 
-**Última actualización:** 22 de febrero de 2026 
+**Última actualización:** 24 de febrero de 2026 
 **Versión:** 2.0
