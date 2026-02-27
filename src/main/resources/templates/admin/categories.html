@@ -16,7 +16,7 @@
         <div class="container py-5">
             <div class="row">
                 <div class="col-12">
-                    <h1 class="mb-4 text-dark">Gestión de Categorías</h1>
+                    <h1 class="mb-4 text-primary">Gestión de Categorías</h1>
 
                     <!-- BLOQUE DE MENSAJES VALIDACIONES-->
                     <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
@@ -68,13 +68,13 @@
                                 </div>
                                 <!-- Botones Enviar/Cancelar -->
                                 <div class="col-md-3 text-end">
-                                    <button type="submit" class="btn btn-outline-dark"
+                                    <button type="submit" class="btn btn-outline-white"
                                         th:classappend="${categoryDTO.id != null ? 'btn-primary' : ''}"
                                         th:aria-label="${categoryDTO.id != null ? 'Actualizar categoría' : 'Añadir nueva categoría'}"
                                         th:text="${categoryDTO.id != null ? 'Actualizar' : 'Añadir'}">
                                     </button>
                                     <a th:if="${categoryDTO.id != null}" th:href="@{/admin/categories}"
-                                        class="btn btn-outline-secondary ms-2" aria-label="Cancelar edición">
+                                        class="btn btn-outline-danger ms-2" aria-label="Cancelar edición">
                                         <i class="bi bi-x-circle me-1"></i>Cancelar</a>
                                 </div>
                             </form>

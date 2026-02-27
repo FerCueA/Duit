@@ -41,8 +41,8 @@
                     <div th:if="${missingAddress}" class="alert alert-warning alert-dismissible fade show" role="alert"
                         aria-live="polite">
                         <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
-                        <span class="fw-semibold">Para publicar una solicitud necesitas configurar tu direccion.</span>
-                        <a th:href="@{/profile/edit}" class="ms-1">Ir a Mi perfil</a>.
+                        <span class="fw-semibold">Para publicar una solicitud necesitas configurar tu direccion</span>
+                        <a th:href="@{/profile/edit}" class="ms-1 text-primary">Ir a editar perfil</a>
                         <button type="button" class="btn-close" data-bs-dismiss="alert"
                             aria-label="Cerrar mensaje"></button>
                     </div>
@@ -111,13 +111,14 @@
 
                                 <!-- Fecha límite -->
                                 <div class="mb-3">
-                                    <label for="deadline" class="form-label fw-bold">Fecha limite de publicacion
-                                        (opcional)</label>
+                                    <label for="deadline" class="form-label fw-bold">Fecha máxima para recibir
+                                        ofertas</label>
                                     <input type="date" th:field="*{deadline}" class="form-control"
                                         th:classappend="${#fields.hasErrors('deadline')} ? 'is-invalid' : ''"
                                         id="deadline" aria-describedby="deadlineHelp"
                                         th:min="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
-                                    <div id="deadlineHelp" class="form-text">La publicacion caducara en esta fecha
+                                    <div id="deadlineHelp" class="form-text">La publicación caducará en
+                                        esta fecha
                                     </div>
                                     <div th:if="${#fields.hasErrors('deadline')}" class="invalid-feedback" role="alert">
                                         <span th:errors="*{deadline}"></span>
