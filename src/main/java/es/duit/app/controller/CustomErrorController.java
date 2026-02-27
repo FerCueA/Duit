@@ -24,13 +24,12 @@ public class CustomErrorController implements ErrorController {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         int statusCode = status != null ? Integer.parseInt(status.toString()) : 500;
 
-        // Si quieres, pásalo a la vista
-        // model.addAttribute("statusCode", statusCode);
+       
 
         if (statusCode == 404)
             return "error/404";
         if (statusCode == 403)
-            return "error/403"; // por si cae aquí alguna vez
+            return "error/403"; 
         return "error/500";
     }
 }
