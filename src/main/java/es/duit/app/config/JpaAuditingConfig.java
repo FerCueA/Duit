@@ -34,7 +34,7 @@ public class JpaAuditingConfig {
             @SuppressWarnings("null")
             public Optional<String> getCurrentAuditor() {
                 try {
-                    // Verificar para el obtener el usuario autenticado
+                    // Verificar el usuario autenticado
                     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
                     // Si no hay autenticación o no está autenticada
