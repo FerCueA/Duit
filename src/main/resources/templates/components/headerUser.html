@@ -100,19 +100,19 @@
 
           <!-- Enlaces de administración (solo para admins) -->
           <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-            <a class="nav-link " th:href="@{/admin/users}">
+            <a class="nav-link text-danger" th:href="@{/admin/users}">
               <i class="bi bi-people"></i> Usuarios
             </a>
           </li>
 
           <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-            <a class="nav-link " th:href="@{/admin/stats}">
+            <a class="nav-link text-danger" th:href="@{/admin/stats}">
               <i class="bi bi-bar-chart-line"></i> Estadísticas
             </a>
           </li>
 
           <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-            <a class="nav-link " th:href="@{/admin/categories}">
+            <a class="nav-link text-danger " th:href="@{/admin/categories}">
               <i class="bi bi-tags"></i> Categorías
             </a>
           </li>
