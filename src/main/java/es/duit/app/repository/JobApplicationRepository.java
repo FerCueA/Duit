@@ -11,12 +11,6 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
 
     // Postulaciones de una solicitud
     List<JobApplication> findByRequest(ServiceRequest request);
-
-    // Buscar postulaciones por estado
-    List<JobApplication> findByRequestAndStatus(ServiceRequest request, JobApplication.Status status);
-    
-    // Postulación de un profesional a una solicitud
-    List<JobApplication> findByRequestAndProfessional(ServiceRequest request, ProfessionalProfile professional);
     
     // Postulaciones de un profesional
     List<JobApplication> findByProfessional(ProfessionalProfile professional);

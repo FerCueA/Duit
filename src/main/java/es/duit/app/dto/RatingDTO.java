@@ -16,6 +16,6 @@ public class RatingDTO {
     @Max(value = 5, message = "La puntuacion debe estar entre 1 y 5")
     private Integer score;
 
-    @Size(max = 1000, message = "El comentario no puede superar los 1000 caracteres")
+    @Size(max = 500, message = "El comentario no puede superar los 500 caracteres")
     private String comment;
 }

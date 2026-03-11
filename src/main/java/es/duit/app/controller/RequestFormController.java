@@ -4,6 +4,7 @@ import es.duit.app.dto.RequestDTO;
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.ServiceRequest;
 import es.duit.app.service.AuthService;
+import es.duit.app.service.CategoryService;
 import es.duit.app.service.RequestService;
 
 import org.springframework.security.core.Authentication;
@@ -23,10 +24,14 @@ import jakarta.validation.Valid;
 public class RequestFormController {
 
     private final RequestService serviceRequestService;
+    private final CategoryService categoryService;
     private final AuthService authService;
 
-    public RequestFormController(RequestService serviceRequestService, AuthService authService) {
+    public RequestFormController(RequestService serviceRequestService,
+            CategoryService categoryService,
+            AuthService authService) {
         this.serviceRequestService = serviceRequestService;
+        this.categoryService = categoryService;
         this.authService = authService;
     }
 
@@ -93,7 +98,7 @@ public class RequestFormController {
                 // Manejar errores de validación - volver al formulario con errores y datos
                 // necesarios
                 model.addAttribute("habitualAddress", usuarioLogueado.getAddress());
-                model.addAttribute("categorias", serviceRequestService.getActiveCategories());
+                model.addAttribute("categorias", categoryService.getActiveCategories());
                 model.addAttribute("missingAddress", usuarioLogueado.getAddress() == null);
 
                 boolean esEdicion = form.getEditId() != null;
@@ -117,7 +122,7 @@ public class RequestFormController {
 
             // Volver al formulario con datos necesarios
             model.addAttribute("habitualAddress", usuarioLogueado.getAddress());
-            model.addAttribute("categorias", serviceRequestService.getActiveCategories());
+            model.addAttribute("categorias", categoryService.getActiveCategories());
             model.addAttribute("missingAddress", usuarioLogueado.getAddress() == null);
 
             boolean esEdicion = form.getEditId() != null;
@@ -138,7 +143,7 @@ public class RequestFormController {
     private void basicFormData(Model model, AppUser usuario, RequestDTO form) {
         // Enviar datos comunes necesarios para el formulario
         model.addAttribute("habitualAddress", usuario.getAddress());
-        model.addAttribute("categorias", serviceRequestService.getActiveCategories());
+        model.addAttribute("categorias", categoryService.getActiveCategories());
         model.addAttribute("missingAddress", usuario.getAddress() == null);
 
         // Configurar valores por defecto

@@ -52,4 +52,12 @@ public class AuthService {
         // Devolver el usuario
         return userOptional.get();
     }
+
+    public AppUser findByUsernameOrNull(String username) {
+        if (username == null || username.trim().isEmpty() || "anonymousUser".equals(username)) {
+            return null;
+        }
+
+        return appUserRepository.findByUsername(username).orElse(null);
+    }
 }

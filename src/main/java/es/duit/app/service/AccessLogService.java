@@ -2,6 +2,8 @@ package es.duit.app.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +12,7 @@ import es.duit.app.entity.AccessLog;
 import es.duit.app.entity.AppUser;
 import es.duit.app.repository.AccessLogRepository;
 import es.duit.app.repository.AppUserRepository;
+import es.duit.app.service.util.IdentityNormalizer;
 
 // ============================================================================
 // SERVICIO PARA REGISTRAR LOS ACCESOS DE USUARIOS (LOGINS EXITOSOS Y FALLIDOS)
@@ -19,15 +22,18 @@ import es.duit.app.repository.AppUserRepository;
 @RequiredArgsConstructor
 public class AccessLogService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AccessLogService.class);
+
     private final AccessLogRepository accessLogRepository;
     private final AppUserRepository appUserRepository;
+    private final IdentityNormalizer identityNormalizer;
 
     // ============================================================================
     // REGISTRA UN LOGIN EXITOSO DE UN USUARIO
     // ============================================================================
     public void saveSuccessfulLogin(String emailUsuario, HttpServletRequest request) {
         try {
-            String emailNormalizado = normalizeEmail(emailUsuario);
+            String emailNormalizado = identityNormalizer.normalizeEmail(emailUsuario);
 
             // Buscar el usuario en la BD
             AppUser usuario = appUserRepository.findByUsername(emailNormalizado)
@@ -52,7 +58,7 @@ public class AccessLogService {
             appUserRepository.save(usuario);
 
         } catch (Exception error) {
-            // Si hay error, no hacer nada
+            LOG.warn("No se pudo registrar login exitoso para email='{}': {}", emailUsuario, error.getMessage());
         }
     }
 
@@ -61,7 +67,7 @@ public class AccessLogService {
     // ============================================================================
     public void saveFailedLogin(String emailUsuario, HttpServletRequest request) {
         try {
-            String emailNormalizado = normalizeEmail(emailUsuario);
+            String emailNormalizado = identityNormalizer.normalizeEmail(emailUsuario);
 
             // Buscar el usuario en la BD
             AppUser usuario = appUserRepository.findByUsername(emailNormalizado).orElse(null);
@@ -79,7 +85,7 @@ public class AccessLogService {
             }
 
         } catch (Exception error) {
-            // Si hay error, no hacer nada
+            LOG.warn("No se pudo registrar login fallido para email='{}': {}", emailUsuario, error.getMessage());
         }
     }
 
@@ -122,13 +128,4 @@ public class AccessLogService {
         return ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip);
     }
 
-    // ==========================================================================
-    // NORMALIZA EMAIL PARA BUSQUEDAS CONSISTENTES
-    // ==========================================================================
-    private String normalizeEmail(String email) {
-        if (email == null) {
-            return "";
-        }
-        return email.trim().toLowerCase();
-    }
 }

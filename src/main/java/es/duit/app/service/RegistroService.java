@@ -9,6 +9,7 @@ import es.duit.app.entity.AppUser;
 import es.duit.app.entity.UserRole;
 import es.duit.app.repository.AppUserRepository;
 import es.duit.app.repository.RoleRepository;
+import es.duit.app.service.util.IdentityNormalizer;
 import lombok.RequiredArgsConstructor;
 
 // ============================================================================
@@ -22,6 +23,7 @@ public class RegistroService {
     private final AppUserRepository appUserRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final IdentityNormalizer identityNormalizer;
 
     // ============================================================================
     // REGISTRA UN NUEVO USUARIO CON VALIDACIONES
@@ -29,7 +31,7 @@ public class RegistroService {
     public AppUser registerUser(RegistroDTO registro) {
         try {
             // Normalizar y validar email antes de cualquier operacion
-            String emailNormalizado = (registro.getEmail() != null) ? registro.getEmail().trim().toLowerCase() : "";
+            String emailNormalizado = identityNormalizer.normalizeEmail(registro.getEmail());
             if (emailNormalizado.isEmpty()) {
                 throw new IllegalArgumentException("El correo electrónico es obligatorio");
             }
@@ -39,7 +41,7 @@ public class RegistroService {
                 throw new IllegalArgumentException("Este correo electrónico ya está registrado");
             }
 
-            String dniNormalizado = (registro.getDni() != null) ? registro.getDni().trim().toUpperCase() : "";
+            String dniNormalizado = identityNormalizer.normalizeDni(registro.getDni());
             if (dniNormalizado.isEmpty()) {
                 throw new IllegalArgumentException("El DNI es obligatorio");
             }

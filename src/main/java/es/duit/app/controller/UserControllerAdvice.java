@@ -1,7 +1,7 @@
 package es.duit.app.controller;
 
 import es.duit.app.entity.AppUser;
-import es.duit.app.repository.AppUserRepository;
+import es.duit.app.service.AuthService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @ControllerAdvice
 public class UserControllerAdvice {
 
-    private final AppUserRepository appUserRepository;
+    private final AuthService authService;
 
-    public UserControllerAdvice(AppUserRepository appUserRepository) {
-        this.appUserRepository = appUserRepository;
+    public UserControllerAdvice(AuthService authService) {
+        this.authService = authService;
     }
 
     // ============================================================================
@@ -90,6 +90,6 @@ public class UserControllerAdvice {
     // BUSCA EL USUARIO EN LA BASE DE DATOS
     // ============================================================================
     private AppUser buscarUsuarioEnBaseDatos(String nombreUsuario) {
-        return appUserRepository.findByUsername(nombreUsuario).orElse(null);
+        return authService.findByUsernameOrNull(nombreUsuario);
     }
 }
