@@ -1,14 +1,14 @@
 package es.duit.app.controller;
 
 import es.duit.app.dto.SearchRequestDTO;
+import es.duit.app.dto.SearchPageDataDTO;
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.JobApplication;
 import es.duit.app.entity.ServiceJob;
-import es.duit.app.repository.JobApplicationRepository;
-import es.duit.app.repository.ServiceJobRepository;
 import es.duit.app.service.AuthService;
 import es.duit.app.service.SearchService;
 import es.duit.app.service.JobApplicationService;
+import es.duit.app.service.JobLifecycleService;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -29,10 +29,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProfessionalController {
 
-    private final JobApplicationRepository jobApplicationRepository;
-    private final ServiceJobRepository serviceJobRepository;
     private final AuthService authService;
     private final JobApplicationService jobApplicationService;
+    private final JobLifecycleService jobLifecycleService;
     private final SearchService searchService;
 
     // Mostrar página de búsqueda
@@ -51,7 +50,8 @@ public class ProfessionalController {
         filters.setCodigoPostal(codigoPostal);
 
         AppUser currentUser = authService.getAuthenticatedUser(auth);
-        searchService.prepareSearchPageData(filters, currentUser, model);
+        SearchPageDataDTO pageData = searchService.buildSearchPageData(filters, currentUser);
+        populateSearchModel(model, pageData);
 
         return "jobs/search";
     }
@@ -72,10 +72,27 @@ public class ProfessionalController {
         }
 
         AppUser currentUser = authService.getAuthenticatedUser(auth);
-        searchService.prepareSearchPageData(filters, currentUser, model);
-        model.addAttribute("filtrosAplicados", filters);
+        SearchPageDataDTO pageData = searchService.buildSearchPageData(filters, currentUser);
+        populateSearchModel(model, pageData);
 
         return "jobs/search";
+    }
+
+    private void populateSearchModel(Model model, SearchPageDataDTO pageData) {
+        model.addAttribute("ofertas", pageData.getOfertas());
+        model.addAttribute("categorias", pageData.getCategorias());
+        model.addAttribute("codigosPostales", pageData.getCodigosPostales());
+        model.addAttribute("totalOfertas", pageData.getTotalOfertas());
+
+        if (pageData.getMissingProfessionalProfile() != null) {
+            model.addAttribute("missingProfessionalProfile", pageData.getMissingProfessionalProfile());
+        }
+        if (pageData.getMissingAddress() != null) {
+            model.addAttribute("missingAddress", pageData.getMissingAddress());
+        }
+        if (pageData.getFiltrosAplicados() != null) {
+            model.addAttribute("filtrosAplicados", pageData.getFiltrosAplicados());
+        }
     }
 
     // Ver mis postulaciones
@@ -84,11 +101,10 @@ public class ProfessionalController {
         AppUser usuario = authService.getAuthenticatedUser(auth);
 
         // Postulaciones del profesional
-        List<JobApplication> postulaciones = jobApplicationRepository
-                .findByProfessional(usuario.getProfessionalProfile());
+        List<JobApplication> postulaciones = jobApplicationService.getApplicationsForProfessional(usuario);
 
         // Obtener trabajos en progreso
-        List<ServiceJob> trabajosEnProgreso = serviceJobRepository.findByProfesional(usuario);
+        List<ServiceJob> trabajosEnProgreso = jobLifecycleService.getJobsForProfessional(usuario);
 
         model.addAttribute("postulaciones", postulaciones);
         model.addAttribute("trabajosEnProgreso", trabajosEnProgreso);

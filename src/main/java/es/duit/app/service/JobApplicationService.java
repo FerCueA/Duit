@@ -4,12 +4,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.JobApplication;
 import es.duit.app.entity.ServiceRequest;
 import es.duit.app.repository.JobApplicationRepository;
 import es.duit.app.repository.ServiceRequestRepository;
+import es.duit.app.service.validation.RequestAccessValidator;
+import es.duit.app.service.validation.UserPreconditionsValidator;
 import lombok.RequiredArgsConstructor;
 
 // ============================================================================
@@ -22,13 +25,36 @@ public class JobApplicationService {
 
     private final JobApplicationRepository jobApplicationRepository;
     private final ServiceRequestRepository serviceRequestRepository;
+    private final RequestAccessValidator requestAccessValidator;
+    private final UserPreconditionsValidator userPreconditionsValidator;
+
+    public List<JobApplication> getApplicationsForProfessional(AppUser usuario) {
+        userPreconditionsValidator.requireProfessionalProfile(usuario);
+        return jobApplicationRepository.findByProfessional(usuario.getProfessionalProfile());
+    }
+
+    public List<JobApplication> getApplicationsForUserRequest(Long requestId, AppUser usuario) {
+        ServiceRequest solicitud = requestAccessValidator.getOwnedRequestOrThrow(requestId, usuario);
+        return jobApplicationRepository.findByRequest(solicitud);
+    }
+
+    public JobApplication getApplicationForRequestOwner(Long postulacionId, AppUser usuario) {
+        JobApplication postulacion = getApplicationById(postulacionId);
+        ServiceRequest solicitud = postulacion.getRequest();
+
+        if (!solicitud.getClient().getId().equals(usuario.getId())) {
+            throw new IllegalArgumentException("No tienes permiso para esta postulación");
+        }
+
+        return postulacion;
+    }
 
     // ============================================================================
     // PERMITE QUE UN PROFESIONAL SE POSTULE A UNA OFERTA DE SERVICIO
     // ============================================================================
     public JobApplication postularseAOferta(Long ofertaId, BigDecimal precio, String mensaje, AppUser usuario) {
-        validateUserHasProfessionalProfile(usuario);
-        validateUserHasAddress(usuario);
+        userPreconditionsValidator.requireProfessionalProfile(usuario);
+        userPreconditionsValidator.requireAddress(usuario);
 
         ServiceRequest oferta = getOfferById(ofertaId);
 
@@ -54,7 +80,7 @@ public class JobApplicationService {
     // =========================================================================
     public JobApplication editarPostulacion(Long postulacionId, AppUser usuario, BigDecimal precio,
             String mensaje) {
-        validateUserHasProfessionalProfile(usuario);
+        userPreconditionsValidator.requireProfessionalProfile(usuario);
 
         JobApplication postulacion = getApplicationById(postulacionId);
 
@@ -80,7 +106,7 @@ public class JobApplicationService {
     // RETIRAR UNA POSTULACION PROPIA (SOLO SI ESTA PENDING)
     // =========================================================================
     public JobApplication retirarPostulacion(Long postulacionId, AppUser usuario) {
-        validateUserHasProfessionalProfile(usuario);
+        userPreconditionsValidator.requireProfessionalProfile(usuario);
 
         JobApplication postulacion = getApplicationById(postulacionId);
 
@@ -106,28 +132,6 @@ public class JobApplicationService {
 
         if (!estaPublicada) {
             throw new IllegalArgumentException("La oferta no está disponible");
-        }
-    }
-
-    // ============================================================================
-    // VALIDA QUE EL USUARIO TIENE UN PERFIL PROFESIONAL CONFIGURADO
-    // ============================================================================
-    private void validateUserHasProfessionalProfile(AppUser usuario) {
-        // Obtener el perfil profesional del usuario
-        Object perfilProfesional = usuario.getProfessionalProfile();
-
-        // Verificar que existe
-        if (perfilProfesional == null) {
-            throw new IllegalArgumentException("No tienes un perfil profesional configurado");
-        }
-    }
-
-    // =========================================================================
-    // VALIDA QUE EL USUARIO TIENE UNA DIRECCION CONFIGURADA
-    // =========================================================================
-    private void validateUserHasAddress(AppUser usuario) {
-        if (usuario.getAddress() == null) {
-            throw new IllegalArgumentException("No tienes una direccion configurada");
         }
     }
 

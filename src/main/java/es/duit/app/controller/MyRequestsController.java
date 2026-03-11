@@ -2,10 +2,11 @@ package es.duit.app.controller;
 
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.JobApplication;
-import es.duit.app.entity.ServiceJob;
 import es.duit.app.entity.ServiceRequest;
-import es.duit.app.repository.ServiceJobRepository;
+import es.duit.app.service.ApplicationDecisionService;
 import es.duit.app.service.AuthService;
+import es.duit.app.service.JobApplicationService;
+import es.duit.app.service.JobLifecycleService;
 import es.duit.app.service.RequestService;
 
 import org.springframework.security.core.Authentication;
@@ -14,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 // ============================================================================
@@ -25,14 +25,20 @@ import java.util.List;
 public class MyRequestsController {
 
     private final RequestService serviceRequestService;
-    private final ServiceJobRepository serviceJobRepository;
+    private final JobApplicationService jobApplicationService;
+    private final ApplicationDecisionService applicationDecisionService;
+    private final JobLifecycleService jobLifecycleService;
     private final AuthService authService;
 
     public MyRequestsController(RequestService serviceRequestService,
-            ServiceJobRepository serviceJobRepository,
+            JobApplicationService jobApplicationService,
+            ApplicationDecisionService applicationDecisionService,
+            JobLifecycleService jobLifecycleService,
             AuthService authService) {
         this.serviceRequestService = serviceRequestService;
-        this.serviceJobRepository = serviceJobRepository;
+        this.jobApplicationService = jobApplicationService;
+        this.applicationDecisionService = applicationDecisionService;
+        this.jobLifecycleService = jobLifecycleService;
         this.authService = authService;
     }
 
@@ -44,12 +50,11 @@ public class MyRequestsController {
         // Obtener usuario logueado
         AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
 
-        List<ServiceRequest> solicitudesUsuario = serviceRequestService.getMyRequests();
-        List<ServiceJob> trabajosUsuario = serviceJobRepository.findByCliente(usuarioLogueado);
+        List<ServiceRequest> solicitudesUsuario = serviceRequestService.getMyRequests(usuarioLogueado);
 
         // Preparar datos para la vista
         model.addAttribute("solicitudesExistentes", solicitudesUsuario);
-        model.addAttribute("trabajosDelCliente", trabajosUsuario);
+        model.addAttribute("trabajosDelCliente", jobLifecycleService.getJobsForClient(usuarioLogueado));
 
         return "jobs/myrequest";
     }
@@ -185,144 +190,17 @@ public class MyRequestsController {
     }
 
     // ============================================================================
-    // MARCA UN TRABAJO COMO COMPLETADO
-    // ============================================================================
-    @PostMapping("/complete/{jobId}")
-    public String completeJob(@PathVariable Long jobId, Authentication auth) {
-        // Obtener usuario logueado
-        AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
-
-        // Buscar y validar el trabajo
-        ServiceJob trabajoEncontrado = buscarYValidarTrabajo(jobId, usuarioLogueado);
-        if (trabajoEncontrado == null) {
-            return "redirect:/requests/my-requests";
-        }
-
-        // Completar el trabajo
-        completarTrabajoEspecifico(trabajoEncontrado);
-
-        // Redirigir a valoraciones
-        return "redirect:/shared/ratings?jobId=" + jobId;
-    }
-
-    // ============================================================================
-    // PAUSA UN TRABAJO EN PROGRESO
-    // ============================================================================
-    @PostMapping("/pause/{jobId}")
-    public String pauseJob(@PathVariable Long jobId, Authentication auth) {
-        // Obtener usuario logueado
-        AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
-
-        // Buscar y validar el trabajo
-        ServiceJob trabajoEncontrado = buscarYValidarTrabajo(jobId, usuarioLogueado);
-        if (trabajoEncontrado == null) {
-            return "redirect:/requests/my-requests";
-        }
-
-        // Pausar el trabajo
-        pausarTrabajoEspecifico(trabajoEncontrado);
-
-        return "redirect:/requests/my-requests";
-    }
-
-    // ============================================================================
-    // CANCELA UN TRABAJO ESPECÍFICO
-    // ============================================================================
-    @PostMapping("/cancel-job/{jobId}")
-    public String cancelJob(@PathVariable Long jobId, Authentication auth) {
-        // Obtener usuario logueado
-        AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
-
-        // Buscar y validar el trabajo
-        ServiceJob trabajoEncontrado = buscarYValidarTrabajo(jobId, usuarioLogueado);
-        if (trabajoEncontrado == null) {
-            return "redirect:/requests/my-requests";
-        }
-
-        // Cancelar el trabajo
-        cancelarTrabajoEspecifico(trabajoEncontrado);
-
-        return "redirect:/requests/my-requests";
-    }
-
-    // ============================================================================
-    // BUSCA Y VALIDA UN TRABAJO ESPECÍFICO
-    // ============================================================================
-    private ServiceJob buscarYValidarTrabajo(Long jobId, AppUser usuario) {
-        // Buscar el trabajo en la base de datos
-        if (jobId == null) {
-            return null;
-        }
-        ServiceJob trabajoEncontrado = serviceJobRepository.findById(jobId).orElse(null);
-
-        // Verificar que existe el trabajo
-        if (trabajoEncontrado == null) {
-            return null;
-        }
-
-        // Validar que el usuario es el cliente del trabajo
-        AppUser clienteDelTrabajo = trabajoEncontrado.getClient();
-        boolean esClienteDelTrabajo = clienteDelTrabajo.getId().equals(usuario.getId());
-
-        if (!esClienteDelTrabajo) {
-            return null;
-        }
-
-        return trabajoEncontrado;
-    }
-
-    // ============================================================================
-    // COMPLETA UN TRABAJO ESPECÍFICO
-    // ============================================================================
-    private void completarTrabajoEspecifico(ServiceJob trabajo) {
-        trabajo.setStatus(ServiceJob.Status.COMPLETED);
-        trabajo.setEndDate(LocalDateTime.now());
-        serviceJobRepository.save(trabajo);
-    }
-
-    // ============================================================================
-    // PAUSA UN TRABAJO ESPECÍFICO
-    // ============================================================================
-    private void pausarTrabajoEspecifico(ServiceJob trabajo) {
-        trabajo.setStatus(ServiceJob.Status.PAUSED);
-        serviceJobRepository.save(trabajo);
-    }
-
-    // ============================================================================
-    // CANCELA UN TRABAJO ESPECÍFICO
-    // ============================================================================
-    private void cancelarTrabajoEspecifico(ServiceJob trabajo) {
-        trabajo.setStatus(ServiceJob.Status.CANCELLED);
-        serviceJobRepository.save(trabajo);
-    }
-
-    // ============================================================================
-    // COMPLETAR UNA SOLICITUD DEL USUARIO AUTENTICADO
-    // ============================================================================
-    @PostMapping("/complete-request/{id}")
-    public String completeRequest(@PathVariable Long id,
-            RedirectAttributes redirectAttributes) {
-        try {
-            serviceRequestService.completeRequest(id);
-
-            redirectAttributes.addFlashAttribute("success", "Solicitud completada correctamente.");
-            return "redirect:/requests/my-requests";
-
-        } catch (RuntimeException error) {
-            redirectAttributes.addFlashAttribute("error", error.getMessage());
-            return "redirect:/requests/my-requests";
-        }
-    }
-
-    // ============================================================================
-    // ACEPTAR UNA APLICACIÓN/PROPUESTA ESPECÍFICA (VERSIÓN CON PARÁMETROS POST)
+    // ACEPTAR UNA APLICACIÓN/PROPUESTA ESPECÍFICA 
     // ============================================================================
     @PostMapping("/accept-application")
     public String acceptApplicationWithParams(@RequestParam Long requestId,
             @RequestParam Long applicationId,
+            Authentication auth,
             RedirectAttributes redirectAttributes) {
         try {
-            serviceRequestService.acceptRequest(requestId, applicationId);
+            AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
+            serviceRequestService.getMyRequestById(requestId, usuarioLogueado);
+            applicationDecisionService.acceptApplication(applicationId, usuarioLogueado);
 
             redirectAttributes.addFlashAttribute("success", "Aplicación aceptada correctamente.");
             return "redirect:/requests/my-requests";
@@ -336,9 +214,12 @@ public class MyRequestsController {
     @PostMapping("/reject-application")
     public String rejectApplicationWithParams(@RequestParam Long requestId,
             @RequestParam Long applicationId,
+            Authentication auth,
             RedirectAttributes redirectAttributes) {
         try {
-            serviceRequestService.rejectRequest(requestId, applicationId);
+            AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
+            serviceRequestService.getMyRequestById(requestId, usuarioLogueado);
+            applicationDecisionService.rejectApplication(applicationId, usuarioLogueado);
 
             redirectAttributes.addFlashAttribute("success", "Aplicación rechazada correctamente.");
             return "redirect:/requests/applications/" + requestId;
@@ -354,10 +235,13 @@ public class MyRequestsController {
     // ============================================================================
     @GetMapping("/applications/{requestId}")
     public String viewApplications(@PathVariable Long requestId, Model model,
+            Authentication auth,
             RedirectAttributes redirectAttributes) {
         try {
-            List<JobApplication> aplicaciones = serviceRequestService.getApplicationsForMyRequest(requestId);
-            ServiceRequest solicitud = serviceRequestService.getMyRequestById(requestId);
+            AppUser usuarioLogueado = authService.getAuthenticatedUser(auth);
+            List<JobApplication> aplicaciones = jobApplicationService.getApplicationsForUserRequest(requestId,
+                    usuarioLogueado);
+            ServiceRequest solicitud = serviceRequestService.getMyRequestById(requestId, usuarioLogueado);
 
             model.addAttribute("aplicaciones", aplicaciones);
             model.addAttribute("solicitud", solicitud);

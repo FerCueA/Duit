@@ -92,7 +92,7 @@ public class ProfileController {
     // ============================================================================
     // MUESTRA EL PERFIL PROFESIONAL
     // ============================================================================
-    @GetMapping({ "/professional", "/profesional" })
+    @GetMapping("/professional")
     public String professional(Model model) {
 
         AppUser userPro = appUserService.getCurrentUser();
@@ -106,7 +106,7 @@ public class ProfileController {
     // ============================================================================
     // PROCESA LA ACTUALIZACIÓN DEL PERFIL PROFESIONAL
     // ============================================================================
-    @PostMapping({ "/professional", "/profesional" })
+    @PostMapping("/professional")
     public String updateProfessionalProfile(
             @Validated(EditProfileDTO.ProfessionalProfileGroup.class) @ModelAttribute("editProfileDTO") EditProfileDTO editProfileDTO,
             BindingResult errors,

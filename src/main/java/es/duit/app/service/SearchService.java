@@ -9,16 +9,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
 import lombok.RequiredArgsConstructor;
 
 import es.duit.app.dto.SearchRequestDTO;
+import es.duit.app.dto.SearchPageDataDTO;
 import es.duit.app.entity.AppUser;
 import es.duit.app.entity.Category;
 import es.duit.app.entity.JobApplication;
 import es.duit.app.entity.ServiceRequest;
-import es.duit.app.repository.CategoryRepository;
 import es.duit.app.repository.JobApplicationRepository;
 import es.duit.app.repository.ServiceRequestRepository;
 
@@ -35,19 +34,19 @@ public class SearchService {
     // DEPENDENCIAS Y ATRIBUTOS
     // =========================================================================
     private final ServiceRequestRepository jobRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
     private final JobApplicationRepository jobApplicationRepository;
 
     // ============================================================================
     // PREPARAR DATOS PARA PÁGINA DE BÚSQUEDA
     // ============================================================================
-    public void prepareSearchPageData(SearchRequestDTO filters, AppUser user, Model model) {
+    public SearchPageDataDTO buildSearchPageData(SearchRequestDTO filters, AppUser user) {
 
         // FILTROS DE BÚSQUEDA
         List<ServiceRequest> foundJobs = searchJobs(filters, user);
 
         // CATEGORÍAS ACTIVAS PARA FILTRO
-        List<Category> activeCategories = categoryRepository.findByActiveTrue();
+        List<Category> activeCategories = categoryService.getActiveCategories();
 
         /// OBTENER CODIGOS POSTALES
         List<ServiceRequest> allJobs = getPublishedJobs();
@@ -63,21 +62,24 @@ public class SearchService {
             }
         }
 
-        model.addAttribute("ofertas", foundJobs);
-        model.addAttribute("categorias", activeCategories);
-        model.addAttribute("codigosPostales", uniquePostalCodes);
-        model.addAttribute("totalOfertas", foundJobs.size());
+        SearchPageDataDTO pageData = new SearchPageDataDTO();
+        pageData.setOfertas(foundJobs);
+        pageData.setCategorias(activeCategories);
+        pageData.setCodigosPostales(uniquePostalCodes);
+        pageData.setTotalOfertas(foundJobs.size());
 
         if (user != null) {
             boolean missingProfessionalProfile = user.getProfessionalProfile() == null;
             boolean missingAddress = user.getAddress() == null;
-            model.addAttribute("missingProfessionalProfile", missingProfessionalProfile);
-            model.addAttribute("missingAddress", missingAddress);
+            pageData.setMissingProfessionalProfile(missingProfessionalProfile);
+            pageData.setMissingAddress(missingAddress);
         }
 
         if (filters != null) {
-            model.addAttribute("filtrosAplicados", filters);
+            pageData.setFiltrosAplicados(filters);
         }
+
+        return pageData;
     }
 
     // ============================================================================

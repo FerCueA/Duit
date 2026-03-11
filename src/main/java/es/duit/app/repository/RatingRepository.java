@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RatingRepository extends JpaRepository<Rating, Long> {
-    List<Rating> findByJob(ServiceJob job);
-
     Optional<Rating> findByJobAndType(ServiceJob job, Rating.Type type);
 
     @Query("select r from Rating r where r.type = :type and r.status = :status and r.job.application.professional.user = :user order by r.ratedAt desc")

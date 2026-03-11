@@ -8,8 +8,10 @@ import es.duit.app.entity.Rating;
 import es.duit.app.entity.ServiceJob;
 import es.duit.app.repository.RatingRepository;
 import es.duit.app.repository.ServiceJobRepository;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 // ============================================================================
@@ -22,6 +24,32 @@ public class RatingService {
 
     private final RatingRepository ratingRepository;
     private final ServiceJobRepository serviceJobRepository;
+
+    public List<ServiceJob> getPendingRatingJobs(AppUser usuario) {
+        return splitCompletedJobsByRatingStatus(usuario, false);
+    }
+
+    public List<ServiceJob> getFinishedRatingJobs(AppUser usuario) {
+        return splitCompletedJobsByRatingStatus(usuario, true);
+    }
+
+    public ServiceJob getJobForRatingsView(Long jobId, AppUser usuario) {
+        if (jobId == null) {
+            return null;
+        }
+
+        Optional<ServiceJob> jobOptional = serviceJobRepository.findById(jobId);
+        if (jobOptional.isEmpty()) {
+            return null;
+        }
+
+        ServiceJob trabajo = jobOptional.get();
+        if (!isUserInvolvedInJob(trabajo, usuario)) {
+            return null;
+        }
+
+        return trabajo;
+    }
 
     public List<Rating> getProfessionalRatings(AppUser usuario) {
         if (usuario == null || usuario.getProfessionalProfile() == null) {
@@ -200,5 +228,50 @@ public class RatingService {
         nuevaValoracion.setStatus(Rating.Status.PUBLISHED);
 
         return nuevaValoracion;
+    }
+
+    private List<ServiceJob> splitCompletedJobsByRatingStatus(AppUser usuario, boolean shouldBeFullyRated) {
+        if (usuario == null) {
+            return Collections.emptyList();
+        }
+
+        List<ServiceJob> jobs = new ArrayList<>();
+        jobs.addAll(serviceJobRepository.findByCliente(usuario));
+        jobs.addAll(serviceJobRepository.findByProfesional(usuario));
+
+        List<ServiceJob> filtered = new ArrayList<>();
+        for (ServiceJob trabajo : jobs) {
+            if (trabajo.getStatus() != ServiceJob.Status.COMPLETED) {
+                continue;
+            }
+
+            boolean fullyRated = isJobFullyRated(trabajo);
+            if (fullyRated == shouldBeFullyRated) {
+                filtered.add(trabajo);
+            }
+        }
+
+        return filtered;
+    }
+
+    private boolean isJobFullyRated(ServiceJob trabajo) {
+        boolean clienteHaValorado = ratingRepository.findByJobAndType(trabajo, Rating.Type.CLIENT_TO_PROFESSIONAL)
+                .isPresent();
+        boolean profesionalHaValorado = ratingRepository
+                .findByJobAndType(trabajo, Rating.Type.PROFESSIONAL_TO_CLIENT)
+                .isPresent();
+
+        return clienteHaValorado && profesionalHaValorado;
+    }
+
+    private boolean isUserInvolvedInJob(ServiceJob trabajo, AppUser usuario) {
+        if (usuario == null) {
+            return false;
+        }
+
+        Long userId = usuario.getId();
+        boolean isClient = trabajo.getClient().getId().equals(userId);
+        boolean isProfessional = trabajo.getProfessional().getId().equals(userId);
+        return isClient || isProfessional;
     }
 }

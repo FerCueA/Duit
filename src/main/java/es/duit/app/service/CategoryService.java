@@ -135,6 +135,13 @@ public class CategoryService {
     }
 
     // ============================================================================
+    // OBTIENE LAS CATEGORÍAS ACTIVAS
+    // ============================================================================
+    public List<Category> getActiveCategories() {
+        return categoryRepository.findByActiveTrue();
+    }
+
+    // ============================================================================
     // VALIDA SI EXISTE UNA CATEGORÍA CON EL MISMO NOMBRE Y DIFERENTE ID
     // ============================================================================
     private boolean isDuplicateName(String name, Long id) {
